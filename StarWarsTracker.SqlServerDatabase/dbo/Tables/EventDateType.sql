@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[EventDateType]
+(
+	[Id] INT CONSTRAINT [PK_EventDateType] NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(60) NOT NULL
+)
