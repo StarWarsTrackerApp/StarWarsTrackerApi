@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /StarWarsTracker.Persistence.Tests/Hidden.cs
+/StarWarsTracker.Api/appsettings.json
+/StarWarsTracker.Api/appsettings.Development.json
