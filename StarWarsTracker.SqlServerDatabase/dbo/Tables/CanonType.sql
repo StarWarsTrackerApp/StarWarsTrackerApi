@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[CanonType]
+(
+	[Id] INT CONSTRAINT [PK_CanonType] NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(60) NOT NULL
+)

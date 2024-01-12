@@ -67,10 +67,12 @@
     <Build Include="dbo\Tables\Event.sql" />
     <Build Include="dbo\Tables\EventDate.sql" />
     <Build Include="dbo\Tables\EventDateType.sql" />
+    <Build Include="dbo\Tables\CanonType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Post-Deployment\SeedTableScripts\SeedTable_EventDateType.sql" />
     <None Include="PublishLocations\StarWarsTracker.TestEnv.publish.xml" />
+    <None Include="Scripts\Post-Deployment\SeedTableScripts\SeedTable_CanonType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Post-Deployment\Script.PostDeployment.sql" />

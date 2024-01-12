@@ -26,7 +26,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             
             Assert.Equal(insertEventRequest.Name, result.Name);
             Assert.Equal(insertEventRequest.Description, result.Description);
-            Assert.Equal(insertEventRequest.IsCanon, result.IsCannon);
+            Assert.Equal(insertEventRequest.CanonTypeId, result.CanonTypeId);
         }
     }
 }
