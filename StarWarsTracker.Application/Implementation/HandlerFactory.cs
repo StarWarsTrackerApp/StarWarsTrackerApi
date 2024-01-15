@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using StarWarsTracker.Application.Abstraction;
+﻿using StarWarsTracker.Application.Abstraction;
 using StarWarsTracker.Domain.Exceptions;
 
 namespace StarWarsTracker.Application.Implementation
@@ -8,11 +7,11 @@ namespace StarWarsTracker.Application.Implementation
     {
         private readonly IHandlerDictionary _handlers;
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly ITypeActivator _typeActivator;
 
-        public HandlerFactory(IServiceProvider serviceProvider, IHandlerDictionary handlers)
+        public HandlerFactory(ITypeActivator typeActivator, IHandlerDictionary handlers)
         {
-            _serviceProvider = serviceProvider;
+            _typeActivator = typeActivator;
 
             _handlers = handlers;
         }
@@ -26,7 +25,7 @@ namespace StarWarsTracker.Application.Implementation
                 throw new DoesNotExistException(nameof(IRequestHandler<TRequest>), (request, nameof(request)));
             }
 
-            return (IRequestHandler<TRequest>)ActivatorUtilities.CreateInstance(_serviceProvider, handlerType);
+            return _typeActivator.Instantiate<IRequestHandler<TRequest>>(handlerType);
         }
 
         public IRequestHandler<TRequest, TResponse> NewRequestHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
@@ -38,7 +37,7 @@ namespace StarWarsTracker.Application.Implementation
                 throw new DoesNotExistException(nameof(IRequestHandler<TRequest, TResponse>), (request, nameof(request)));
             }
 
-            return (IRequestHandler<TRequest, TResponse>)ActivatorUtilities.CreateInstance(_serviceProvider, handlerType);
+            return _typeActivator.Instantiate<IRequestHandler<TRequest, TResponse>>(handlerType);
         }
     }
 }

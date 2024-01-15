@@ -13,11 +13,13 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "StarWarsTracker.SqlServerDa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0BBBEA6A-35FF-4793-8602-CEB231364CD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Persistence.Tests", "StarWarsTracker.Persistence.Tests\StarWarsTracker.Persistence.Tests.csproj", "{C1EB75F1-C377-4E46-ABD3-112B3D442B10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Persistence.Tests", "StarWarsTracker.Persistence.Tests\StarWarsTracker.Persistence.Tests.csproj", "{C1EB75F1-C377-4E46-ABD3-112B3D442B10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Application.Tests", "StarWarsTracker.Application.Tests\StarWarsTracker.Application.Tests.csproj", "{211C7BED-3F8F-4666-B3A2-636D3EA8F864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Application.Tests", "StarWarsTracker.Application.Tests\StarWarsTracker.Application.Tests.csproj", "{211C7BED-3F8F-4666-B3A2-636D3EA8F864}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Api", "StarWarsTracker.Api\StarWarsTracker.Api.csproj", "{C0F25760-1B8F-44EF-A8D5-2C6CC1411ED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Api", "StarWarsTracker.Api\StarWarsTracker.Api.csproj", "{C0F25760-1B8F-44EF-A8D5-2C6CC1411ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Domain.Tests", "StarWarsTracker.Domain.Tests\StarWarsTracker.Domain.Tests.csproj", "{1DE270C4-DDA0-4DD8-8426-56DE17970C10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{C0F25760-1B8F-44EF-A8D5-2C6CC1411ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F25760-1B8F-44EF-A8D5-2C6CC1411ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F25760-1B8F-44EF-A8D5-2C6CC1411ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DE270C4-DDA0-4DD8-8426-56DE17970C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DE270C4-DDA0-4DD8-8426-56DE17970C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DE270C4-DDA0-4DD8-8426-56DE17970C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DE270C4-DDA0-4DD8-8426-56DE17970C10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C1EB75F1-C377-4E46-ABD3-112B3D442B10} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 		{211C7BED-3F8F-4666-B3A2-636D3EA8F864} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
+		{1DE270C4-DDA0-4DD8-8426-56DE17970C10} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E423B46-9960-4AF6-A4C5-C597E268BBB5}

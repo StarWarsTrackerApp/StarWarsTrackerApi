@@ -12,19 +12,26 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
 
         private readonly Mock<IHandlerDictionary> _mockHandlerDictionary;
 
+        private readonly Mock<ITypeActivator> _mockTypeActivator;
+
         public HandlerFactoryTests()
         {
             _mockHandlerDictionary = new Mock<IHandlerDictionary>();
 
-            _handlerFactory = new HandlerFactory(new Mock<IServiceProvider>().Object, _mockHandlerDictionary.Object);
+            _mockTypeActivator = new Mock<ITypeActivator>();
+
+            _handlerFactory = new HandlerFactory(_mockTypeActivator.Object, _mockHandlerDictionary.Object);
         }
 
         [Fact]
-        public void HandlerFactory_Given_HandlerDictionaryReturnsHandler_ShouldReturn_InstantiatedHandler()
+        public void HandlerFactory_Given_HandlerDictionaryReturnsHandler_ShouldReturn_HandlerInstantiatedByActivator()
         {
             var request = new ExampleRequest();
+            var handlerType = typeof(ExampleRequestHandler);
             
-            _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(typeof(ExampleRequestHandler));
+            _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(handlerType);
+
+            _mockTypeActivator.Setup(_ => _.Instantiate<IRequestHandler<ExampleRequest>>(handlerType)).Returns(new ExampleRequestHandler());
 
             var result = _handlerFactory.NewRequestHandler(new ExampleRequest());
 

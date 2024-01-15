@@ -20,6 +20,8 @@ namespace StarWarsTracker.Application.Implementation
 
             services.AddTransient<IServiceProvider>(_ => services.BuildServiceProvider());
 
+            services.AddTransient<ITypeActivator, TypeActivator>();
+
             return services;
         }
     }

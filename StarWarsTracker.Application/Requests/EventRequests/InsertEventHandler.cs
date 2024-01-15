@@ -12,7 +12,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests
 
         public async Task HandleRequestAsync(InsertEventRequest request) 
         {
-            //TODO: Refactor to have validation implemented and throw exception for bad requests
+            //TODO: Check response and throw exception if request not inserted based on failure reason.
             await _dataAccess.ExecuteAsync(new InsertEvent(request.Name, request.Description, (int)request.CanonType));
         }
     }
