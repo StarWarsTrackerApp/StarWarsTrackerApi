@@ -31,6 +31,7 @@ namespace StarWarsTracker.Domain.Models
 
         public static bool operator >(EventDate left, EventDate right) => left.YearsSinceBattleOfYavin > right.YearsSinceBattleOfYavin
                                                                        || (left.YearsSinceBattleOfYavin == right.YearsSinceBattleOfYavin && left.Sequence > right.Sequence);
+       
         public static bool operator <(EventDate left, EventDate right) => left != right && !(left > right);
 
         public static bool operator ==(EventDate left, EventDate right) => left.YearsSinceBattleOfYavin == right.YearsSinceBattleOfYavin && left.Sequence == right.Sequence;
