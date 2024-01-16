@@ -6,13 +6,13 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
     public class GetEventByGuidTests : DataRequestTest
     {
         [Fact]
-        public async Task GetEventByName_Given_EventNotExisting_ShouldReturn_Null()
+        public async Task GetEventByGuid_Given_EventNotExisting_ShouldReturn_Null()
         {
             Assert.Null(await _dataAccess.FetchAsync(new GetEventByGuid(Guid.NewGuid())));
         }
 
         [Fact]
-        public async Task GetEventByName_Given_EventIsExisting_ShouldReturn_Event()
+        public async Task GetEventByGuid_Given_EventIsExisting_ShouldReturn_Event()
         {
             var insertEventRequest = EventHelper.NewInsertEvent();
 
