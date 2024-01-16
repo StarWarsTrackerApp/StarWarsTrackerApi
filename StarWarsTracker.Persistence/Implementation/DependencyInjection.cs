@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Persistence.Implementation
 {
     public static class DependencyInjection
     {
+        [ExcludeFromCodeCoverage]
         public static IServiceCollection InjectPersistenceDependencies(this IServiceCollection services, string connectionString)
         {
             if (services == null)

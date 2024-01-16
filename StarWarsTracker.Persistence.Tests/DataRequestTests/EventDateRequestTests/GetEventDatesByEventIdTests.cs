@@ -29,7 +29,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
 
             for (int i = 0; i < numberOfEventDates; i++)
             {
-                var request = new InsertEventDate(existingEvent.Id, (int)EventDateType.DefinitiveStart, yearsSinceBattleOfYavin: i, sequence: i);
+                var request = new InsertEventDate(existingEvent.Guid, (int)EventDateType.DefinitiveStart, yearsSinceBattleOfYavin: i, sequence: i);
 
                 insertEventDateRequests[i] = request;
 

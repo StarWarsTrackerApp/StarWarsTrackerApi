@@ -2,12 +2,15 @@
 {
     public class InsertEvent : IDataExecute
     {
-        public InsertEvent(string name, string description, int canonTypeId)
+        public InsertEvent(Guid guid, string name, string description, int canonTypeId)
         {
+            Guid = guid;
             Name = name;
             Description = description;
             CanonTypeId = canonTypeId;
         }
+
+        public Guid Guid { get; set; }
 
         public string Name { get; set; }
 
@@ -19,10 +22,10 @@
 
         public string GetSql() => 
         @$"
-            IF NOT EXISTS ( SELECT 1 FROM {TableName.Event} WHERE Name = @Name AND CanonTypeId = @CanonTypeId )
+            IF NOT EXISTS ( SELECT 1 FROM {TableName.Event} WHERE Guid = @Guid )
             BEGIN
-                INSERT INTO {TableName.Event} (  Name,  Description,  CanonTypeId ) 
-                                       VALUES ( @Name, @Description, @CanonTypeId )
+                INSERT INTO {TableName.Event} (  Guid,  Name,  Description,  CanonTypeId ) 
+                                       VALUES ( @Guid, @Name, @Description, @CanonTypeId )
             END
         ";
     }

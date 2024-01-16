@@ -17,7 +17,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             var recordInserted = await _dataAccess.FetchAsync(new GetEventByName(insertEventRequest.Name));
 
             // Delete inserted row
-            await _dataAccess.ExecuteAsync(new DeleteEventById(rowsAffectedDuringInsert));
+            await _dataAccess.ExecuteAsync(new DeleteEventById(recordInserted!.Id));
 
             Assert.Equal(1, rowsAffectedDuringInsert);
 
@@ -25,15 +25,13 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         }
 
         [Fact]
-        public async Task InsertEvent_Given_EventNameAlreadyExists_ShouldReturn_NegativeOneRowsAffected()
+        public async Task InsertEvent_Given_GuidAlreadyExists_ShouldReturn_NegativeOneRowsAffected()
         {
-            var eventNameAlreadyTaken = "EventNameAlreadyTaken";
-
             // insert event with name so that it already exists
-            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess, name: eventNameAlreadyTaken);
+            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
 
             // now attempt to insert again with the same name
-            var rowsAffected = await _dataAccess.ExecuteAsync(EventHelper.NewInsertEvent(name: eventNameAlreadyTaken));
+            var rowsAffected = await _dataAccess.ExecuteAsync(EventHelper.NewInsertEvent(guid: existingEvent.Guid));
 
             // Delete inserted row
             await _dataAccess.ExecuteAsync(new DeleteEventById(existingEvent.Id));

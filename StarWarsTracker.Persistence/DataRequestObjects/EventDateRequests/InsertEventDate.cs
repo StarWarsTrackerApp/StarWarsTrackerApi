@@ -2,15 +2,15 @@
 {
     public class InsertEventDate : IDataExecute
     {
-        public InsertEventDate(int eventId, int eventDateTypeId, int yearsSinceBattleOfYavin, int sequence)
+        public InsertEventDate(Guid eventId, int eventDateTypeId, int yearsSinceBattleOfYavin, int sequence)
         {
-            EventId = eventId;
+            EventGuid = eventId;
             EventDateTypeId = eventDateTypeId;
             YearsSinceBattleOfYavin = yearsSinceBattleOfYavin;
             Sequence = sequence;
         }
 
-        public int EventId { get; set; }
+        public Guid EventGuid { get; set; }
 
         public int EventDateTypeId { get; set; }
 
@@ -22,6 +22,8 @@
 
         public string GetSql() => 
         @$"
+            DECLARE @EventId INT = (SELECT Id FROM {TableName.Event} WHERE Guid = @EventGuid)
+
             INSERT INTO {TableName.EventDate} (  EventId,  EventDateTypeId,  YearsSinceBattleOfYavin,  Sequence )
                                        VALUES ( @EventId, @EventDateTypeId, @YearsSinceBattleOfYavin, @Sequence )
         ";

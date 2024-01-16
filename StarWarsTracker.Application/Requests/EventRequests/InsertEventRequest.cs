@@ -4,6 +4,7 @@ using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Domain.Validation;
 using StarWarsTracker.Domain.Validation.EnumValidation;
+using StarWarsTracker.Domain.Validation.EventDateValidation;
 using StarWarsTracker.Domain.Validation.StringValidation;
 
 namespace StarWarsTracker.Application.Requests.EventRequests
@@ -27,6 +28,8 @@ namespace StarWarsTracker.Application.Requests.EventRequests
             validator.ApplyRule(new StringRequiredRule(Description, nameof(Description)));
             
             validator.ApplyRule(new RequiredCanonTypeRule(CanonType, nameof(CanonType)));
+
+            validator.ApplyRule(new EventDatesValidTimeFrameRule(EventDates, nameof(EventDates)));
 
             return validator.IsPassingAllRules;
         }

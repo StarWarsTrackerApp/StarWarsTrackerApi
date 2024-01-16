@@ -8,13 +8,12 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
 {
     public class InsertEventDateTests : DataRequestTest
     {
-        [Theory]
-        [InlineData(int.MinValue)]
-        [InlineData(0)]
-        [InlineData(int.MaxValue)]
-        public async Task InsertEventDate_Given_EventIdNotExisting_ShouldThrow_SqlException(int eventId)
+        [Fact]
+        public async Task InsertEventDate_Given_GuidNotExisting_ShouldThrow_SqlException()
         {
-            var request = new InsertEventDate(eventId, (int)EventDateType.Definitive, 0, 0);
+            var guidNotExisting = Guid.NewGuid();
+
+            var request = new InsertEventDate(guidNotExisting, (int)EventDateType.Definitive, 0, 0);
 
             await Assert.ThrowsAsync<SqlException>(async () => await _dataAccess.ExecuteAsync(request));
         }
@@ -27,7 +26,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
         {
             var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
 
-            var request = new InsertEventDate(existingEvent.Id, eventDateTypeId, 0, 0);
+            var request = new InsertEventDate(existingEvent.Guid, eventDateTypeId, 0, 0);
 
             var exception = await Record.ExceptionAsync(async () => await _dataAccess.ExecuteAsync(request));
 
@@ -41,7 +40,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
         {
             var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
 
-            var insertEventDateRequest = new InsertEventDate(existingEvent.Id, (int)EventDateType.Definitive, 123, 321);
+            var insertEventDateRequest = new InsertEventDate(existingEvent.Guid, (int)EventDateType.Definitive, 123, 321);
 
             var rowsAffected = await _dataAccess.ExecuteAsync(insertEventDateRequest);
 
@@ -53,7 +52,8 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
             Assert.Equal(1, rowsAffected);
             Assert.NotNull(eventDateInserted);
 
-            Assert.Equal(insertEventDateRequest.EventId, eventDateInserted.EventId);
+            Assert.Equal(existingEvent.Id, eventDateInserted.EventId);
+
             Assert.Equal(insertEventDateRequest.EventDateTypeId, eventDateInserted.EventDateTypeId);
             Assert.Equal(insertEventDateRequest.YearsSinceBattleOfYavin, eventDateInserted.YearsSinceBattleOfYavin);
             Assert.Equal(insertEventDateRequest.Sequence, eventDateInserted.Sequence);

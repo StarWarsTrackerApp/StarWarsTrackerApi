@@ -110,7 +110,7 @@ namespace StarWarsTracker.Domain.Models
             var endingDates = _eventDates.Where(_ => _.EventDateType == EventDateType.DefinitiveEnd || _.EventDateType == EventDateType.SpeculativeEnd);
             var isDefinitiveEnd = endingDates.Count() == 1 && endingDates.First().EventDateType == EventDateType.DefinitiveEnd;               
 
-            if (isDefinitiveStart)
+            if (isDefinitiveStart && !isDefinitiveEnd)
             {
                 if (endingDates.Count() == 2 && endingDates.All(_ => _.EventDateType == EventDateType.SpeculativeEnd))
                 {
@@ -129,7 +129,7 @@ namespace StarWarsTracker.Domain.Models
                 return;
             }
 
-            if (isDefinitiveEnd)
+            if (isDefinitiveEnd && !isDefinitiveStart)
             {
                 if(startingDates.Count() == 2 && startingDates.All(_ => _.EventDateType == EventDateType.SpeculativeStart))
                 {
@@ -142,10 +142,10 @@ namespace StarWarsTracker.Domain.Models
                         _timeFrameType = EventTimeFrameType.SpeculativeStartDefinitiveEnd;
                         return;
                     }
-
-                    SetTimeFrameTypeToInvalid(EventTimeFrameType.SpeculativeStartDefinitiveEnd);
-                    return;
                 }
+
+                SetTimeFrameTypeToInvalid(EventTimeFrameType.SpeculativeStartDefinitiveEnd);
+                return;
             }
 
             SetTimeFrameTypeToInvalid();

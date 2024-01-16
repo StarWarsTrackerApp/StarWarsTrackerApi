@@ -28,7 +28,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
 
             for (int i = 0; i < numberOfEventDates; i++)
             {
-                await _dataAccess.ExecuteAsync(new InsertEventDate(existingEvent.Id, (int)EventDateType.DefinitiveStart, i, i));
+                await _dataAccess.ExecuteAsync(new InsertEventDate(existingEvent.Guid, (int)EventDateType.DefinitiveStart, i, i));
             }
 
             var rowsAffected = await _dataAccess.ExecuteAsync(new DeleteEventDatesByEventId(existingEvent.Id));
