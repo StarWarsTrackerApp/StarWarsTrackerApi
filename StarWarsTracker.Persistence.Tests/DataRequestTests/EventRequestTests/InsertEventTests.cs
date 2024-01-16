@@ -14,7 +14,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             var rowsAffectedDuringInsert = await _dataAccess.ExecuteAsync(insertEventRequest);
 
             // fetch the record inserted to ensure it exists
-            var recordInserted = await _dataAccess.FetchAsync(new GetEventByName(insertEventRequest.Name));
+            var recordInserted = await _dataAccess.FetchAsync(new GetEventByGuid(insertEventRequest.Guid));
 
             // Delete inserted row
             await _dataAccess.ExecuteAsync(new DeleteEventById(recordInserted!.Id));

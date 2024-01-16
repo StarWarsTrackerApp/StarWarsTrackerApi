@@ -25,7 +25,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             var rowsAffected = await _dataAccess.ExecuteAsync(new DeleteEventById(eventExisting.Id));
 
             // get event by name after deleting to ensure it is now null
-            var eventAfterDeleting = await _dataAccess.FetchAsync(new GetEventByName(eventExisting.Name));
+            var eventAfterDeleting = await _dataAccess.FetchAsync(new GetEventByGuid(eventExisting.Guid));
 
             Assert.Equal(1, rowsAffected);
 

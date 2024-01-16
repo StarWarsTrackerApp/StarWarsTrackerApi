@@ -30,7 +30,7 @@ namespace StarWarsTracker.Persistence.Tests.TestHelpers
 
             await dataAccess.ExecuteAsync(insertRequest);
 
-            var eventInserted = await dataAccess.FetchAsync(new GetEventByName(insertRequest.Name));
+            var eventInserted = await dataAccess.FetchAsync(new GetEventByGuid(insertRequest.Guid));
 
             return eventInserted!;
         }

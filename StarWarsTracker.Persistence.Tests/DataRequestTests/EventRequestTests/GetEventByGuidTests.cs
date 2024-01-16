@@ -3,12 +3,12 @@ using StarWarsTracker.Persistence.Tests.TestHelpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 {
-    public class GetEventByNameTests : DataRequestTest
+    public class GetEventByGuidTests : DataRequestTest
     {
         [Fact]
         public async Task GetEventByName_Given_EventNotExisting_ShouldReturn_Null()
         {
-            Assert.Null(await _dataAccess.FetchAsync(new GetEventByName(StringHelper.RandomString())));
+            Assert.Null(await _dataAccess.FetchAsync(new GetEventByGuid(Guid.NewGuid())));
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 
             await _dataAccess.ExecuteAsync(insertEventRequest);
 
-            var result = await _dataAccess.FetchAsync(new GetEventByName(insertEventRequest.Name));
+            var result = await _dataAccess.FetchAsync(new GetEventByGuid(insertEventRequest.Guid));
 
             Assert.NotNull(result);
 
