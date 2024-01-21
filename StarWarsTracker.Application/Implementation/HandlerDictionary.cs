@@ -1,7 +1,4 @@
-﻿using StarWarsTracker.Application.Abstraction;
-using StarWarsTracker.Domain.Exceptions;
-
-namespace StarWarsTracker.Application.Implementation
+﻿namespace StarWarsTracker.Application.Implementation
 {
     internal class HandlerDictionary : IHandlerDictionary
     {
