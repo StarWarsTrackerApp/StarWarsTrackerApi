@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Persistence.Abstraction
 {
+    /// <summary>
+    /// This interface will abstract out the integration with Dapper. Each method will receive either an IDataExecute or IDataFetch request, which will define the Sql and Parameters to pass to Dapper.
+    /// </summary>
     public interface IDataAccess
     {
         /// <summary>
