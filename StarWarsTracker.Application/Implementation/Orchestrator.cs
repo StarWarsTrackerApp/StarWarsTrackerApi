@@ -1,8 +1,4 @@
-﻿using StarWarsTracker.Application.Abstraction;
-using StarWarsTracker.Domain.Exceptions;
-using StarWarsTracker.Domain.Validation;
-
-namespace StarWarsTracker.Application.Implementation
+﻿namespace StarWarsTracker.Application.Implementation
 {
     internal class Orchestrator : IOrchestrator
     {
@@ -10,7 +6,7 @@ namespace StarWarsTracker.Application.Implementation
 
         public Orchestrator(IHandlerFactory handlerFactory) => _handlerFactory = handlerFactory;
 
-        public async Task SendRequest<TRequest>(TRequest request) where TRequest : IRequest
+        public async Task ExecuteRequestAsync<TRequest>(TRequest request) where TRequest : IRequest
         {
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
@@ -19,19 +15,19 @@ namespace StarWarsTracker.Application.Implementation
 
             var handler = _handlerFactory.NewRequestHandler(request);
 
-            await handler.HandleRequestAsync(request);
+            await handler.ExecuteRequestAsync(request);
         }
 
-        public async Task<TResponse> SendRequest<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
+        public async Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
         {
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
                 throw new ValidationFailureException(validator.ReasonsForFailure);
             }
 
-            var handler = _handlerFactory.NewRequestHandler<TRequest, TResponse>(request);
+            var handler = _handlerFactory.NewRequestResponseHandler<TRequest, TResponse>(request);
 
-            return await handler.HandleRequestAsync(request);
+            return await handler.GetResponseAsync(request);
         }
     }
 }

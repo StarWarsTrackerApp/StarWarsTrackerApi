@@ -1,4 +1,4 @@
-﻿namespace StarWarsTracker.Persistence.DataRequestObjects.BaseRequests
+﻿namespace StarWarsTracker.Persistence.BaseDataRequests
 {
     /// <summary>
     /// This base request can be reused by any IDataRequest which will GetParameters() => { Id };

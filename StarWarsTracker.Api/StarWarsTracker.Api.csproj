@@ -14,8 +14,4 @@
     <ProjectReference Include="..\StarWarsTracker.Application\StarWarsTracker.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
 </Project>

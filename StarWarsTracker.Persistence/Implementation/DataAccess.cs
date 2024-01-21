@@ -17,7 +17,7 @@ namespace StarWarsTracker.Persistence.Implementation
             return await connection.ExecuteAsync(request.GetSql(), request.GetParameters());
         }
 
-        public async Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request) where TResponse : class
+        public async Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request)
         {
             using var connection = _connectionFactory.NewConnection();
 
@@ -26,7 +26,7 @@ namespace StarWarsTracker.Persistence.Implementation
             return await connection.QueryFirstOrDefaultAsync<TResponse>(request.GetSql(), request.GetParameters());
         }
 
-        public async Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request) where TResponse : class
+        public async Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request)
         {
             using var connection = _connectionFactory.NewConnection();
 

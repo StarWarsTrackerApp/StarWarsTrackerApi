@@ -6,6 +6,6 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 
     internal class ExampleRequestHandler : IRequestHandler<ExampleRequest>
     {
-        public Task HandleRequestAsync(ExampleRequest request) => Task.CompletedTask;
+        public Task ExecuteRequestAsync(ExampleRequest request) => Task.CompletedTask;
     }
 }

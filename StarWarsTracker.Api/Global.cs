@@ -1,1 +1,2 @@
-﻿global using Microsoft.AspNetCore.Mvc;
+﻿global using StarWarsTracker.Application.Abstraction;
+global using Microsoft.AspNetCore.Mvc;

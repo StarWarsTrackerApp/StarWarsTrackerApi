@@ -1,5 +1,4 @@
-﻿using StarWarsTracker.Application.Abstraction;
-using StarWarsTracker.Application.Requests.EventRequests;
+﻿using StarWarsTracker.Application.Requests.EventRequests.InsertEventRequests;
 
 namespace StarWarsTracker.Api.Controllers
 {
@@ -8,10 +7,6 @@ namespace StarWarsTracker.Api.Controllers
         public EventController(IOrchestrator orchestrator) : base(orchestrator) { }
 
         [HttpPost("Event/InsertEvent")]
-        public async Task InsertEvent(InsertEventRequest request)
-        {
-            await _orchestrator.SendRequest(request);
-        }
-
+        public async Task InsertEvent(InsertEventRequest request) => await _orchestrator.ExecuteRequestAsync(request);
     }
 }

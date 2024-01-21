@@ -2,6 +2,7 @@
 using StarWarsTracker.Persistence.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
+using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Persistence.Tests.TestHelpers
 {

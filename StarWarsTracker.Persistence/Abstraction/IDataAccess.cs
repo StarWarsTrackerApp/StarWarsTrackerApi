@@ -14,12 +14,12 @@
         /// Fetch the FirstOrDefault result from the query provided by the DataRequest using GetSql() and GetParameters() from the IDataFetch.
         /// Returns an object of the type TResponse associated with the IDataFetch.
         /// </summary>
-        public Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request) where TResponse : class;
+        public Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request);
 
         /// <summary>
         /// Fetch the collection of result from the query provided by the DataRequest using GetSql() and GetParameters() from the IDataFetch.
         /// Returns an IEnumerable of objects of the type TResponse associated with the IDataFetch.        
         /// /// </summary>
-        public Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request) where TResponse : class;
+        public Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request);
     }
 }

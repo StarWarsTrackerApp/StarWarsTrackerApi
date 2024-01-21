@@ -22,7 +22,7 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         {
             var request = new ExampleRequestResponse("ExpectedMessage");
 
-            var result = await _orchestrator.SendRequest<ExampleRequestResponse, ExampleResponse>(request);
+            var result = await _orchestrator.GetRequestResponseAsync<ExampleRequestResponse, ExampleResponse>(request);
 
             Assert.NotNull(result);
             Assert.Equal(request.Input, result.Message);
@@ -33,7 +33,7 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         {
             var request = new ExampleRequest();
 
-            var e = _orchestrator.SendRequest(request);
+            var e = _orchestrator.ExecuteRequestAsync(request);
 
             await e;
 

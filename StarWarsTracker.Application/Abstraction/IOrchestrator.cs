@@ -2,8 +2,14 @@
 {
     public interface IOrchestrator
     {
-        public Task SendRequest<TRequest>(TRequest request) where TRequest : IRequest;
+        /// <summary>
+        /// Executes the IRequest using the IRequestHandler associated with the request.
+        /// </summary>
+        public Task ExecuteRequestAsync<TRequest>(TRequest request) where TRequest : IRequest;
 
-        public Task<TResponse> SendRequest<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>;
+        /// <summary>
+        /// Gets the Response for the IRequest TResponse using the IRequestResponseHandler associated with the request.
+        /// </summary>
+        public Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>;
     }
 }

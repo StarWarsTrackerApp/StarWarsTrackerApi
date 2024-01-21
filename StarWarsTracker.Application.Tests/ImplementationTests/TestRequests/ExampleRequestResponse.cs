@@ -16,9 +16,9 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
         public string Message { get; set; }
     }
 
-    internal class ExampleRequestResponseHandler : IRequestHandler<ExampleRequestResponse, ExampleResponse>
+    internal class ExampleRequestResponseHandler : IRequestResponseHandler<ExampleRequestResponse, ExampleResponse>
     {
-        public Task<ExampleResponse> HandleRequestAsync(ExampleRequestResponse request)
+        public Task<ExampleResponse> GetResponseAsync(ExampleRequestResponse request)
         {
             return Task.FromResult(new ExampleResponse(request.Input));
         }

@@ -1,4 +1,6 @@
-﻿namespace StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests
+﻿using StarWarsTracker.Persistence.BaseDataRequests;
+
+namespace StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests
 {
     public class GetEventDatesByEventId : IdParameter, IDataFetch<EventDate_DTO>
     {

@@ -1,7 +1,4 @@
-﻿using StarWarsTracker.Application.Abstraction;
-using StarWarsTracker.Domain.Exceptions;
-
-namespace StarWarsTracker.Application.Implementation
+﻿namespace StarWarsTracker.Application.Implementation
 {
     internal class HandlerFactory : IHandlerFactory
     {
@@ -28,16 +25,16 @@ namespace StarWarsTracker.Application.Implementation
             return _typeActivator.Instantiate<IRequestHandler<TRequest>>(handlerType);
         }
 
-        public IRequestHandler<TRequest, TResponse> NewRequestHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
+        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
         {
             var handlerType = _handlers.GetHandlerType(request.GetType());
 
             if (handlerType == null)
             {
-                throw new DoesNotExistException(nameof(IRequestHandler<TRequest, TResponse>), (request, nameof(request)));
+                throw new DoesNotExistException(nameof(IRequestResponseHandler<TRequest, TResponse>), (request, nameof(request)));
             }
 
-            return _typeActivator.Instantiate<IRequestHandler<TRequest, TResponse>>(handlerType);
+            return _typeActivator.Instantiate<IRequestResponseHandler<TRequest, TResponse>>(handlerType);
         }
     }
 }

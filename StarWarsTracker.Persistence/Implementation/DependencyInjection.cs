@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Persistence.Implementation
 {
+    [ExcludeFromCodeCoverage]
     public static class DependencyInjection
     {
         [ExcludeFromCodeCoverage]

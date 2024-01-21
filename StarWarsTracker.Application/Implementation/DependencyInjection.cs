@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StarWarsTracker.Application.Abstraction;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Application.Implementation
 {
+    [ExcludeFromCodeCoverage]
     public static class DependencyInjection
     {
         public static IServiceCollection InjectApplicationDependencies(this IServiceCollection services)
