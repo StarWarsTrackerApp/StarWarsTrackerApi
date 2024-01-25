@@ -1,7 +1,7 @@
 ﻿using StarWarsTracker.Domain.Validation.EnumValidation;
 using StarWarsTracker.Domain.Validation.StringValidation;
 
-namespace StarWarsTracker.Application.Requests.EventRequests.InsertEventRequests
+namespace StarWarsTracker.Application.Requests.EventRequests.Insert
 {
     public class InsertEventRequest : IRequest, IValidatable
     {

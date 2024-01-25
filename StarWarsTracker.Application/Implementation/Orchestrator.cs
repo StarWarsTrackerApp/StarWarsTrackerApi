@@ -18,7 +18,7 @@
             await handler.ExecuteRequestAsync(request);
         }
 
-        public async Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
+        public async Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>
         {
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {

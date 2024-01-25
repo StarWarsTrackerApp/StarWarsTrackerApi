@@ -10,6 +10,6 @@
         /// <summary>
         /// Gets the Response for the IRequest TResponse using the IRequestResponseHandler associated with the request.
         /// </summary>
-        public Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>;
+        public Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>;
     }
 }

@@ -25,7 +25,7 @@
             return _typeActivator.Instantiate<IRequestHandler<TRequest>>(handlerType);
         }
 
-        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>
+        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>
         {
             var handlerType = _handlers.GetHandlerType(request.GetType());
 

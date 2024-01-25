@@ -2,9 +2,9 @@
 {
     public class InsertEventDate : IDataExecute
     {
-        public InsertEventDate(Guid eventId, int eventDateTypeId, int yearsSinceBattleOfYavin, int sequence)
+        public InsertEventDate(Guid eventGuid, int eventDateTypeId, int yearsSinceBattleOfYavin, int sequence)
         {
-            EventGuid = eventId;
+            EventGuid = eventGuid;
             EventDateTypeId = eventDateTypeId;
             YearsSinceBattleOfYavin = yearsSinceBattleOfYavin;
             Sequence = sequence;

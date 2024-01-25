@@ -1,12 +1,12 @@
 ﻿using StarWarsTracker.Application.BaseObjects.BaseHandlers;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
-namespace StarWarsTracker.Application.Requests.EventRequests.InsertEventRequests
+namespace StarWarsTracker.Application.Requests.EventRequests.Insert
 {
     internal class InsertEventHandler : DataRequestHandler<InsertEventRequest>
     {
         public InsertEventHandler(IDataAccess dataAccess) : base(dataAccess) { }
-        
+
         public override async Task ExecuteRequestAsync(InsertEventRequest request)
         {
             var guid = Guid.NewGuid();

@@ -2,7 +2,7 @@
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 {
-    internal class ExampleRequestResponse : IRequest<ExampleResponse>
+    internal class ExampleRequestResponse : IRequestResponse<ExampleResponse>
     {
         public ExampleRequestResponse(string input) => Input = input;
 

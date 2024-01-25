@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StarWarsTracker.Application.Abstraction;
 
 namespace StarWarsTracker.Application.Implementation
 {

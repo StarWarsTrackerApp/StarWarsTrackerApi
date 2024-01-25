@@ -15,9 +15,9 @@ namespace StarWarsTracker.Application.Implementation
 
             services.AddSingleton<IHandlerDictionary>(new HandlerDictionary());
 
-            services.AddSingleton<IHandlerFactory, HandlerFactory>();
+            services.AddScoped<IOrchestrator, Orchestrator>();
 
-            services.AddSingleton<IOrchestrator, Orchestrator>();
+            services.AddScoped<IHandlerFactory, HandlerFactory>();
 
             services.AddTransient<IServiceProvider>(_ => services.BuildServiceProvider());
 

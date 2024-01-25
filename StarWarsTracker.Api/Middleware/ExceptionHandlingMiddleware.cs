@@ -32,7 +32,7 @@ namespace StarWarsTracker.Api.Middleware
         private static string GetContent(Exception exception) => exception switch
         {
             ValidationFailureException e => JsonSerializer.Serialize(e.ValidationFailureMessages),
-            DoesNotExistException e => JsonSerializer.Serialize(e.ValuesSearchedBy),
+            DoesNotExistException e => JsonSerializer.Serialize(new { e.NameOfObjectNotExisting, e.ValuesSearchedBy }),
             AlreadyExistsException e => JsonSerializer.Serialize(e.Conflicts),
             _ => "Unexpected Error"
         };

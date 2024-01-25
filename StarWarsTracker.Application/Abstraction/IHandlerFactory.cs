@@ -10,6 +10,6 @@
         /// <summary>
         /// Returns a new instance of the IRequestResponseHandler which handles the IRequest TResponse provided
         /// </summary>
-        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse>;
+        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>;
     }
 }

@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.InsertEventRequests;
+﻿using StarWarsTracker.Application.Requests.EventRequests.Insert;
 using StarWarsTracker.Domain.Constants;
 using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Tests.Shared.Helpers;
