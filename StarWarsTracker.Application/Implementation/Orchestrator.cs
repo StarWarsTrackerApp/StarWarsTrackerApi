@@ -13,21 +13,26 @@
                 throw new ValidationFailureException(validator.ReasonsForFailure);
             }
 
-            var handler = _handlerFactory.NewRequestHandler(request);
+            var handler = _handlerFactory.NewHandler(request);
 
-            await handler.ExecuteRequestAsync(request);
+            await handler.HandleAsync(request);
         }
 
-        public async Task<TResponse> GetRequestResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>
+        public async Task<TResponse> GetRequestResponseAsync<TResponse>(IRequestResponse<TResponse> request)
         {
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
                 throw new ValidationFailureException(validator.ReasonsForFailure);
             }
 
-            var handler = _handlerFactory.NewRequestResponseHandler<TRequest, TResponse>(request);
+            var handler = _handlerFactory.NewHandler(request);
 
-            return await handler.GetResponseAsync(request);
+            if (await handler.HandleAsync(request) is TResponse response)
+            {
+                return response;
+            }
+
+            throw new OperationFailedException();
         }
     }
 }

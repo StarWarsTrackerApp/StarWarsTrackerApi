@@ -13,28 +13,21 @@
             _handlers = handlers;
         }
 
-        public IRequestHandler<TRequest> NewRequestHandler<TRequest>(TRequest request) where TRequest : IRequest
+        public IBaseHandler NewHandler<TRequest>(TRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var handlerType = _handlers.GetHandlerType(request.GetType());
 
             if (handlerType == null)
             {
-                throw new DoesNotExistException(nameof(IRequestHandler<TRequest>), (request, nameof(request)));
+                throw new DoesNotExistException("RequestHandler", (request, nameof(request)));
             }
 
-            return _typeActivator.Instantiate<IRequestHandler<TRequest>>(handlerType);
-        }
-
-        public IRequestResponseHandler<TRequest, TResponse> NewRequestResponseHandler<TRequest, TResponse>(TRequest request) where TRequest : IRequestResponse<TResponse>
-        {
-            var handlerType = _handlers.GetHandlerType(request.GetType());
-
-            if (handlerType == null)
-            {
-                throw new DoesNotExistException(nameof(IRequestResponseHandler<TRequest, TResponse>), (request, nameof(request)));
-            }
-
-            return _typeActivator.Instantiate<IRequestResponseHandler<TRequest, TResponse>>(handlerType);
+            return _typeActivator.Instantiate<IBaseHandler>(handlerType);
         }
     }
 }

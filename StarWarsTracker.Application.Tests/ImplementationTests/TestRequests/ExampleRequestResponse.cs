@@ -1,4 +1,5 @@
 ﻿using StarWarsTracker.Application.Abstraction;
+using StarWarsTracker.Application.BaseObjects.BaseHandlers;
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 {
@@ -16,9 +17,9 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
         public string Message { get; set; }
     }
 
-    internal class ExampleRequestResponseHandler : IRequestResponseHandler<ExampleRequestResponse, ExampleResponse>
+    internal class ExampleRequestResponseHandler : BaseRequestResponseHandler<ExampleRequestResponse, ExampleResponse>
     {
-        public Task<ExampleResponse> GetResponseAsync(ExampleRequestResponse request)
+        public override Task<ExampleResponse> GetResponseAsync(ExampleRequestResponse request)
         {
             return Task.FromResult(new ExampleResponse(request.Input));
         }

@@ -10,7 +10,7 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 
         public override async Task ExecuteRequestAsync(InsertEventTimeFrameRequest request)
         {
-            var eventByGuid = await _orchestrator.GetRequestResponseAsync<GetEventByGuidRequest, GetEventByGuidResponse>(new GetEventByGuidRequest(request.EventGuid));
+            var eventByGuid = await _orchestrator.GetRequestResponseAsync(new GetEventByGuidRequest(request.EventGuid));
 
             if(eventByGuid.EventTimeFrame != null)
             {

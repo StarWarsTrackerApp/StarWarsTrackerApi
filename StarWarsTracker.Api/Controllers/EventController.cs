@@ -13,12 +13,12 @@ namespace StarWarsTracker.Api.Controllers
         public async Task InsertEvent(InsertEventRequest request) => await _orchestrator.ExecuteRequestAsync(request);
 
         [HttpGet("Event/GetEventByGuid")]
-        public async Task<GetEventByGuidResponse> GetEventByGuid(GetEventByGuidRequest request) => await _orchestrator.GetRequestResponseAsync<GetEventByGuidRequest, GetEventByGuidResponse>(request);
+        public async Task<GetEventByGuidResponse> GetEventByGuid(GetEventByGuidRequest request) => await _orchestrator.GetRequestResponseAsync(request);
 
         [HttpGet("Event/GetEventsByYear")]
-        public async Task<GetEventsByYearResponse> GetEventsByYear(GetEventsByYearRequest request) => await _orchestrator.GetRequestResponseAsync<GetEventsByYearRequest, GetEventsByYearResponse>(request);
+        public async Task<GetEventsByYearResponse> GetEventsByYear(GetEventsByYearRequest request) => await _orchestrator.GetRequestResponseAsync(request);
 
         [HttpGet("Event/GetEventsByNameLike")]
-        public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await _orchestrator.GetRequestResponseAsync<GetEventsByNameLikeRequest, GetEventsByNameLikeResponse>(request);
+        public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await _orchestrator.GetRequestResponseAsync(request);
     }
 }

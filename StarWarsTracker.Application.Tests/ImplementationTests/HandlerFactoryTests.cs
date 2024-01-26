@@ -31,9 +31,9 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
             
             _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(handlerType);
 
-            _mockTypeActivator.Setup(_ => _.Instantiate<IRequestHandler<ExampleRequest>>(handlerType)).Returns(new ExampleRequestHandler());
+            _mockTypeActivator.Setup(_ => _.Instantiate<IBaseHandler>(handlerType)).Returns(new ExampleRequestHandler());
 
-            var result = _handlerFactory.NewRequestHandler(new ExampleRequest());
+            var result = _handlerFactory.NewHandler(new ExampleRequest());
 
             Assert.NotNull(result);
         }
@@ -41,7 +41,7 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         [Fact]
         public void HandlerFactory_Given_HandlerNotExisting_ShouldThrow_DoesNotExistException()
         {
-            Assert.Throws<DoesNotExistException>(() => _handlerFactory.NewRequestHandler(new ExampleRequest()));
+            Assert.Throws<DoesNotExistException>(() => _handlerFactory.NewHandler(new ExampleRequest()));
         }
     }
 }
