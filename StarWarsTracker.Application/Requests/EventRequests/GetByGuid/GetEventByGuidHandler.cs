@@ -16,18 +16,15 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByGuid
                 throw new DoesNotExistException(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
             }
 
-            var response = new GetEventByGuidResponse
-            {
-                Event = new Event(eventDTO.Guid, eventDTO.Name, eventDTO.Description, (CanonType)eventDTO.CanonTypeId)
-            };
+            var response = new GetEventByGuidResponse { Event = eventDTO.AsDomainEvent() };
 
             var eventDatesDTO = await _dataAccess.FetchListAsync(new GetEventDatesByEventId(eventDTO.Id));
 
             if (eventDatesDTO.Any())
             {
-                var eventDates = eventDatesDTO.Select(_ => new EventDate((EventDateType)_.EventDateTypeId, _.YearsSinceBattleOfYavin, _.Sequence));
+                var eventDates = eventDatesDTO.Select(_ => _.AsDomainEventDate());
 
-                response.EventTimeFrame = new EventTimeFrame(eventDates.ToArray());
+                response.EventTimeFrame = new EventTimeFrame(eventDates);
             }
 
             return response;

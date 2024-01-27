@@ -3,7 +3,7 @@ using StarWarsTracker.Domain.Constants;
 using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Tests.Shared.Helpers;
 
-namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.InsertEventRequestTests
+namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.InsertEventTests
 {
     public class InsertEventRequestTests
     {

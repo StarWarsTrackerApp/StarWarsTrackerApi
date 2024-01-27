@@ -1,5 +1,4 @@
-﻿using StarWarsTracker.Application.BaseObjects.BaseHandlers;
-using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
+﻿using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.Insert
 {

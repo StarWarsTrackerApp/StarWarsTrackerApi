@@ -5,7 +5,9 @@ namespace StarWarsTracker.Domain.Models
 {
     public class EventTimeFrame
     {
-        #region Constructor 
+        #region Constructors
+
+        public EventTimeFrame(IEnumerable<EventDate> eventDates) : this(eventDates.ToArray()) { }
 
         public EventTimeFrame(params EventDate[] eventDates)
         {

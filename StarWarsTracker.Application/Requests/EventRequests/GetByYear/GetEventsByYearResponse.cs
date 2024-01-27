@@ -2,12 +2,7 @@
 {
     public class GetEventsByYearResponse
     {
-        public GetEventsByYearResponse() { }
-
-        public GetEventsByYearResponse(IEnumerable<Event> events)
-        {
-            Events = events;
-        }
+        public GetEventsByYearResponse(IEnumerable<Event> events) => Events = events;
 
         public IEnumerable<Event> Events { get; set; } = Enumerable.Empty<Event>();
     }

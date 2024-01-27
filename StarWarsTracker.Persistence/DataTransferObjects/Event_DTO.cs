@@ -1,4 +1,7 @@
-﻿namespace StarWarsTracker.Persistence.DataTransferObjects
+﻿using StarWarsTracker.Domain.Enums;
+using StarWarsTracker.Domain.Models;
+
+namespace StarWarsTracker.Persistence.DataTransferObjects
 {
     public class Event_DTO
     {
@@ -11,5 +14,7 @@
         public string Description { get; set; } = string.Empty;
 
         public int CanonTypeId { get; set; }
+
+        public Event AsDomainEvent() => new(Guid, Name, Description, (CanonType)CanonTypeId);
     }
 }

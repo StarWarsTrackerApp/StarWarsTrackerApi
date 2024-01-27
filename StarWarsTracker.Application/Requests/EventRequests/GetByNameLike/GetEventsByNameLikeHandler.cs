@@ -1,5 +1,4 @@
-﻿using StarWarsTracker.Application.BaseObjects.BaseHandlers;
-using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
+﻿using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 {
@@ -13,7 +12,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 
             if (events.Any())
             {
-                return new GetEventsByNameLikeResponse(events.Select(_ => new Event(_.Guid, _.Name, _.Description, (CanonType)_.CanonTypeId)));
+                return new GetEventsByNameLikeResponse(events.Select(_ => _.AsDomainEvent()));
             }
 
             throw new DoesNotExistException(nameof(Event), (request.Name, nameof(request.Name)));

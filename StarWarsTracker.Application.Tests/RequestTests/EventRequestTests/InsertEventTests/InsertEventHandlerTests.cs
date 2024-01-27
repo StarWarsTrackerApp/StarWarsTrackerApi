@@ -4,7 +4,7 @@ using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
 
-namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.InsertEventRequestTests
+namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.InsertEventTests
 {
     public class InsertEventHandlerTests : HandlerTest
     {
@@ -15,7 +15,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         public InsertEventHandlerTests() => _handler = new(_mockDataAccess.Object);
 
         [Fact]
-        public async void InsertEventHandler_Given_NameNotExisting_And_InsertEventReturnsOneRowAffected_ShouldReturn_CompletedTask()
+        public async void InsertEventHandler_Given_NameNotExisting_And_InsertEventReturnsOneRowAffected_ShouldReturn_TaskCompletedSuccessfully()
         {
             SetupMockFetchAsync<IsEventNameExisting, IsEventNameExisting_DTO>(new IsEventNameExisting_DTO(false, false, false));
 
@@ -25,7 +25,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
 
             await task;
 
-            Assert.True(task.IsCompleted);
+            Assert.True(task.IsCompletedSuccessfully);
         }
 
         [Fact]

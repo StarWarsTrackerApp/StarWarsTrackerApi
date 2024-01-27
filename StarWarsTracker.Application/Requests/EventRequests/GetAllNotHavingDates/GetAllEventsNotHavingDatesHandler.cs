@@ -12,7 +12,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetAllNotHavingDate
 
             if (events.Any())
             {
-                return new GetAllEventsNotHavingDatesResponse(events.Select(_ => new Event(_.Guid, _.Name, _.Description, (CanonType)_.CanonTypeId)));
+                return new GetAllEventsNotHavingDatesResponse(events.Select(_ => _.AsDomainEvent()));
             }
 
             return new GetAllEventsNotHavingDatesResponse();
