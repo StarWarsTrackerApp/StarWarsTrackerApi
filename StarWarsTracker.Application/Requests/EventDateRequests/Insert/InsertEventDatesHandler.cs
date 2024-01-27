@@ -1,14 +1,13 @@
-﻿using StarWarsTracker.Application.BaseObjects.BaseHandlers;
-using StarWarsTracker.Application.Requests.EventRequests.GetByGuid;
+﻿using StarWarsTracker.Application.Requests.EventRequests.GetByGuid;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 
 namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 {
-    internal class InsertEventTimeFrameHandler : DataOrchestratorRequestHandler<InsertEventTimeFrameRequest>
+    internal class InsertEventDatesHandler : DataOrchestratorRequestHandler<InsertEventDatesRequest>
     {
-        public InsertEventTimeFrameHandler(IDataAccess dataAccess, IOrchestrator orchestrator) : base(dataAccess, orchestrator) { }
+        public InsertEventDatesHandler(IDataAccess dataAccess, IOrchestrator orchestrator) : base(dataAccess, orchestrator) { }
 
-        public override async Task ExecuteRequestAsync(InsertEventTimeFrameRequest request)
+        public override async Task ExecuteRequestAsync(InsertEventDatesRequest request)
         {
             var eventByGuid = await _orchestrator.GetRequestResponseAsync(new GetEventByGuidRequest(request.EventGuid));
 

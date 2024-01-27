@@ -1,6 +1,10 @@
 ﻿global using StarWarsTracker.Application.Abstraction;
+global using StarWarsTracker.Application.BaseObjects.BaseHandlers;
+global using StarWarsTracker.Application.BaseObjects.BaseRequests;
+
 global using StarWarsTracker.Persistence.Abstraction;
 global using StarWarsTracker.Persistence.DataTransferObjects;
+
 global using StarWarsTracker.Domain.Constants;
 global using StarWarsTracker.Domain.Enums;
 global using StarWarsTracker.Domain.Exceptions;

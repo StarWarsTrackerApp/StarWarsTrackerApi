@@ -27,7 +27,9 @@ namespace StarWarsTracker.Domain.Validation.EventDateValidation
                 return true;
             }
 
-            validationFailureMessage = ValidationFailureMessage.BadFormat(ObjectToValidate, NameOfObjectToValidate, invalidFormattingNotes);
+            var eventDatesJson = System.Text.Json.JsonSerializer.Serialize(ObjectToValidate);
+
+            validationFailureMessage = ValidationFailureMessage.BadFormat(eventDatesJson, NameOfObjectToValidate, invalidFormattingNotes);
             return false;
         }
     }

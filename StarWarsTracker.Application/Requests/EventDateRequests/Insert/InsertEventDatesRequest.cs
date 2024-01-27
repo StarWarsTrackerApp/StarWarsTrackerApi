@@ -3,7 +3,7 @@ using StarWarsTracker.Domain.Validation.GuidValidation;
 
 namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 {
-    public class InsertEventTimeFrameRequest : IRequest, IValidatable
+    public class InsertEventDatesRequest : IRequest, IValidatable
     {
         public Guid EventGuid { get; set; }
 
