@@ -1,12 +1,14 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace StarWarsTracker.Tests.Shared.Helpers
 {
-    public static class StringHelper
+    [ExcludeFromCodeCoverage]
+    public static class TestString
     {
         private const string _characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_)(*&^%$#@!";
 
-        public static string RandomString(int length = 36)
+        public static string Random(int length = 36)
         {
             var sb = new StringBuilder(length);
 

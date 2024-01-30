@@ -1,5 +1,4 @@
 ﻿using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 {
@@ -8,7 +7,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         [Fact]
         public async Task InsertEvent_Given_EventIsInserted_ShouldReturn_OneRowsAffected()
         {
-            var insertEventRequest = EventHelper.NewInsertEvent();
+            var insertEventRequest = TestEvent.NewInsertEvent();
 
             // execute insert request and get number of rows affected
             var rowsAffectedDuringInsert = await _dataAccess.ExecuteAsync(insertEventRequest);
@@ -28,10 +27,10 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         public async Task InsertEvent_Given_GuidAlreadyExists_ShouldReturn_NegativeOneRowsAffected()
         {
             // insert event with name so that it already exists
-            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
             // now attempt to insert again with the same name
-            var rowsAffected = await _dataAccess.ExecuteAsync(EventHelper.NewInsertEvent(guid: existingEvent.Guid));
+            var rowsAffected = await _dataAccess.ExecuteAsync(TestEvent.NewInsertEvent(guid: existingEvent.Guid));
 
             // Delete inserted row
             await _dataAccess.ExecuteAsync(new DeleteEventById(existingEvent.Id));

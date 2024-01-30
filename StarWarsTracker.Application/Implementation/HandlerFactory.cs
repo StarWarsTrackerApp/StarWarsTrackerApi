@@ -15,9 +15,9 @@
 
         public IBaseHandler NewHandler<TRequest>(TRequest request)
         {
-            if (request == null)
+            if (request is null)
             {
-                throw new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(request)); 
             }
 
             var handlerType = _handlers.GetHandlerType(request.GetType());

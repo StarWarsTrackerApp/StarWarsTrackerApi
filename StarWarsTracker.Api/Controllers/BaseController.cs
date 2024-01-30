@@ -1,6 +1,4 @@
-﻿using StarWarsTracker.Application.Abstraction;
-
-namespace StarWarsTracker.Api.Controllers
+﻿namespace StarWarsTracker.Api.Controllers
 {
     public abstract class BaseController
     {

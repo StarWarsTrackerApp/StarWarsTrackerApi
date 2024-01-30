@@ -1,15 +1,10 @@
 ﻿using StarWarsTracker.Persistence.Abstraction;
-using StarWarsTracker.Persistence.Implementation;
+using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests
 {
     public abstract class DataRequestTest
     {
-        protected readonly IDataAccess _dataAccess;
-
-        public DataRequestTest()
-        {
-            _dataAccess = new DataAccess(new SqlConnectionFactory(Hidden.DbServer, Hidden.DbName));
-        }
+        protected readonly IDataAccess _dataAccess = TestDataAccess.SharedInstance;
     }
 }

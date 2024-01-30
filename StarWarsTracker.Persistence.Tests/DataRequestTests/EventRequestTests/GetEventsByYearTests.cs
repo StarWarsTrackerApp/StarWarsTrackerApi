@@ -1,7 +1,6 @@
 ﻿using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 {
@@ -18,10 +17,10 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         {
             var year = 45;
 
-            var firstEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var firstEvent = await TestEvent.InsertAndFetchEventAsync();
             await _dataAccess.ExecuteAsync(new InsertEventDate(firstEvent.Guid, (int)EventDateType.Definitive, year, 0));
 
-            var secondEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var secondEvent = await TestEvent.InsertAndFetchEventAsync();
             await _dataAccess.ExecuteAsync(new InsertEventDate(secondEvent.Guid, (int)EventDateType.Definitive, year, 1));
 
             var results = await _dataAccess.FetchListAsync(new GetEventsByYear(year));
@@ -46,10 +45,10 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             var year = -45;
 
             // insert them out of order just to make sure we are ordering by sequence
-            var secondChronologicalEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var secondChronologicalEvent = await TestEvent.InsertAndFetchEventAsync();
             await _dataAccess.ExecuteAsync(new InsertEventDate(secondChronologicalEvent.Guid, (int)EventDateType.Definitive, year, sequence: 10));
 
-            var firstChronologicalEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var firstChronologicalEvent = await TestEvent.InsertAndFetchEventAsync();
             await _dataAccess.ExecuteAsync(new InsertEventDate(firstChronologicalEvent.Guid, (int)EventDateType.Definitive, year, sequence: 5));
 
             // store results in a List so we can get index of events

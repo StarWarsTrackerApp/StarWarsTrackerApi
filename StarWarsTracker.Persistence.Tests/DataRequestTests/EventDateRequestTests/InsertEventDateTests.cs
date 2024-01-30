@@ -1,7 +1,7 @@
 ﻿using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
+using StarWarsTracker.Tests.Shared.Helpers;
 using System.Data.SqlClient;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTests
@@ -24,7 +24,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
         [InlineData(int.MaxValue)]
         public async Task InsertEventDate_Given_EventDateTypeIdNotExisting_ShouldThrow_SqlException(int eventDateTypeId)
         {
-            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
             var request = new InsertEventDate(existingEvent.Guid, eventDateTypeId, 0, 0);
 
@@ -38,7 +38,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
         [Fact]
         public async Task InsertEventDate_Given_EventDateIsInserted_ShouldReturn_OneRowAffected()
         {
-            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
             var insertEventDateRequest = new InsertEventDate(existingEvent.Guid, (int)EventDateType.Definitive, 123, 321);
 

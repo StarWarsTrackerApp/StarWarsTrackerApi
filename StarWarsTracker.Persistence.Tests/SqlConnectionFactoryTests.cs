@@ -1,4 +1,5 @@
 ﻿using StarWarsTracker.Persistence.Implementation;
+using StarWarsTracker.Tests.Shared;
 using System.Data;
 
 namespace StarWarsTracker.Persistence.Tests

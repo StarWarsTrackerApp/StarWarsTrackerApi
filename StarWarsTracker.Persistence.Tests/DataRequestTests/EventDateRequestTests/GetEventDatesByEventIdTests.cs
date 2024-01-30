@@ -1,7 +1,7 @@
 ﻿using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
+using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTests
 {
@@ -23,7 +23,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTes
         [InlineData(5)]
         public async Task GetEventDatesByEventId_Given_EventDatesExistWithEventId_ShouldReturn_AllEventDates(int numberOfEventDates)
         {
-            var existingEvent = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
             var insertEventDateRequests = new InsertEventDate[numberOfEventDates];
 

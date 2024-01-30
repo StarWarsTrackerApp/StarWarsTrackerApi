@@ -1,6 +1,7 @@
 ﻿using StarWarsTracker.Application.Requests.EventRequests.Delete;
 using StarWarsTracker.Application.Requests.EventRequests.GetAllNotHavingDates;
 using StarWarsTracker.Application.Requests.EventRequests.GetByGuid;
+using StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonType;
 using StarWarsTracker.Application.Requests.EventRequests.GetByNameLike;
 using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
 using StarWarsTracker.Application.Requests.EventRequests.Insert;
@@ -22,6 +23,9 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet("Event/GetEventByGuid")]
         public async Task<GetEventByGuidResponse> GetEventByGuid(GetEventByGuidRequest request) => await _orchestrator.GetRequestResponseAsync(request);
+
+        [HttpGet("Event/GetEventByNameAndCanonType")]
+        public async Task<GetEventByNameAndCanonTypeResponse> GetEventByNameAndCanonType(GetEventByNameAndCanonTypeRequest request) => await _orchestrator.GetRequestResponseAsync(request);
 
         [HttpGet("Event/GetEventsByNameLike")]
         public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await _orchestrator.GetRequestResponseAsync(request);

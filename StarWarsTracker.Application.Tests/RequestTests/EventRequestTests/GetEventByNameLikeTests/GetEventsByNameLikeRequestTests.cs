@@ -13,7 +13,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
         [InlineData(MaxLength.EventName - 30)]
         public void GetEventsByNameLikeRequest_Given_NameIsMaxLengthOrLess_IsValid_ShouldReturn_True(int nameLength)
         {
-            var request = new GetEventsByNameLikeRequest(StringHelper.RandomString(nameLength));
+            var request = new GetEventsByNameLikeRequest(TestString.Random(nameLength));
 
             Assert.True(request.IsValid(out _));
         }
@@ -25,7 +25,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
         [InlineData(MaxLength.EventName + 30)]
         public void GetEventsByNameLikeRequest_Given_NameIsMoreThanMaxLength_IsValid_ShouldReturn_False(int nameLength)
         {
-            var request = new GetEventsByNameLikeRequest(StringHelper.RandomString(nameLength));
+            var request = new GetEventsByNameLikeRequest(TestString.Random(nameLength));
 
             Assert.False(request.IsValid(out _));
         }

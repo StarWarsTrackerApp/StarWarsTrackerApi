@@ -1,6 +1,4 @@
 ﻿using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
-using System;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 {
@@ -20,7 +18,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         [Fact]
         public async Task DeleteEventById_Given_EventIsDeleted_ShouldReturn_OneRowAffected()
         {
-            var eventExisting = await EventHelper.InsertAndFetchEventAsync(_dataAccess);
+            var eventExisting = await TestEvent.InsertAndFetchEventAsync();
 
             var rowsAffected = await _dataAccess.ExecuteAsync(new DeleteEventById(eventExisting.Id));
 

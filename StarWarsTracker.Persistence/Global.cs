@@ -4,3 +4,4 @@ global using StarWarsTracker.Persistence.DataTransferObjects;
 
 using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("StarWarsTracker.Persistence.Tests")]
+[assembly: InternalsVisibleTo("StarWarsTracker.Tests.Shared")]

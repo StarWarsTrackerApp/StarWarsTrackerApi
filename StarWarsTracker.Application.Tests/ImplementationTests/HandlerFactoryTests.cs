@@ -43,5 +43,11 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         {
             Assert.Throws<DoesNotExistException>(() => _handlerFactory.NewHandler(new ExampleRequest()));
         }
+
+        [Fact]
+        public void HandlerFactory_Given_Null_ShouldThrow_ArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _handlerFactory.NewHandler((object)null!));
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using StarWarsTracker.Domain.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace StarWarsTracker.Api.Middleware
 {
+    [ExcludeFromCodeCoverage]
     public class ExceptionHandlingMiddleware : IMiddleware
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)

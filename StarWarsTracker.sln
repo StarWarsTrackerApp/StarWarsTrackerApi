@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Api", "Star
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Domain.Tests", "StarWarsTracker.Domain.Tests\StarWarsTracker.Domain.Tests.csproj", "{1DE270C4-DDA0-4DD8-8426-56DE17970C10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Tests.Shared", "StarWarsTracker.Tests.Shared\StarWarsTracker.Tests.Shared.csproj", "{D271C052-0722-4E96-9C1A-954B9DDF2AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Tests.Shared", "StarWarsTracker.Tests.Shared\StarWarsTracker.Tests.Shared.csproj", "{D271C052-0722-4E96-9C1A-954B9DDF2AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Api.Tests", "StarWarsTracker.Api.Tests\StarWarsTracker.Api.Tests.csproj", "{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{D271C052-0722-4E96-9C1A-954B9DDF2AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D271C052-0722-4E96-9C1A-954B9DDF2AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D271C052-0722-4E96-9C1A-954B9DDF2AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{211C7BED-3F8F-4666-B3A2-636D3EA8F864} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 		{1DE270C4-DDA0-4DD8-8426-56DE17970C10} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 		{D271C052-0722-4E96-9C1A-954B9DDF2AA1} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
+		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E423B46-9960-4AF6-A4C5-C597E268BBB5}

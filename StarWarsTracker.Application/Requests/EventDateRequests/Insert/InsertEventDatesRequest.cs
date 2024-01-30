@@ -5,6 +5,14 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 {
     public class InsertEventDatesRequest : IRequest, IValidatable
     {
+        public InsertEventDatesRequest() { }
+
+        public InsertEventDatesRequest(Guid eventGuid, EventDate[] eventDates)
+        {
+            EventGuid = eventGuid;
+            EventDates = eventDates;
+        }
+
         public Guid EventGuid { get; set; }
 
         public EventDate[] EventDates { get; set; } = Array.Empty<EventDate>();

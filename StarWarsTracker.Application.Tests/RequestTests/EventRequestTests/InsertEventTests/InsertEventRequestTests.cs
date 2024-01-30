@@ -18,8 +18,8 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(nameLength),
-                Description = StringHelper.RandomString(),
+                Name = TestString.Random(nameLength),
+                Description = TestString.Random(),
                 CanonType = CanonType.StrictlyCanon
             };
 
@@ -35,8 +35,8 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(nameLength),
-                Description = StringHelper.RandomString(),
+                Name = TestString.Random(nameLength),
+                Description = TestString.Random(),
                 CanonType = CanonType.StrictlyCanon
             };
 
@@ -54,7 +54,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
             var request = new InsertEventRequest()
             {
                 Name = name,
-                Description = StringHelper.RandomString(),
+                Description = TestString.Random(),
                 CanonType = CanonType.StrictlyCanon
             };
 
@@ -75,7 +75,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(),
+                Name = TestString.Random(),
                 Description = description,
                 CanonType = CanonType.StrictlyCanon
             };
@@ -93,7 +93,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(),
+                Name = TestString.Random(),
                 Description = description,
                 CanonType = CanonType.StrictlyCanon
             };
@@ -113,8 +113,8 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(),
-                Description = StringHelper.RandomString(),
+                Name = TestString.Random(),
+                Description = TestString.Random(),
                 CanonType = canonType
             };
 
@@ -129,8 +129,8 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
         {
             var request = new InsertEventRequest()
             {
-                Name = StringHelper.RandomString(),
-                Description = StringHelper.RandomString(),
+                Name = TestString.Random(),
+                Description = TestString.Random(),
                 CanonType = (CanonType)canonType
             };
 

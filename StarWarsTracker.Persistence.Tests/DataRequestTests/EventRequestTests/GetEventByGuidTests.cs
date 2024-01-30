@@ -1,5 +1,4 @@
 ﻿using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Persistence.Tests.TestHelpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
 {
@@ -14,7 +13,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
         [Fact]
         public async Task GetEventByGuid_Given_EventIsExisting_ShouldReturn_Event()
         {
-            var insertEventRequest = EventHelper.NewInsertEvent();
+            var insertEventRequest = TestEvent.NewInsertEvent();
 
             await _dataAccess.ExecuteAsync(insertEventRequest);
 
@@ -23,7 +22,7 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventRequestTests
             Assert.NotNull(result);
 
             await _dataAccess.ExecuteAsync(new DeleteEventById(result.Id));
-            
+
             Assert.Equal(insertEventRequest.Name, result.Name);
             Assert.Equal(insertEventRequest.Description, result.Description);
             Assert.Equal(insertEventRequest.CanonTypeId, result.CanonTypeId);

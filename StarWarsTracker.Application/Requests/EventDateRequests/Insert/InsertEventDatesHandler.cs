@@ -20,7 +20,7 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
             {
                 var rowsUpdated = await _dataAccess.ExecuteAsync(new InsertEventDate(request.EventGuid, (int)date.EventDateType, date.YearsSinceBattleOfYavin, date.Sequence));
             
-                if (rowsUpdated <= 0)
+                if (rowsUpdated != request.EventDates.Length)
                 {
                     throw new OperationFailedException();
                 }
