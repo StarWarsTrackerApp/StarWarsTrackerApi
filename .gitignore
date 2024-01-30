@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /StarWarsTracker.Persistence.Tests/Hidden.cs
 /StarWarsTracker.Api/appsettings.json
 /StarWarsTracker.Api/appsettings.Development.json
+/StarWarsTracker.Tests.Shared/Hidden.cs
