@@ -1,5 +1,8 @@
-﻿namespace StarWarsTracker.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class AlreadyExistsException : Exception
     {
         public AlreadyExistsException(string nameOfObjectAlreadyExisting, params (object Value, string NameOfField)[] conflicts)

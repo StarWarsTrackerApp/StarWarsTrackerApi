@@ -1,4 +1,5 @@
-﻿using StarWarsTracker.Domain.Exceptions;
+﻿using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
+using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
@@ -8,7 +9,9 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
         [Fact]
         public async Task GetEventsByYear_Given_NoEventsExistWithYear_ShouldThrow_DoesNotExistException()
         {
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _controller.GetEventsByYear(new(int.MinValue)));
+            var request = new GetEventsByYearRequest() { YearsSinceBattleOfYavin = int.MinValue };
+
+            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _controller.GetEventsByYear(request));
         }
 
         [Fact]
@@ -22,7 +25,9 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             var (thirdEventDuringDifferentYear, _) = await TestEventDate.InsertAndFetchEventDateAsync(yearsSincleBattleOfYavin: year + 1);
 
-            var response = await _controller.GetEventsByYear(new(year));
+            var request = new GetEventsByYearRequest() { YearsSinceBattleOfYavin = year };
+
+            var response = await _controller.GetEventsByYear(request);
 
             await _controller.DeleteEvent(new(firstEventDuringYear.Guid));
             await _controller.DeleteEvent(new(secondEventDuringYear.Guid));

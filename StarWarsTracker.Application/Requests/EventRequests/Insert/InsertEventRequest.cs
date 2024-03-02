@@ -22,13 +22,11 @@ namespace StarWarsTracker.Application.Requests.EventRequests.Insert
 
         public bool IsValid(out Validator validator)
         {
-            validator = new();
-
-            validator.ApplyRule(new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName));
-
-            validator.ApplyRule(new StringRequiredRule(Description, nameof(Description)));
-
-            validator.ApplyRule(new RequiredCanonTypeRule(CanonType, nameof(CanonType)));
+            validator = new(
+                new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName),
+                new RequiredCanonTypeRule(CanonType, nameof(CanonType)),
+                new StringRequiredRule(Description, nameof(Description))
+            );
 
             return validator.IsPassingAllRules;
         }

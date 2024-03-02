@@ -1,5 +1,8 @@
-﻿namespace StarWarsTracker.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class DoesNotExistException : Exception
     {
         public DoesNotExistException(string nameOfObjectNotExisting, params(object? Value, string NameOfValue)[] valuesSearchedBy)

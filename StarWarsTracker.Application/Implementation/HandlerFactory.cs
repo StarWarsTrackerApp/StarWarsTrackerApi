@@ -2,7 +2,7 @@
 {
     internal class HandlerFactory : IHandlerFactory
     {
-        private readonly IHandlerDictionary _handlers;
+        private readonly IHandlerDictionary _handlerDictionary;
 
         private readonly ITypeActivator _typeActivator;
 
@@ -10,17 +10,17 @@
         {
             _typeActivator = typeActivator;
 
-            _handlers = handlers;
+            _handlerDictionary = handlers;
         }
 
         public IBaseHandler NewHandler<TRequest>(TRequest request)
         {
             if (request is null)
             {
-                throw new ArgumentNullException(nameof(request)); 
+                throw new ArgumentNullException(nameof(request));
             }
 
-            var handlerType = _handlers.GetHandlerType(request.GetType());
+            var handlerType = _handlerDictionary.GetHandlerType(request.GetType());
 
             if (handlerType == null)
             {

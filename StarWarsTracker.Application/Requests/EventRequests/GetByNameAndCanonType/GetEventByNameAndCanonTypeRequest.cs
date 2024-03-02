@@ -19,12 +19,11 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonTy
 
         public bool IsValid(out Validator validator)
         {
-            validator = new();
-
-            validator.ApplyRule(new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName));
-
-            validator.ApplyRule(new RequiredCanonTypeRule(CanonType, nameof(CanonType)));
-
+            validator = new(
+                new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName),
+                new RequiredCanonTypeRule(CanonType, nameof(CanonType))                
+            );
+            
             return validator.IsPassingAllRules;
         }
     }

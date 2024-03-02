@@ -15,9 +15,7 @@ namespace StarWarsTracker.Application.BaseObjects.BaseRequests
 
         public bool IsValid(out Validator validator)
         {
-            validator = new();
-
-            validator.ApplyRule(new GuidRequiredRule(EventGuid, nameof(EventGuid)));
+            validator = new(new GuidRequiredRule(EventGuid, nameof(EventGuid)));
 
             return validator.IsPassingAllRules;
         }

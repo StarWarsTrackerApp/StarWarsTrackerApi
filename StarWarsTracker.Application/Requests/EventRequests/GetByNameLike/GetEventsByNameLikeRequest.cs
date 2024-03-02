@@ -12,9 +12,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 
         public bool IsValid(out Validator validator)
         {
-            validator = new();
-
-            validator.ApplyRule(new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName));
+            validator = new(new StringLengthLimitRule(Name, nameof(Name), MaxLength.EventName));
 
             return validator.IsPassingAllRules;
         }

@@ -1,6 +1,7 @@
-﻿namespace StarWarsTracker.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Domain.Exceptions
 {
-    public class OperationFailedException : Exception
-    {
-    }
+    [ExcludeFromCodeCoverage]
+    public class OperationFailedException : Exception { }
 }

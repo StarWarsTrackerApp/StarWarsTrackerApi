@@ -1,4 +1,6 @@
-﻿namespace StarWarsTracker.Persistence.DataTransferObjects
+﻿using StarWarsTracker.Domain.Enums;
+
+namespace StarWarsTracker.Persistence.DataTransferObjects
 {
     public class IsEventNameExisting_DTO
     {
@@ -16,5 +18,16 @@
         public bool NameExistsInStrictlyLegends{ get; set; }
 
         public bool NameExistsInCanonAndLegends{ get; set; }
+
+        public bool IsExistingInCanonType(CanonType canonType)
+        {
+            return canonType switch
+            {
+                CanonType.StrictlyCanon => NameExistsInStrictlyCanon || NameExistsInCanonAndLegends,
+                CanonType.StrictlyLegends => NameExistsInStrictlyLegends || NameExistsInCanonAndLegends,
+                CanonType.CanonAndLegends => NameExistsInCanonAndLegends || NameExistsInStrictlyCanon || NameExistsInStrictlyLegends,
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }

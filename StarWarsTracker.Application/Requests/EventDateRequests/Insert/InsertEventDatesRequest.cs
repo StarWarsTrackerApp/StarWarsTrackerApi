@@ -19,11 +19,10 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 
         public bool IsValid(out Validator validator)
         {
-            validator = new Validator();
-
-            validator.ApplyRule(new GuidRequiredRule(EventGuid, nameof(EventGuid)));
-
-            validator.ApplyRule(new EventDatesValidTimeFrameRule(EventDates, nameof(EventDates)));
+            validator = new Validator(
+                new GuidRequiredRule(EventGuid, nameof(EventGuid)),
+                new EventDatesValidTimeFrameRule(EventDates, nameof(EventDates))
+            );
 
             return validator.IsPassingAllRules;
         }

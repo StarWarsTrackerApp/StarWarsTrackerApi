@@ -2,9 +2,11 @@
 using StarWarsTracker.Persistence.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Tests.Shared.Helpers;
 
+[ExcludeFromCodeCoverage]
 public  static class TestEvent
 {
     private static IDataAccess _dataAccess = TestDataAccess.SharedInstance;

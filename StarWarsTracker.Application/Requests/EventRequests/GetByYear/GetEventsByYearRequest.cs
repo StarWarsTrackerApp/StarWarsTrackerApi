@@ -4,8 +4,6 @@
     {
         public GetEventsByYearRequest() { }
 
-        public GetEventsByYearRequest(int yearsSinceBattleOfYavin) => YearsSinceBattleOfYavin = yearsSinceBattleOfYavin;
-
         public int YearsSinceBattleOfYavin { get; set; }
     }
 }
