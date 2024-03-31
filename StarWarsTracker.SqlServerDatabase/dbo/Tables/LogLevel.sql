@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[LogLevel]
+(
+	[Id] INT NOT NULL CONSTRAINT [PK_LogLevel] PRIMARY KEY,
+	[Name] VARCHAR(10)
+)

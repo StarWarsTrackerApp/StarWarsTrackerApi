@@ -12,9 +12,11 @@ namespace StarWarsTracker.Tests.Shared.Helpers
         {
             var sb = new StringBuilder(length);
 
+            var random = new Random();
+
             for (int i = 0; i < length; i++)
             {
-                var randomIndex = new Random().Next(0, _characters.Length);
+                var randomIndex = random.Next(0, _characters.Length);
 
                 sb.Append(_characters[randomIndex]);
             }

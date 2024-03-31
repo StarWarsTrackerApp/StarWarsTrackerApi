@@ -17,7 +17,10 @@ internal class Program
 
         // Inject Dependencies
         builder.Services.InjectPersistenceDependencies(builder.Configuration.GetConnectionString("Default"));
-        builder.Services.InjectApplicationDependencies();
+        
+        var logLevel = builder.Configuration[$"LogLevel:{builder.Environment.EnvironmentName}"];
+
+        builder.Services.InjectApplicationDependencies(logLevel);
 
         // Inject Middleware
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();

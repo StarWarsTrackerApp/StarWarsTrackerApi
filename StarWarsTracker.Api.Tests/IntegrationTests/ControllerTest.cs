@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Persistence.Implementation;
 using StarWarsTracker.Tests.Shared;
 
@@ -21,7 +22,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests
 
             // Inject Dependencies
             _services.InjectPersistenceDependencies($"Data Source={Hidden.DbServer};Initial Catalog={Hidden.DbName};Integrated Security=True;");
-            _services.InjectApplicationDependencies();
+            _services.InjectApplicationDependencies(nameof(LogLevel.None));
         }
 
         // Instantiate the controller for each test class using the IServiceCollection similar to how the API will do when an endpoint is called.
