@@ -14,7 +14,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
         private readonly DeleteEventDatesByEventGuidHandler _handler;
 
-        public DeleteEventDatesByEventGuidHandlerTests() => _handler = new(_mockDataAccess.Object);
+        public DeleteEventDatesByEventGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
 
         [Fact]
         public async Task DeleteEventDatesByEventGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException_WithEventNotFound()

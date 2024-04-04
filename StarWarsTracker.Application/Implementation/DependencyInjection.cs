@@ -7,27 +7,21 @@ namespace StarWarsTracker.Application.Implementation
     [ExcludeFromCodeCoverage]
     public static class DependencyInjection
     {
-        public static IServiceCollection InjectApplicationDependencies(this IServiceCollection services, string nameOfLogLevel)
+        public static IServiceCollection InjectApplicationDependencies(this IServiceCollection services, Dictionary<string, Dictionary<string, Dictionary<string, string>>> logSettings)
         {
             if (services == null)
             {
                 throw new NullReferenceException(nameof(services));
             }
 
-            if (Enum.TryParse<LogLevel>(nameOfLogLevel, out var logLevel))
-            {
-                services.AddSingleton(new LoggerFactory.LogSettings(logLevel));
-                services.AddSingleton<ILoggerFactory, LoggerFactory>();
-            }
-            else
-            {
-                throw new InvalidDataException(nameof(nameOfLogLevel));
-            }
+            services.AddSingleton(logSettings);
+            services.AddScoped<ILogConfig, LogConfig>();
+            services.AddScoped<ILogger, DatabaseLogger>();
+            services.AddScoped<ILogMessage, LogMessage>();
 
             services.AddSingleton<IHandlerDictionary>(new HandlerDictionary());
 
             services.AddScoped<IOrchestrator, Orchestrator>();
-
             services.AddScoped<IHandlerFactory, HandlerFactory>();
 
             services.AddTransient<IServiceProvider>(_ => services.BuildServiceProvider());

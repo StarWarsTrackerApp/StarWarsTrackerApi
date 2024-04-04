@@ -16,7 +16,7 @@ namespace StarWarsTracker.Persistence.Implementation
 
             services.AddSingleton<IDbConnectionFactory>(new SqlConnectionFactory(connectionString));
 
-            services.AddSingleton<IDataAccess, DataAccess>();
+            services.AddScoped<IDataAccess, DataAccess>();
 
             return services;
         }

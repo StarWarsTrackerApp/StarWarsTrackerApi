@@ -13,6 +13,10 @@ namespace StarWarsTracker.Persistence.Tests.DataRequestTests.LoggingRequestTests
 
             var rowsAffected = await _dataAccess.ExecuteAsync(request);
 
+            var log = await _dataAccess.FetchAsync(new GetLogByClassName(request.ClassName));
+
+            await _dataAccess.ExecuteAsync(new DeleteLogById(log!.Id));
+
             Assert.Equal(1, rowsAffected);
         }
 

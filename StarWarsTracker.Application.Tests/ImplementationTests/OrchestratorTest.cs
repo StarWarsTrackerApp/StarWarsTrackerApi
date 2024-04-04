@@ -12,15 +12,11 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
 
         private readonly Mock<IHandlerFactory> _mockHandlerFactory = new();
 
-        private readonly Mock<ILogger<Orchestrator>> _mockLogger = new();
+        private readonly Mock<ILogMessage> _mockLogMessage = new();
 
         public OrchestratorTest()
         {
-            var mockLoggerFactory = new Mock<ILoggerFactory>();
-
-            mockLoggerFactory.Setup(_ => _.NewLogger<Orchestrator>()).Returns(_mockLogger.Object);
-
-            _orchestrator = new Orchestrator(_mockHandlerFactory.Object, mockLoggerFactory.Object);
+            _orchestrator = new Orchestrator(_mockHandlerFactory.Object, _mockLogMessage.Object);
         }
 
         [Fact]

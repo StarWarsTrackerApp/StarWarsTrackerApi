@@ -20,7 +20,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.I
             EventTimeFrame = null!
         };
 
-        public InsertEventDatesHandlerTests() => _handler = new(_mockDataAccess.Object, _mockOrchestrator.Object);
+        public InsertEventDatesHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object, _mockOrchestrator.Object);
 
         [Fact]
         public async Task InsertEventDates_Given_EventFoundWithGuid_HasEventTimeFrame_ShouldThrow_AlreadyExistsException()

@@ -8,17 +8,17 @@ namespace StarWarsTracker.Application.Implementation
 
         private readonly IHandlerFactory _handlerFactory;
 
-        private readonly ILogger<Orchestrator> _logger;
+        private readonly ILogMessage _logMessage;
 
         #endregion
 
         #region Constructors
 
-        public Orchestrator(IHandlerFactory handlerFactory, ILoggerFactory loggerFactory)
+        public Orchestrator(IHandlerFactory handlerFactory, ILogMessage logMessage)
         {
             _handlerFactory = handlerFactory;
 
-            _logger = loggerFactory.NewLogger<Orchestrator>();
+            _logMessage = logMessage;
         }
 
         #endregion
@@ -27,65 +27,47 @@ namespace StarWarsTracker.Application.Implementation
 
         public async Task ExecuteRequestAsync<TRequest>(TRequest request) where TRequest : IRequest
         {
-            var logMessage = LogMessage.New();
-
-            logMessage.AddTrace("Orchestrator Receiving Request", request.GetType().Name);
-            logMessage.AddTrace("Request Body", request);
+            _logMessage.AddInfo(this, "Orchestrator Receiving Request", request.GetType().Name);
 
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
-                logMessage.AddDebug("Request Validation Failed", validator.ReasonsForFailure);
-
-                _logger.LogDebug(logMessage);
-
                 throw new ValidationFailureException(validator.ReasonsForFailure);
             }
 
             var handler = _handlerFactory.NewHandler(request);
 
-            logMessage.AddTrace("Handler Instantiated", handler.GetType().Name);
+            _logMessage.AddDebug(this, "Handler Instantiated", handler.GetType().Name);
 
             await handler.HandleAsync(request);
 
-            logMessage.AddTrace("Request Handled");
-
-            _logger.LogTrace(logMessage);
+            _logMessage.AddInfo(this, "Request Handled");
         }
 
         public async Task<TResponse> GetRequestResponseAsync<TResponse>(IRequestResponse<TResponse> request)
         {
-            var logMessage = LogMessage.New();
-
-            logMessage.AddTrace("Orchestrator Receiving Request", request.GetType().Name);
-            logMessage.AddTrace("Request Body", request);
+            _logMessage.AddInfo(this, "Orchestrator Receiving Request", request.GetType().Name);
 
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
-                logMessage.AddDebug("Request Validation Failed", validator.ReasonsForFailure);
-
-                _logger.LogDebug(logMessage);
-
                 throw new ValidationFailureException(validator.ReasonsForFailure);
             }
 
             var handler = _handlerFactory.NewHandler(request);
 
-            logMessage.AddTrace("Handler Instantiated", handler.GetType().Name);
+            _logMessage.AddDebug(this, "Handler Instantiated", handler.GetType().Name);
 
             var result = await handler.HandleAsync(request);
 
-            logMessage.AddTrace("Handler Response", result);
+            _logMessage.AddDebug(this, "Handler Response", result);
 
             if (result is TResponse response)
             {
-                _logger.LogTrace(logMessage);
+                _logMessage.AddInfo(this, "Handler Returned Expected Response Type.", typeof(TResponse).Name);
 
                 return response;
             }
 
-            logMessage.AddCritical("Handler Returned Unexpected Response Type");
-
-            _logger.LogCritical(logMessage);
+            _logMessage.IncreaseLevel(LogLevel.Critical, this, "Handler Returned Unexpected Response Type");
 
             throw new OperationFailedException();
         }

@@ -12,7 +12,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
 
         private readonly GetEventsByNameLikeHandler _handler;
 
-        public GetEventsByNameLikeHandlerTests() => _handler = new(_mockDataAccess.Object);
+        public GetEventsByNameLikeHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
 
         [Fact]
         public async Task GetEventsByNameLike_Given_NoEventsFoundWithName_ShouldThrow_DoesNotExistException()

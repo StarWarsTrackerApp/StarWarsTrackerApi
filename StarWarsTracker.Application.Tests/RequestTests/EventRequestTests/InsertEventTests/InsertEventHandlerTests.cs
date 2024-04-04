@@ -12,7 +12,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Inser
 
         private readonly InsertEventHandler _handler;
 
-        public InsertEventHandlerTests() => _handler = new(_mockDataAccess.Object);
+        public InsertEventHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
 
         [Fact]
         public async void InsertEventHandler_Given_NameNotExisting_And_InsertEventReturnsOneRowAffected_ShouldReturn_TaskCompletedSuccessfully()

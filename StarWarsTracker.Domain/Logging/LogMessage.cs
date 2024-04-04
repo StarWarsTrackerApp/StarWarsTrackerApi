@@ -1,108 +1,104 @@
-﻿using StarWarsTracker.Domain.Enums;
+﻿using StarWarsTracker.Domain.Constants;
+using StarWarsTracker.Domain.Enums;
+using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace StarWarsTracker.Domain.Logging
 {
-    public class LogMessage
+    public class LogMessage : ILogMessage
     {
         #region Private Members
-
-        private readonly string _startingMethod;
 
         private readonly List<LogContent> _logContents = new();
 
         private readonly DateTime _dateTimeCreatedUTC = DateTime.UtcNow;
 
-        #endregion
+        private LogLevel _logLevel = LogLevel.Trace;
 
-        #region Constructor
+        private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
 
-        /// <summary>
-        /// Private constructor is exposed via the public method New()
-        /// </summary>
-        /// <param name="startingMethod"></param>
-        private LogMessage(string startingMethod) => _startingMethod = startingMethod;
+        private readonly ILogConfig _logConfig;
 
         #endregion
+
+        public LogMessage(ILogConfig logConfig) => _logConfig = logConfig;
 
         #region Exposed Methods
 
-        /// <summary>
-        /// Return a new instance of LogMessage with the methodCalling defaulting to the method that calls New().
-        /// </summary>
-        /// <param name="methodCalling">Defaults the methodCalling to the name of the method that calls New().</param>
-        /// <returns></returns>
-        public static LogMessage New([CallerMemberName] string methodCalling = "") => new(methodCalling);
+        private void Add<T>(LogLevel logLevel, T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "")
+        {
+            var classType = classCalling?.GetType();
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddTrace().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddTrace()</param>
-        public void AddTrace(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new (LogLevel.Trace, methodCalling, description, extra));
+            var className = classType?.Name ?? "Unknown";
+            var nameSpace = classType?.Namespace ?? "Unknown";
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddDebug().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace or Debug.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddDebug()</param>
-        public void AddDebug(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new(LogLevel.Debug, methodCalling, description, extra));
+            if(logLevel != LogLevel.None)
+            {
+                _logContents.Add(new(logLevel, className, nameSpace, methodCalling, description, extra, _stopwatch.ElapsedMilliseconds));
+            }
+        }
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddInfo().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace, Debug or Info.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddInfo()</param>
-        public void AddInfo(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new(LogLevel.Information, methodCalling, description, extra));
+        public void AddTrace<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") => 
+            Add(LogLevel.Trace, classCalling, description, extra, methodCalling);
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddWarning().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace, Debug, Info, or Warning.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddWarning()</param>
-        public void AddWarning(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new(LogLevel.Warning, methodCalling, description, extra));
+        public void AddDebug<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
+            Add(LogLevel.Debug, classCalling, description, extra, methodCalling);
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddError().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace, Debug, Info, Warning, or Error.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddError()</param>
-        public void AddError(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new(LogLevel.Error, methodCalling, description, extra));
+        public void AddInfo<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") => 
+            Add(LogLevel.Information, classCalling, description, extra, methodCalling);
 
-        /// <summary>
-        /// Add LogContent with the description and optional extra object provided. methodCalling defaults to the method that is calling AddCritical().
-        /// The LogContent will be logged when the applications LogLevel is set to Trace, Debug, Info, Warning, Error, or Critical.
-        /// </summary>
-        /// <param name="description">Message to add in the LogContent.</param>
-        /// <param name="extra">Optional object that can be included in the LogContent.</param>
-        /// <param name="methodCalling">Defaults to the method that is calling AddCritical()</param>
-        public void AddCritical(string description, object? extra = null, [CallerMemberName] string methodCalling = "") => _logContents.Add(new(LogLevel.Critical, methodCalling, description, extra));
+        public void AddWarning<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") => 
+            Add(LogLevel.Warning, classCalling, description, extra, methodCalling);
+
+        public void AddError<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
+            Add(LogLevel.Error, classCalling, description, extra, methodCalling);
+
+        public void AddCritical<T>(T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
+            Add(LogLevel.Critical, classCalling, description, extra, methodCalling);
+
+        public void AddConfiguredLogLevel<T>(string logConfigSectionName, string logConfigName, T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
+            Add(_logConfig.GetLogLevel(logConfigSectionName, logConfigName), classCalling, description, extra, methodCalling);
+            
+        public string GetLogsAsJson(LogLevel logLevel)
+        {
+            var messagesToLog = _logContents.Where(_ => _.LogLevel >= logLevel);
+
+            var currentTime = DateTime.UtcNow;
+
+            var logContent = new
+            {
+                _stopwatch.ElapsedMilliseconds,
+                LogStartTime = _dateTimeCreatedUTC,
+                LogEndTime = currentTime,
+                LogLevel = _logLevel,
+                NameOfLogLevel = _logLevel.ToString(),                
+                LogContents = messagesToLog
+            };
+
+            var jsonContent = JsonSerializer.Serialize(logContent);
+
+            return jsonContent;
+        }
 
         #endregion
 
-        /// <summary>
-        /// Returns the LogMessage as a JSON containing the StartingMethod that created the log message, and all the LogContent that is above or equal to the logLevel provided.
-        /// </summary>
-        /// <param name="level">The LogLevel to log. If provided Info, then the Content will only contain Info and above.</param>
-        /// <returns>JSON containing the StartingMethod, LogStartTime, and the LogContents with a LogLevel above or equal to the LogLevel provided.</returns>
-        public string GetContentAsJson(LogLevel level)
+        public LogLevel GetLogLevel() => _logLevel;
+
+        public void IncreaseLevel<T>(LogLevel logLevel, T classCalling, string description, object? extra = null, [CallerMemberName] string methodCalling = "")
         {
-            var logContent = _logContents.Where(_ => _.LogLevel >= level);
+            if (logLevel == LogLevel.None)
+            {
+                return;
+            }
 
-            var content = new { StartingMethod = _startingMethod, LogStartTime = _dateTimeCreatedUTC, LogContents = logContent };
+            Add(logLevel, classCalling, description, extra, methodCalling);
 
-            return JsonSerializer.Serialize(content);
+            if (logLevel > _logLevel)
+            {
+                _logLevel = logLevel;
+            }
         }
     }
 }

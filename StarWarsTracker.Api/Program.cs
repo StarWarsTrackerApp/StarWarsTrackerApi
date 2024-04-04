@@ -1,5 +1,6 @@
 using StarWarsTracker.Api.Middleware;
 using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Domain.Logging;
 using StarWarsTracker.Persistence.Implementation;
 using System.Diagnostics.CodeAnalysis;
 
@@ -17,13 +18,16 @@ internal class Program
 
         // Inject Dependencies
         builder.Services.InjectPersistenceDependencies(builder.Configuration.GetConnectionString("Default"));
-        
-        var logLevel = builder.Configuration[$"LogLevel:{builder.Environment.EnvironmentName}"];
 
-        builder.Services.InjectApplicationDependencies(logLevel);
+        var env = builder.Environment.EnvironmentName;
+
+        var loggingConfigs = builder.Configuration.GetSection($"Logging:Environment:{env}").Get<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>();
+
+        builder.Services.InjectApplicationDependencies(loggingConfigs);
 
         // Inject Middleware
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+        builder.Services.AddTransient<LoggingMiddleware>();
 
         var app = builder.Build();
 
@@ -41,6 +45,7 @@ internal class Program
         app.MapControllers();
 
         // Use Middleware
+        app.UseMiddleware<LoggingMiddleware>();
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.Run();

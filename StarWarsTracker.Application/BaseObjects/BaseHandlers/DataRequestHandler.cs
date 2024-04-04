@@ -1,4 +1,6 @@
-﻿namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
+﻿using StarWarsTracker.Domain.Logging;
+
+namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
     /// <summary>
     /// This abstract base class can be inherited from by any Handler for an IRequest that will use IDataAccess and does not return a response.
@@ -7,6 +9,6 @@
     {
         protected readonly IDataAccess _dataAccess;
 
-        protected DataRequestHandler(IDataAccess dataAccess) => _dataAccess = dataAccess;
+        protected DataRequestHandler(IDataAccess dataAccess, ILogMessage logMessage) : base(logMessage) => _dataAccess = dataAccess;
     }
 }
