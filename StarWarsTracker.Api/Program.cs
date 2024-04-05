@@ -1,6 +1,5 @@
 using StarWarsTracker.Api.Middleware;
 using StarWarsTracker.Application.Implementation;
-using StarWarsTracker.Domain.Logging;
 using StarWarsTracker.Persistence.Implementation;
 using System.Diagnostics.CodeAnalysis;
 

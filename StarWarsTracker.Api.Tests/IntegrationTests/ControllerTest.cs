@@ -42,14 +42,13 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests
                                 { LogConfigKey.ExecuteSqlResponseLogLevel, "None" },
                                 { LogConfigKey.ExecuteSqlResponseLogDetails, "None" },
                                 { LogConfigKey.FetchSqlRequestLogLevel, "None" },
-                                { LogConfigKey.FetchSqlRequestLogDetails, "None" },10
+                                { LogConfigKey.FetchSqlRequestLogDetails, "None" },
                                 { LogConfigKey.FetchSqlResponseLogLevel, "None" },
                                 { LogConfigKey.FetchSqlResponseLogDetails, "None" },
                                 { LogConfigKey.FetchListSqlRequestLogLevel, "None" },
                                 { LogConfigKey.FetchListSqlRequestLogDetails, "None" },
                                 { LogConfigKey.FetchListSqlResponseLogLevel, "None" },
                                 { LogConfigKey.FetchListSqlResponseLogDetails, "None" }
-
                             }
                         },
                         {
