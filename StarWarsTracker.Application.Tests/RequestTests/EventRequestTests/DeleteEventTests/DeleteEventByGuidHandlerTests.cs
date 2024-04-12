@@ -1,7 +1,5 @@
-﻿using Moq;
-using StarWarsTracker.Application.Requests.EventRequests.Delete;
+﻿using StarWarsTracker.Application.Requests.EventRequests.Delete;
 using StarWarsTracker.Domain.Exceptions;
-using StarWarsTracker.Domain.Logging;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
 
@@ -13,13 +11,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Delet
 
         private readonly DeleteEventByGuidHandler _handler;
 
-        private readonly Mock<ILogMessage> _mockLog = new();
-
-        public DeleteEventByGuidHandlerTests()
-        {
-
-            _handler = new(_mockDataAccess.Object, _mockLog.Object);
-        }
+        public DeleteEventByGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
         public async Task DeleteEventByGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException()

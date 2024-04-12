@@ -13,7 +13,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetBy
 
         private readonly GetEventByNameAndCanonTypeHandler _handler;
 
-        public GetEventByNameAndCanonTypeHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
+        public GetEventByNameAndCanonTypeHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
         public async Task GetEventByNameAndCanonType_Given_NoEventFound_ShouldThrow_DoesNotExistException()

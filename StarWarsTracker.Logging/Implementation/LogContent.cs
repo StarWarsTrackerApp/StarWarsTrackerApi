@@ -1,10 +1,10 @@
 ﻿using StarWarsTracker.Domain.Enums;
 
-namespace StarWarsTracker.Domain.Logging
+namespace StarWarsTracker.Logging.Implementation
 {
     public class LogContent
     {
-        public LogContent(LogLevel logLevel, string className, string nameSpace, string methodCalling, string description, object? extra, long elapsedMilliseconds)
+        public LogContent(LogLevel logLevel, string className, string nameSpace, string methodCalling, string description, object? extra, double elapsedMilliseconds)
         {
             LogLevel = logLevel;
             NameOfLogLevel = logLevel.ToString();
@@ -30,7 +30,7 @@ namespace StarWarsTracker.Domain.Logging
 
         public object? Extra { get; set; }
 
-        public long ElapsedMilliseconds { get; set; }
+        public double ElapsedMilliseconds { get; set; }
 
         public DateTime DateTimeCreatedUTC { get; set; } = DateTime.UtcNow;
     }

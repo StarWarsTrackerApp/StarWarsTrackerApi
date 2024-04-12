@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Implementation
 {
@@ -8,17 +8,17 @@ namespace StarWarsTracker.Application.Implementation
 
         private readonly IHandlerFactory _handlerFactory;
 
-        private readonly ILogMessage _logMessage;
+        private readonly IClassLogger _logger;
 
         #endregion
 
         #region Constructors
 
-        public Orchestrator(IHandlerFactory handlerFactory, ILogMessage logMessage)
+        public Orchestrator(IHandlerFactory handlerFactory, IClassLoggerFactory loggerFactory)
         {
             _handlerFactory = handlerFactory;
 
-            _logMessage = logMessage;
+            _logger = loggerFactory.GetLoggerFor(this);
         }
 
         #endregion
@@ -27,7 +27,7 @@ namespace StarWarsTracker.Application.Implementation
 
         public async Task ExecuteRequestAsync<TRequest>(TRequest request) where TRequest : IRequest
         {
-            _logMessage.AddInfo(this, "Orchestrator Receiving Request", request.GetType().Name);
+            _logger.AddInfo("Orchestrator Receiving Request", request.GetType().Name);
 
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
@@ -36,16 +36,16 @@ namespace StarWarsTracker.Application.Implementation
 
             var handler = _handlerFactory.NewHandler(request);
 
-            _logMessage.AddDebug(this, "Handler Instantiated", handler.GetType().Name);
+            _logger.AddDebug("Handler Instantiated", handler.GetType().Name);
 
             await handler.HandleAsync(request);
 
-            _logMessage.AddInfo(this, "Request Handled");
+            _logger.AddInfo("Request Handled");
         }
 
         public async Task<TResponse> GetRequestResponseAsync<TResponse>(IRequestResponse<TResponse> request)
         {
-            _logMessage.AddInfo(this, "Orchestrator Receiving Request", request.GetType().Name);
+            _logger.AddInfo("Orchestrator Receiving Request", request.GetType().Name);
 
             if (request is IValidatable validatableRequest && !validatableRequest.IsValid(out var validator))
             {
@@ -54,20 +54,20 @@ namespace StarWarsTracker.Application.Implementation
 
             var handler = _handlerFactory.NewHandler(request);
 
-            _logMessage.AddDebug(this, "Handler Instantiated", handler.GetType().Name);
+            _logger.AddDebug("Handler Instantiated", handler.GetType().Name);
 
             var result = await handler.HandleAsync(request);
 
-            _logMessage.AddDebug(this, "Handler Response", result);
+            _logger.AddDebug("Handler Response", result);
 
             if (result is TResponse response)
             {
-                _logMessage.AddInfo(this, "Handler Returned Expected Response Type.", typeof(TResponse).Name);
+                _logger.AddInfo("Handler Returned Expected Response Type.", typeof(TResponse).Name);
 
                 return response;
             }
 
-            _logMessage.IncreaseLevel(LogLevel.Critical, this, "Handler Returned Unexpected Response Type");
+            _logger.IncreaseLevel(LogLevel.Critical, "Handler Returned Unexpected Response Type");
 
             throw new OperationFailedException();
         }

@@ -1,6 +1,6 @@
 ﻿using StarWarsTracker.Application.Abstraction;
 using StarWarsTracker.Application.BaseObjects.BaseHandlers;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 {
@@ -8,7 +8,7 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 
     internal class ExampleRequestHandler : BaseRequestHandler<ExampleRequest>
     {
-        public ExampleRequestHandler(ILogMessage logMessage) : base(logMessage)
+        public ExampleRequestHandler(IClassLoggerFactory classLoggerFactory) : base(classLoggerFactory)
         {
         }
 

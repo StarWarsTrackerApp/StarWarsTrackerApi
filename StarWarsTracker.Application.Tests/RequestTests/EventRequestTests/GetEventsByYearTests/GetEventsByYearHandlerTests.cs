@@ -12,7 +12,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
 
         private readonly GetEventsByYearHandler _handler;
 
-        public GetEventsByYearHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
+        public GetEventsByYearHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
         public async Task GetEventsByYear_Given_NoEventsFoundWithYear_ShouldThrow_DoesNotExistException()

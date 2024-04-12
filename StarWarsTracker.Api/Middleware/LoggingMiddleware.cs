@@ -1,22 +1,23 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Api.Middleware
 {
     public class LoggingMiddleware : IMiddleware
     {
-        private readonly Domain.Logging.ILogger _logger;
+        private readonly ILogWriter _logWriter;
+
+        private readonly IClassLogger _logger;
 
         private readonly ILogMessage _logMessage;
 
-        private readonly ILogConfig _logConfig;
+        private readonly ILogConfigReader _logConfigReader;
 
-        public LoggingMiddleware(Domain.Logging.ILogger logger, ILogMessage logMessage, ILogConfig logConfig)
+        public LoggingMiddleware(ILogWriter logWriter, ILogMessage logMessage, IClassLoggerFactory loggerFactory, ILogConfigReader logConfigReader)
         {
-            _logger = logger;
-
+            _logWriter = logWriter;
+            _logger = loggerFactory.GetLoggerFor(this);
+            _logConfigReader = logConfigReader;
             _logMessage = logMessage;
-
-            _logConfig = logConfig;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -25,23 +26,31 @@ namespace StarWarsTracker.Api.Middleware
 
             var method = context.Request.Method;
 
-            _logConfig.SetEndpointConfigs(requestPath);
-
             try
             {
-                _logMessage.AddTrace(this, "Logging Started", new { RequestPath = requestPath, Method = method });
+                _logger.AddTrace("Logging Started", new { RequestPath = requestPath, Method = method });
+
+                if (_logConfigReader.TrySetEndpointConfigs(requestPath))
+                {
+                    _logger.AddDebug("Endpoint Logging Overrides Applied", _logConfigReader.GetActiveConfigs());
+                }
+                else
+                {
+                    _logger.AddDebug("No Endpoint Logging Overrides Found", _logConfigReader.GetActiveConfigs());
+                }
 
                 await next(context);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.IncreaseLevel(Domain.Enums.LogLevel.Critical, "Unhandled Exception Reached Logging Middleware", new { e.GetType().Name, e.Message, e.StackTrace });
                 throw;
             }
             finally
             {
-                _logMessage.AddTrace(this, "Logging Complete");
+                _logger.AddTrace("Logging Complete");
 
-                _logger.Log(_logMessage, requestPath, method);
+                _logWriter.Write(_logMessage, requestPath, method);
             }
         }
     }

@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Tests.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Api.Tests", "StarWarsTracker.Api.Tests\StarWarsTracker.Api.Tests.csproj", "{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.BlazorServer", "StarWarsTracker.BlazorServer\StarWarsTracker.BlazorServer.csproj", "{AC62499D-3867-408B-AE3E-5D94D21D2FC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.BlazorServer", "StarWarsTracker.BlazorServer\StarWarsTracker.BlazorServer.csproj", "{AC62499D-3867-408B-AE3E-5D94D21D2FC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Logging", "StarWarsTracker.Logging\StarWarsTracker.Logging.csproj", "{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.Logging.Tests", "StarWarsTracker.Logging.Tests\StarWarsTracker.Logging.Tests.csproj", "{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +131,22 @@ Global
 		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Trace|Any CPU.ActiveCfg = Trace|Any CPU
 		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Trace|Any CPU.Build.0 = Trace|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Info|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Info|Any CPU.Build.0 = Debug|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Trace|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Trace|Any CPU.Build.0 = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Info|Any CPU.ActiveCfg = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Info|Any CPU.Build.0 = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Trace|Any CPU.ActiveCfg = Debug|Any CPU
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Trace|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +157,7 @@ Global
 		{1DE270C4-DDA0-4DD8-8426-56DE17970C10} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 		{D271C052-0722-4E96-9C1A-954B9DDF2AA1} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
+		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E} = {0BBBEA6A-35FF-4793-8602-CEB231364CD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E423B46-9960-4AF6-A4C5-C597E268BBB5}

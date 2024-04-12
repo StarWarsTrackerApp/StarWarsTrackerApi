@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
@@ -6,7 +6,7 @@ namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
     {
         protected readonly IOrchestrator _orchestrator;
 
-        protected DataOrchestratorRequestHandler(IDataAccess dataAccess, ILogMessage logMessage, IOrchestrator orchestrator) : base(dataAccess, logMessage)
+        protected DataOrchestratorRequestHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory, IOrchestrator orchestrator) : base(dataAccess, loggerFactory)
         {
             _orchestrator = orchestrator;
         }

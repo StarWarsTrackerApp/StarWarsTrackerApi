@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StarWarsTracker.Application.Implementation;
-using StarWarsTracker.Domain.Constants;
+using StarWarsTracker.Logging;
+using StarWarsTracker.Logging.AppSettingsConfig;
 using StarWarsTracker.Persistence.Implementation;
 using StarWarsTracker.Tests.Shared;
 
@@ -22,54 +23,14 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests
 
             // Inject Dependencies
             _services.InjectPersistenceDependencies($"Data Source={Hidden.DbServer};Initial Catalog={Hidden.DbName};Integrated Security=True;");
-            _services.InjectApplicationDependencies(new Dictionary<string, Dictionary<string, Dictionary<string, string>>>()
+            _services.InjectApplicationDependencies();
+
+            var loggingConfigs = new Dictionary<string, LogConfigSettings>()
             {
-                { 
-                    "Default", new Dictionary<string, Dictionary<string, string>>()
-                    {
-                        {
-                            LogConfigSection.DatabaseLogger, new Dictionary<string, string>()
-                            {
-                                { LogConfigKey.LogLevel, "None" },
-                                { LogConfigKey.LogDetails, "None" }
-                            }
-                        },
-                        {
-                            LogConfigSection.SqlLogging, new Dictionary<string, string>()
-                            {
-                                { LogConfigKey.ExecuteSqlRequestLogLevel, "None" },
-                                { LogConfigKey.ExecuteSqlRequestLogDetails, "None" },
-                                { LogConfigKey.ExecuteSqlResponseLogLevel, "None" },
-                                { LogConfigKey.ExecuteSqlResponseLogDetails, "None" },
-                                { LogConfigKey.FetchSqlRequestLogLevel, "None" },
-                                { LogConfigKey.FetchSqlRequestLogDetails, "None" },
-                                { LogConfigKey.FetchSqlResponseLogLevel, "None" },
-                                { LogConfigKey.FetchSqlResponseLogDetails, "None" },
-                                { LogConfigKey.FetchListSqlRequestLogLevel, "None" },
-                                { LogConfigKey.FetchListSqlRequestLogDetails, "None" },
-                                { LogConfigKey.FetchListSqlResponseLogLevel, "None" },
-                                { LogConfigKey.FetchListSqlResponseLogDetails, "None" }
-                            }
-                        },
-                        {
-                            LogConfigSection.ExceptionLogging, new Dictionary<string, string>()
-                            {
-                                { LogConfigKey.DefaultExceptionLogLevel, "None" },
-                                { LogConfigKey.DoesNotExistExceptionLogLevel, "None" },
-                                { LogConfigKey.AlreadyExistsExceptionLogLevel, "None" },
-                                { LogConfigKey.ValidationFailureExceptionLogLevel, "None" },
-                            }
-                        },
-                        {
-                            LogConfigSection.CustomLogLevels, new Dictionary<string, string>()
-                            {
-                                { LogConfigKey.ControllerRequestBodyLogLevel, "None" },
-                                { LogConfigKey.ControllerResponseBodyLogLevel, "None" },
-                            }
-                        }
-                    } 
-                }
-            }); 
+                { "Default", new LogConfigSettings() }
+            };
+
+            _services.InjectLoggingDependencies(loggingConfigs);
         }
 
         // Instantiate the controller for each test class using the IServiceCollection similar to how the API will do when an endpoint is called.

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarWarsTracker.Api\StarWarsTracker.Api.csproj" />
+    <ProjectReference Include="..\StarWarsTracker.Logging\StarWarsTracker.Logging.csproj" />
     <ProjectReference Include="..\StarWarsTracker.Tests.Shared\StarWarsTracker.Tests.Shared.csproj" />
   </ItemGroup>
 

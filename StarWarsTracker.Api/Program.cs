@@ -1,5 +1,7 @@
 using StarWarsTracker.Api.Middleware;
 using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Logging;
+using StarWarsTracker.Logging.AppSettingsConfig;
 using StarWarsTracker.Persistence.Implementation;
 using System.Diagnostics.CodeAnalysis;
 
@@ -17,12 +19,13 @@ internal class Program
 
         // Inject Dependencies
         builder.Services.InjectPersistenceDependencies(builder.Configuration.GetConnectionString("Default"));
+        builder.Services.InjectApplicationDependencies();
 
         var env = builder.Environment.EnvironmentName;
 
-        var loggingConfigs = builder.Configuration.GetSection($"Logging:Environment:{env}").Get<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>();
+        var loggingConfigs = builder.Configuration.GetSection($"Logging:Environment:{env}").Get<Dictionary<string, LogConfigSettings>>();
 
-        builder.Services.InjectApplicationDependencies(loggingConfigs);
+        builder.Services.InjectLoggingDependencies(loggingConfigs);
 
         // Inject Middleware
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
@@ -50,4 +53,3 @@ internal class Program
         app.Run();
     }
 }
-

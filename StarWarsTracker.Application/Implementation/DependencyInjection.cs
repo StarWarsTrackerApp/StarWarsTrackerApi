@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Application.Implementation
@@ -7,17 +7,14 @@ namespace StarWarsTracker.Application.Implementation
     [ExcludeFromCodeCoverage]
     public static class DependencyInjection
     {
-        public static IServiceCollection InjectApplicationDependencies(this IServiceCollection services, Dictionary<string, Dictionary<string, Dictionary<string, string>>> logSettings)
+        public static IServiceCollection InjectApplicationDependencies(this IServiceCollection services)
         {
             if (services == null)
             {
                 throw new NullReferenceException(nameof(services));
             }
 
-            services.AddSingleton(logSettings);
-            services.AddScoped<ILogConfig, LogConfig>();
-            services.AddScoped<ILogger, DatabaseLogger>();
-            services.AddScoped<ILogMessage, LogMessage>();
+            services.AddScoped<ILogWriter, DatabaseLogger>();
 
             services.AddSingleton<IHandlerDictionary>(new HandlerDictionary());
 

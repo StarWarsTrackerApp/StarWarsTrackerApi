@@ -1,7 +1,6 @@
 ﻿using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Persistence.Tests.DataRequestTests.EventDateRequestTests
 {

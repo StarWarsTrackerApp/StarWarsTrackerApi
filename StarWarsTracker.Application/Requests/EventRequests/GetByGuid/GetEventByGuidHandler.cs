@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
@@ -6,32 +6,32 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByGuid
 {
     internal class GetEventByGuidHandler : DataRequestResponseHandler<GetEventByGuidRequest, GetEventByGuidResponse>
     {
-        public GetEventByGuidHandler(IDataAccess dataAccess, ILogMessage logMessage) : base(dataAccess, logMessage) { }
+        public GetEventByGuidHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
         public override async Task<GetEventByGuidResponse> GetResponseAsync(GetEventByGuidRequest request)
         {
-            _logMessage.AddInfo(this, "Getting Response For Request", request.GetType().Name);
+            _logger.AddInfo("Getting Response For Request", request.GetType().Name);
 
-            _logMessage.AddDebug(this, "Request Body", request);
+            _logger.AddDebug("Request Body", request);
 
             var eventDTO = await _dataAccess.FetchAsync(new GetEventByGuid(request.EventGuid));
 
-            _logMessage.AddDebug(this, "Event DTO", eventDTO);
+            _logger.AddDebug("Event DTO", eventDTO);
 
             if (eventDTO == null)
             {
-                _logMessage.AddInfo(this, "No Event Found With Guid", request.EventGuid);
+                _logger.AddInfo("No Event Found With Guid", request.EventGuid);
 
                 throw new DoesNotExistException(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
             }
 
             var response = new GetEventByGuidResponse { Event = eventDTO.AsDomainEvent() };
 
-            _logMessage.AddTrace(this, "Fetching Event Dates");
+            _logger.AddTrace("Fetching Event Dates");
 
             var eventDatesDTO = await _dataAccess.FetchListAsync(new GetEventDatesByEventId(eventDTO.Id));
 
-            _logMessage.AddDebug(this, "EventDates DTO", eventDatesDTO);
+            _logger.AddDebug("EventDates DTO", eventDatesDTO);
 
             if (eventDatesDTO.Any())
             {
@@ -40,9 +40,9 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByGuid
                 response.EventTimeFrame = new EventTimeFrame(eventDates);            
             }
 
-            _logMessage.AddInfo(this, "Response Found", response.GetType().Name);
+            _logger.AddInfo("Response Found", response.GetType().Name);
 
-            _logMessage.AddDebug(this, "Response Body", response);
+            _logger.AddDebug("Response Body", response);
 
             return response;
         }

@@ -11,7 +11,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetAl
 
         private readonly GetAllEventsNotHavingDatesHandler _handler;
 
-        public GetAllEventsNotHavingDatesHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
+        public GetAllEventsNotHavingDatesHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
         public async Task GetAllEventsNotHavingDates_Given_NoEventsFound_ShouldReturn_ResponseWithEmptyCollectionOfEvents()

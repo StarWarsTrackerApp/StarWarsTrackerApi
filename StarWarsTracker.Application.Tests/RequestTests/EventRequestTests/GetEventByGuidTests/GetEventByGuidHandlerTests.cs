@@ -14,7 +14,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
 
         private readonly GetEventByGuidHandler _handler;
 
-        public GetEventByGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLogMessage.Object);
+        public GetEventByGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
         public async Task GetEventByGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException()

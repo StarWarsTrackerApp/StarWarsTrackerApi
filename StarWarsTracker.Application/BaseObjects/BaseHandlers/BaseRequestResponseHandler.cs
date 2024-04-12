@@ -1,25 +1,25 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
     internal abstract class BaseRequestResponseHandler<TRequest, TResponse> : IRequestResponseHandler<TRequest, TResponse> where TRequest : IRequestResponse<TResponse>
     {
-        protected readonly ILogMessage _logMessage;
+        protected readonly IClassLogger _logger;
 
-        protected BaseRequestResponseHandler(ILogMessage logMessage)
+        protected BaseRequestResponseHandler(IClassLoggerFactory loggerFactory)
         {
-            _logMessage = logMessage;
+            _logger = loggerFactory.GetLoggerFor(this);
         }
 
         public abstract Task<TResponse> GetResponseAsync(TRequest request);
 
         public async Task<object?> HandleAsync(object request)
         {
-            _logMessage.AddInfo(this, "Getting Request Response", request.GetType().Name);
+            _logger.AddInfo("Getting Request Response", request.GetType().Name);
 
             var response = await GetResponseAsync((TRequest)request);
 
-            _logMessage.AddInfo(this, "Response Received", response?.GetType().Name);
+            _logger.AddInfo("Response Received", response?.GetType().Name);
 
             return response;
         }

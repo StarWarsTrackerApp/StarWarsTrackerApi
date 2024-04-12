@@ -1,6 +1,6 @@
-﻿using StarWarsTracker.Domain.Constants;
+﻿using StarWarsTracker.Domain.Constants.LogConfigs;
 using StarWarsTracker.Domain.Exceptions;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
@@ -9,14 +9,14 @@ namespace StarWarsTracker.Api.Middleware
     [ExcludeFromCodeCoverage]
     public class ExceptionHandlingMiddleware : IMiddleware
     {
-        private readonly ILogMessage _logMessage;
+        private readonly IClassLogger _logger;
 
-        private readonly ILogConfig _logConfig;
+        private readonly ILogConfigReader _logConfigReader;
 
-        public ExceptionHandlingMiddleware(ILogMessage logMessage, ILogConfig logConfig)
+        public ExceptionHandlingMiddleware(IClassLoggerFactory loggerFactory, ILogConfigReader logConfigReader)
         {
-            _logMessage = logMessage;
-            _logConfig = logConfig;
+            _logger = loggerFactory.GetLoggerFor(this);
+            _logConfigReader = logConfigReader;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -29,8 +29,8 @@ namespace StarWarsTracker.Api.Middleware
             }
             catch (ValidationFailureException e)
             {
-                _logMessage.IncreaseLevel(_logConfig.GetLogLevel(LogConfigSection.ExceptionLogging, LogConfigKey.ValidationFailureExceptionLogLevel), this, "ValidationFailureException Caught",
-                    new { e.GetType().Name, e.ValidationFailureMessages, e.StackTrace });
+                _logger.IncreaseLevel(_logConfigReader.GetCustomLogLevel(Section.ExceptionLogging, Key.ValidationFailureExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
+                    "ValidationFailureException Caught", new { e.GetType().Name, e.ValidationFailureMessages, e.StackTrace });
 
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
@@ -38,8 +38,8 @@ namespace StarWarsTracker.Api.Middleware
             }
             catch (DoesNotExistException e)
             {
-                _logMessage.IncreaseLevel(_logConfig.GetLogLevel(LogConfigSection.ExceptionLogging, LogConfigKey.DoesNotExistExceptionLogLevel), this, "DoesNotExistException Caught",
-                    new { e.GetType().Name, e.NameOfObjectNotExisting, e.ValuesSearchedBy, e.StackTrace });
+                _logger.IncreaseLevel(_logConfigReader.GetCustomLogLevel(Section.ExceptionLogging, Key.DoesNotExistExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
+                    "DoesNotExistException Caught", new { e.GetType().Name, e.NameOfObjectNotExisting, e.ValuesSearchedBy, e.StackTrace });
 
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
 
@@ -47,8 +47,8 @@ namespace StarWarsTracker.Api.Middleware
             }
             catch (AlreadyExistsException e)
             {
-                _logMessage.IncreaseLevel(_logConfig.GetLogLevel(LogConfigSection.ExceptionLogging, LogConfigKey.AlreadyExistsExceptionLogLevel), this, "AlreadyExistsException Caught",
-                    new { e.GetType().Name, e.NameOfObjectAlreadyExisting, e.Conflicts, e.StackTrace });
+                _logger.IncreaseLevel(_logConfigReader.GetCustomLogLevel(Section.ExceptionLogging, Key.AlreadyExistsExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
+                    "AlreadyExistsException Caught", new { e.GetType().Name, e.NameOfObjectAlreadyExisting, e.Conflicts, e.StackTrace });
 
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
 
@@ -56,8 +56,8 @@ namespace StarWarsTracker.Api.Middleware
             }
             catch (Exception e)
             {
-                _logMessage.IncreaseLevel(_logConfig.GetLogLevel(LogConfigSection.ExceptionLogging, LogConfigKey.DefaultExceptionLogLevel), this, $"Exception Caught", 
-                    new { e.GetType().Name, e.Message, e.StackTrace });
+                _logger.IncreaseLevel(_logConfigReader.GetCustomLogLevel(Section.ExceptionLogging, Key.DefaultExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
+                    "Exception Caught", new { e.GetType().Name, e.Message, e.StackTrace });
                 
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

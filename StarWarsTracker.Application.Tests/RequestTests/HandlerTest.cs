@@ -1,17 +1,24 @@
 ﻿using Moq;
 using StarWarsTracker.Application.Abstraction;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 using StarWarsTracker.Persistence.Abstraction;
 
 namespace StarWarsTracker.Application.Tests.RequestTests
 {
     public abstract class HandlerTest
     {
-        protected readonly Mock<IDataAccess> _mockDataAccess = new();
+        protected static readonly Mock<IClassLoggerFactory> _mockLoggerFactory = new();
 
+        protected readonly Mock<IClassLogger> _mockLogger = new();
+
+        protected readonly Mock<IDataAccess> _mockDataAccess = new();
+        
         protected readonly Mock<IOrchestrator> _mockOrchestrator = new();
 
-        protected readonly Mock<ILogMessage> _mockLogMessage = new();
+        public HandlerTest()
+        {
+            _mockLoggerFactory.Setup(_ => _.GetLoggerFor(It.IsAny<It.IsAnyType>())).Returns(() => _mockLogger.Object);
+        }
 
         #region Helpers for setting up Mock calls to database with IDataAccess
 

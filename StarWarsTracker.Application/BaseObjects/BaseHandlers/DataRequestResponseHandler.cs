@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
@@ -9,6 +9,6 @@ namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
     {
         protected readonly IDataAccess _dataAccess;
 
-        protected DataRequestResponseHandler(IDataAccess dataAccess, ILogMessage logMessage) : base(logMessage) => _dataAccess = dataAccess;        
+        protected DataRequestResponseHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(loggerFactory) => _dataAccess = dataAccess;        
     }
 }

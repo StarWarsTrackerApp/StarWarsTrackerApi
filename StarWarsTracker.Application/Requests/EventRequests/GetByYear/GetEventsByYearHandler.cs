@@ -1,34 +1,34 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByYear
 {
     internal class GetEventsByYearHandler : DataRequestResponseHandler<GetEventsByYearRequest, GetEventsByYearResponse>
     {
-        public GetEventsByYearHandler(IDataAccess dataAccess, ILogMessage logMessage) : base(dataAccess, logMessage) { }
+        public GetEventsByYearHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
         public override async Task<GetEventsByYearResponse> GetResponseAsync(GetEventsByYearRequest request)
         {
-            _logMessage.AddInfo(this, "Getting Response For Request", request.GetType().Name);
+            _logger.AddInfo("Getting Response For Request", request.GetType().Name);
 
-            _logMessage.AddDebug(this, "Request Body", request);
+            _logger.AddDebug("Request Body", request);
 
             var events = await _dataAccess.FetchListAsync(new GetEventsByYear(request.YearsSinceBattleOfYavin));
 
-            _logMessage.AddDebug(this, "Event DTOs Found", events);
+            _logger.AddDebug("Event DTOs Found", events);
 
             if (events.Any())
             {
                 var response = new GetEventsByYearResponse(events.Select(_ => _.AsDomainEvent()));
 
-                _logMessage.AddInfo(this, "Response Found", response.GetType().Name);
+                _logger.AddInfo("Response Found", response.GetType().Name);
 
-                _logMessage.AddDebug(this, "Response Body", response);
+                _logger.AddDebug("Response Body", response);
 
                 return response;
             }
 
-            _logMessage.AddInfo(this, "No Events Found");
+            _logger.AddInfo("No Events Found");
 
             throw new DoesNotExistException(nameof(Event), (request.YearsSinceBattleOfYavin, nameof(request.YearsSinceBattleOfYavin)));
         }

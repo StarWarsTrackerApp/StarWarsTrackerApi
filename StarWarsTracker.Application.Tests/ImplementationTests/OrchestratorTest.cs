@@ -2,7 +2,7 @@
 using StarWarsTracker.Application.Abstraction;
 using StarWarsTracker.Application.Implementation;
 using StarWarsTracker.Application.Tests.ImplementationTests.TestRequests;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests
 {
@@ -12,11 +12,15 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
 
         private readonly Mock<IHandlerFactory> _mockHandlerFactory = new();
 
-        private readonly Mock<ILogMessage> _mockLogMessage = new();
+        private readonly Mock<IClassLogger> _mockLogger = new();
 
         public OrchestratorTest()
         {
-            _orchestrator = new Orchestrator(_mockHandlerFactory.Object, _mockLogMessage.Object);
+            var mockClassLoggerFactory = new Mock<IClassLoggerFactory>();
+
+            mockClassLoggerFactory.Setup(_ => _.GetLoggerFor(It.IsAny<It.IsAnyType>())).Returns(() => _mockLogger.Object);
+
+            _orchestrator = new Orchestrator(_mockHandlerFactory.Object, mockClassLoggerFactory.Object);
         }
 
         [Fact]

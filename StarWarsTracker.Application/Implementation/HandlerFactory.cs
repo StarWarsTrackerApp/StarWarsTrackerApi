@@ -1,4 +1,4 @@
-﻿using StarWarsTracker.Domain.Logging;
+﻿using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Implementation
 {
@@ -10,19 +10,19 @@ namespace StarWarsTracker.Application.Implementation
 
         private readonly ITypeActivator _typeActivator;
 
-        private readonly ILogMessage _logMessage;
+        private readonly IClassLogger _logger;
 
         #endregion
 
         #region Constructor
 
-        public HandlerFactory(ITypeActivator typeActivator, IHandlerDictionary handlers, ILogMessage logMessage)
+        public HandlerFactory(ITypeActivator typeActivator, IHandlerDictionary handlers, IClassLoggerFactory classLoggerFactory)
         {
             _typeActivator = typeActivator;
 
             _handlerDictionary = handlers;
 
-            _logMessage = logMessage;
+            _logger = classLoggerFactory.GetLoggerFor(this);
         }
 
         #endregion
@@ -31,33 +31,33 @@ namespace StarWarsTracker.Application.Implementation
 
         public IBaseHandler NewHandler<TRequest>(TRequest request)
         {
-            _logMessage.AddInfo(this, "Handler Factory Receiving Request", request?.GetType().Name);
+            _logger.AddInfo("Handler Factory Receiving Request", request?.GetType().Name);
 
             if (request is null)
             {
                 var exception = new ArgumentNullException(nameof(request));
 
-                _logMessage.IncreaseLevel(LogLevel.Critical, this, "Attempted To Instantiate Handler For Null TRequest");
+                _logger.IncreaseLevel(LogLevel.Critical, "Attempted To Instantiate Handler For Null TRequest");
 
                 throw exception;
             }
 
-            _logMessage.AddTrace(this, "Looking for Handler", request.GetType().Name);
+            _logger.AddTrace("Looking for Handler", request.GetType().Name);
             
             var handlerType = _handlerDictionary.GetHandlerType(request.GetType());            
 
             if (handlerType == null)
             {
-                _logMessage.IncreaseLevel(LogLevel.Critical, this, $"No Handler Found", request.GetType().Name);
+                _logger.IncreaseLevel(LogLevel.Critical, "No Handler Found", request.GetType().Name);
 
                 throw new DoesNotExistException("RequestHandler", (request, nameof(request)));
             }
 
-            _logMessage.AddTrace(this, "Located Handler", handlerType.Name);
+            _logger.AddTrace("Located Handler", handlerType.Name);
 
             var handler = _typeActivator.Instantiate<IBaseHandler>(handlerType);
 
-            _logMessage.AddInfo(this, "Instantiated Handler", handlerType.Name);
+            _logger.AddInfo("Instantiated Handler", handlerType.Name);
 
             return handler;
         }

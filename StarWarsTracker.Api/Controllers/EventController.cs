@@ -5,13 +5,13 @@ using StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonType;
 using StarWarsTracker.Application.Requests.EventRequests.GetByNameLike;
 using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
 using StarWarsTracker.Application.Requests.EventRequests.Insert;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Api.Controllers
 {
     public class EventController : BaseController
     {
-        public EventController(IOrchestrator orchestrator, ILogMessage logMessage) : base(orchestrator, logMessage) { }
+        public EventController(IOrchestrator orchestrator, IClassLoggerFactory loggerFactory) : base(orchestrator, loggerFactory) { }
 
         [HttpPost("Event/InsertEvent")]
         public async Task InsertEvent(InsertEventRequest request) => await ExecuteRequestAsync(request);

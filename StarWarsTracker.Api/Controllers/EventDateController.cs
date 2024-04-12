@@ -1,12 +1,12 @@
 ﻿using StarWarsTracker.Application.Requests.EventDateRequests.Delete;
 using StarWarsTracker.Application.Requests.EventDateRequests.Insert;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Api.Controllers
 {
     public class EventDateController : BaseController
     {
-        public EventDateController(IOrchestrator orchestrator, ILogMessage logMessage) : base(orchestrator, logMessage) { }
+        public EventDateController(IOrchestrator orchestrator, IClassLoggerFactory loggerFactory) : base(orchestrator, loggerFactory) { }
 
         [HttpPost("EventDate/InsertEventDates")]
         public async Task InsertEventDates([FromBody] InsertEventDatesRequest request) => await ExecuteRequestAsync(request);

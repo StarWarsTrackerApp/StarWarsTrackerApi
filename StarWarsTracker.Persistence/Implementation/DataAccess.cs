@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using StarWarsTracker.Domain.Constants.LogConfigs;
 using StarWarsTracker.Domain.Enums;
-using StarWarsTracker.Domain.Logging;
+using StarWarsTracker.Logging.Abstraction;
+using System.Runtime.CompilerServices;
 
 namespace StarWarsTracker.Persistence.Implementation
 {
@@ -10,21 +12,21 @@ namespace StarWarsTracker.Persistence.Implementation
 
         private readonly IDbConnectionFactory _connectionFactory;
 
-        private readonly ILogMessage _logMessage;
+        private readonly IClassLogger _logger;
 
-        private readonly ILogConfig _logConfig;
+        private readonly ILogConfigReader _logConfigReader;
 
         #endregion
 
         #region Constructor 
 
-        public DataAccess(IDbConnectionFactory connectionFactory, ILogMessage logMessage, ILogConfig logConfig)
+        public DataAccess(IDbConnectionFactory connectionFactory, IClassLoggerFactory loggerFactory, ILogConfigReader logConfigReader)
         {
             _connectionFactory = connectionFactory;
 
-            _logMessage = logMessage;
+            _logger = loggerFactory.GetLoggerFor(this);
 
-            _logConfig = logConfig;
+            _logConfigReader = logConfigReader;
         }
 
         #endregion
@@ -38,22 +40,20 @@ namespace StarWarsTracker.Persistence.Implementation
         /// <returns>Returns the number of rows that are affected by the SQL Command that is executed.</returns>
         public async Task<int> ExecuteAsync(IDataExecute request)
         {
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.ExecuteSqlRequestLogLevel, this, "Executing SQL Request", 
-                GetRequestToLog(request, LogConfigKey.ExecuteSqlRequestLogDetails));
+            LogRequest(Section.SqlExecute, request);
 
             using var connection = _connectionFactory.NewConnection();
 
-            _logMessage.AddTrace(this, "Connection Created", connection.ConnectionString);
+            _logger.AddTrace("Connection Created", connection.ConnectionString);
 
             connection.Open();
 
-            _logMessage.AddTrace(this, "Opened Connection");
+            _logger.AddTrace("Opened Connection");
 
             var response = await connection.ExecuteAsync(request.GetSql(), request.GetParameters());
 
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.ExecuteSqlResponseLogLevel, this, "Rows Affected", 
-                GetResponseToLog(response, LogConfigKey.ExecuteSqlResponseLogDetails));
-
+            LogResponse(Section.SqlExecute, response);
+            
             return response;
         }
 
@@ -65,21 +65,19 @@ namespace StarWarsTracker.Persistence.Implementation
         /// <returns>Returns the first record found or default if none found.</returns>
         public async Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request)
         {
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.FetchSqlRequestLogLevel, this, "Fetching SQL Request", 
-                GetRequestToLog(request, LogConfigKey.FetchSqlRequestLogDetails));
+            LogRequest(Section.SqlFetch, request);
 
             using var connection = _connectionFactory.NewConnection();
 
-            _logMessage.AddTrace(this, "Database Connection Created", connection.ConnectionString);
+            _logger.AddTrace("Database Connection Created", connection.ConnectionString);
 
             connection.Open();
 
-            _logMessage.AddTrace(this, "Database Connection Opened");
+            _logger.AddTrace("Database Connection Opened");
 
             var response = await connection.QueryFirstOrDefaultAsync<TResponse>(request.GetSql(), request.GetParameters());
 
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.FetchSqlResponseLogLevel, this, "Response Fetched", 
-                GetResponseToLog<TResponse>(response, LogConfigKey.FetchSqlResponseLogDetails));
+            LogResponse(Section.SqlFetch, response);
 
             return response;
         }
@@ -92,21 +90,19 @@ namespace StarWarsTracker.Persistence.Implementation
         /// <returns>Returns the records found or an empty collection if none found.</returns>
         public async Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request)
         {
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.FetchListSqlRequestLogLevel, this, "Fetching SQL List Request", 
-                GetRequestToLog(request, LogConfigKey.FetchListSqlRequestLogDetails));
+            LogRequest(Section.SqlFetchList, request);
 
             using var connection = _connectionFactory.NewConnection();
 
-            _logMessage.AddTrace(this, "Connection Created", connection.ConnectionString);
+            _logger.AddTrace("Connection Created", connection.ConnectionString);
 
             connection.Open();
 
-            _logMessage.AddTrace(this, "Opened Connection");
+            _logger.AddTrace("Opened Connection");
 
             var response = await connection.QueryAsync<TResponse>(request.GetSql(), request.GetParameters());
 
-            _logMessage.AddConfiguredLogLevel(LogConfigSection.SqlLogging, LogConfigKey.FetchListSqlResponseLogLevel, this, "Response Fetched", 
-                GetResponseToLog(response, LogConfigKey.FetchListSqlResponseLogDetails));
+            LogResponse(Section.SqlFetchList, response);
 
             return response;
         }
@@ -115,33 +111,45 @@ namespace StarWarsTracker.Persistence.Implementation
 
         #region Private Methods For Logging
 
-        private object? GetRequestToLog<T>(T request, string logDetailsConfigKey) where T : IDataRequest =>
-            _logConfig.GetLogLevel(LogConfigSection.SqlLogging, logDetailsConfigKey) switch
+        private void LogRequest<T>(string logConfigSection, T request, [CallerMemberName] string methodCalling = "") where T : IDataRequest
+        {
+            var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlRequestLogDetails);
+
+            object? extra = logDetailLevel switch
             {
-                LogLevel.Trace => 
+                LogLevel.Trace =>
                     new { request.GetType().Name, Parameters = request.GetParameters(), Sql = request.GetSql() },
-                
-                LogLevel.Debug => 
+
+                LogLevel.Debug =>
                     new { request.GetType().Name, Parameters = request.GetParameters() },
-                
-                LogLevel.Information or LogLevel.Warning or LogLevel.Error or LogLevel.Critical => 
+
+                LogLevel.Information or LogLevel.Warning or LogLevel.Error or LogLevel.Critical =>
                 new { request.GetType().Name },
-                
+
                 _ => null,
             };
 
-        private object? GetResponseToLog<T>(T? response, string logDetailsConfigKey) =>
-            _logConfig.GetLogLevel(LogConfigSection.SqlLogging, logDetailsConfigKey) switch
+            _logger.AddConfiguredLogLevel(logConfigSection, Key.SqlRequestLogLevel, "Sql Request Received", extra, methodCalling);
+        }
+
+        private void LogResponse<T>(string logConfigSection, T? response, [CallerMemberName] string methodCalling = "")
+        {
+            var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlResponseLogDetails);
+
+            object? extra = logDetailLevel switch
             {
-                LogLevel.Trace => 
+                LogLevel.Trace =>
                     new { response?.GetType().Name, response },
 
-                LogLevel.Debug or LogLevel.Information or LogLevel.Warning or LogLevel.Error or LogLevel.Critical => 
+                LogLevel.Debug or LogLevel.Information or LogLevel.Warning or LogLevel.Error or LogLevel.Critical =>
                     new { response?.GetType().Name, response },
-                
-                _ => null,
+
+                _ => null
             };
 
+            _logger.AddConfiguredLogLevel(logConfigSection, Key.SqlResponseLogLevel, "Sql Response Received", extra, methodCalling);
+        }
+       
         #endregion
     }
 }
