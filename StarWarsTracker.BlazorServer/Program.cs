@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using StarWarsTracker.ApiCaller.Implementation;
 using StarWarsTracker.BlazorServer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.InjectApiCallerDependencies("https://localhost:7160/");
 
 var app = builder.Build();
 

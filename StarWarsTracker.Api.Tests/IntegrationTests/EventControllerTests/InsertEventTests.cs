@@ -134,7 +134,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
             Assert.NotNull(eventInserted);
             Assert.Equal(request.Name, eventInserted.Event.Name);
             Assert.Equal(request.Description, eventInserted.Event.Description);
-            Assert.Equal(request.CanonType, eventInserted.Event.CanonType);
+            Assert.Equal((int)request.CanonType, eventInserted.Event.CanonType);
         }
 
         #endregion

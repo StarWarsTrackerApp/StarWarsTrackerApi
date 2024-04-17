@@ -1,0 +1,68 @@
+﻿@page "/Events/GetEventsByName"
+
+@using StarWarsTracker.ApiCaller.StarWarsTrackerApi.Events.GetByNameLike
+@using StarWarsTracker.Domain.Models
+
+@inject IApiCaller ApiCaller;
+
+<h3>GetEventsByName</h3>
+
+<input @bind="name"/>
+
+<button class="btn btn-primary" @onclick="SearchAsync">Search</button>
+
+@if(noFormsFound == null)
+{
+    <p>Enter the name of an Event to search for.</p>
+}
+else if (noFormsFound == true)
+{
+    <p>
+        No Forms Found With EventName Containing: @name
+    </p>
+}
+else if(noFormsFound == false)
+{
+    <p>Forms Found:</p>
+    <ul>
+        @foreach(var e in @events)
+        {
+            <li> @e.Name </li>
+        }
+    </ul>
+}
+
+@code {
+    private string name = string.Empty;
+
+    private bool? noFormsFound = null;
+
+    private bool isBadRequest = false;
+
+    private IEnumerable<Event> events = Enumerable.Empty<Event>();
+
+    private async Task SearchAsync()
+    {
+        var response = await ApiCaller.GetResponseAsync(new GetEventsByNameLikeRequest(name));
+
+        if(response is GetResponse<GetEventsByNameLikeResponse> r)
+        {
+            if(!r.Value.Events.Any())
+            {
+                noFormsFound = true;
+            }
+            else
+            {
+                noFormsFound = false;
+                events = r.Value.Events;
+            }
+        }
+        else if(response is ValidationFailureResponse v)
+        {
+            // validationFailure - Add popup here
+            isBadRequest = false;
+            noFormsFound = true;
+        }
+        //TODO: More Failure Handling
+    }
+}

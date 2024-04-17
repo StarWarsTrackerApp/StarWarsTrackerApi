@@ -8,7 +8,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 
         public GetEventsByNameLikeRequest(string name) => Name = name;
 
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
 
         public bool IsValid(out Validator validator)
         {

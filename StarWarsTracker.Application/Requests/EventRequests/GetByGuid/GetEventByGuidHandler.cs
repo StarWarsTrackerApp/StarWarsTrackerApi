@@ -42,8 +42,6 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByGuid
 
             _logger.AddInfo("Response Found", response.GetType().Name);
 
-            _logger.AddDebug("Response Body", response);
-
             return response;
         }
     }
