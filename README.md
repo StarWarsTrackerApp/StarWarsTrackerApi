@@ -132,19 +132,142 @@ For example, all interactions with the Database are encapsulated in the StarWars
 In the below sections we will discuss each projects responsibility and any notes to highlight from that project.
 
 ### StarWarsTracker.Domain
-Info about Domain Layer
+The Domain is the core of the application. This project does not depend on any other projects.
+
+Below are some things you will find in the Domain project:
+- Constants
+  - Contains classes for constants related to different values such as MaxLength used to track the maximum length of values like EventName.
+- Enums
+  - Contains Enums used throughout the application such as CanonType and EventDateType.
+- Exceptions
+  - Contains Custom exceptions created for various scenarios like AlreadyExistsException or NotFoundException.
+- Extensions
+  - Contains Extension Methods for various classes such as EnumExtensions that has a function to GetEnumDescription.
+- Models
+  - Contains Domain Models that are used throughout the application.
+- Validation
+  - Contains ValidationRules for how objects are validated, reuseable ValidationFailureMessages, and a Validator to apply Validation Rules.
 
 ### StarWarsTracker.Logging
-Info about Logging Layer
+The Logging project is responsible for defining how the Custom Logging is handled/exposed.
+
+Below are some things you will find in the Logging project:
+- Abstraction
+  - IClassLogger
+    - This interface defines the contract of how a Class will be able to manipulate a LogMessage. 
+  - IClassLoggerFactory
+    - This interface defines the contract for the Factory that will return an IClassLogger for different classes to use for logging.
+  - ILogConfig
+    - This interface defines the contract for the LogConfig that will be stored/saved at startup. This exposes the Default Configurations and Endpoint Override Configurations.
+  - ILogConfigReader
+    - This interface defines the contract for how a class is able to obtain LogLevel Configurations from the ILogConfig.
+  - ILogMessage
+    - This interface defines the contract for how you can manipulate and obtain data from the LogMessage.
+  - ILogWriter
+    - This interface defines the contract for how a LogMessage will be written/saved.
+- AppSettingsConfig
+  - LogConfigSection
+    - LogConfigSection represents the Dictionary (of String, LogLevel) that contains LogLevel Configurations. Each Key would map to a LogLevel.   
+  - LogConfigCategory
+    - LogConfigCategory represents the Dictionary (of String, LogConfigSection) that contains ConfigSections where each Section is a Dictionary of string, LogLevel.
+  - LogConfigSettings
+    - LogConfigSettings represents the Dictionary (of String, LogConfigCategory) that contains the Default or Endpoint Override Configurations.
+- Implementation
+  - This namespace contains the implementation for the interfaces defined in Abstraction (First Bullet Point).
 
 ### StarWarsTracker.Persistence
-Info about DataAccess Layer
+The Persistence layer encapsulates the SQL transactions sent to the Database. This is where the application has a dependency on the Dapper (ORM).
+'DataRequests' (Queries/Commands) sent to Dapper use an IDataRequest interface to define how they will GetSql() and GetParameters().
+
+Below are some things you will find in the Persistence project:
+- Abstraction
+  - IDbConnectionFactory
+    - Defines the contract for Factory that returns an IDbConnection to connect to the database.
+  - IDataRequest
+    - Defines the contract for every request that goes to Dapper. Each request will GetSql() and GetParameters().
+    - IDataExecute implements IDataRequest and is used by SQL Commands (Insert, Update, Delete).
+    - IDataFetch < T > implements IDataRequest and uses Generics to define the DTO fetched for SQL Queries.
+  - IDataAccess
+    - This is the Interface abstracting the calls to Dapper.
+    - ExecuteAsync(IDataExecute request) - Used for Insert/Update/Delete and returns an int representing the number of rows affected by the SQL command.
+    - FetchAsync < T > (IDataFetch < T > request) - Used for SQL Queries and will return the FirstOrDefault <T> defined by the IDataFetch request.
+    - FetchListAsync < T > (IDataFetch < T > request) - Used for SQL Queries and will return a collection of the <T> defined by the IDataFetch request.
+- BaseDataRequests
+  - Contains reuseable BaseRequests for SQL Queries/Commands that may reuse the same parameters.
+    - For Example, 'IdParameter' can be reused for a DataRequest where the parameter is just @Id
+- DataRequestObjects
+  - Contains folders for each table/feature that Queries/Commands are created for.
+    - For Example, EventRequests and EventDateRequests.
+  - Each DataRequest implements either IDataFetch (Query) or IDataExecute (Command).
+    - Both of these implement IDataRequest, so they will use GetSql() and GetParameters() to define the SQL transaction.
+- DataTransferObjects
+  - Contains the DTOs (Data Transfer Objects) that we will fetch from the database with IDataFetch requests.
+- Implementation
+  - SqlConnectionFactory
+    - Implements IDbConnectionFactory to create SqlConnections.
+  - DataAccess
+    - Implements IDataAccess to encapsulate Dapper dependency.
+  - DependencyInjection
+    - Utilize Microsoft.Extensions.DependencyInjection to inject Dependencies into IServiceCollection.
 
 ### StarWarsTracker.Application
-Info about Application Layer
+The Application Project encapsulates the logic on how requests are handled. This is where the Mediator Pattern is implemented. 
+The IOrchestrator will receive an IRequest or IRequestResponse, and use the IHandlerFactory to instantiate the appropriate RequestHandler at runtime. 
+There is also RequestValidation that is automatically processed for any request that implements the StarWarsTracker.Domain.IValidatabale interface before the handler is initialized.
+
+Below are some things you will find in the Application project:
+- Abstraction
+  - IBaseHandler
+    - This Interface defines a common method that is used to handle a request. The IBaseHandler is implemented by the IRequestHandler and IRequestResponseHandler
+  - IHandlerDictionary
+    - This interface defines the contract for the Handler Dictionary which will use RequestTypes to locate and return the appropriate RequestHandler.
+  - IHandlerFactory
+    - This interface defines the contract for the factory that will instantiate a Handler at runtime using the Type of Request that is being received.
+  - IOrchestrator
+    - This interface defines the contract for the Orchestrator that will act as a mediator between the request caller and the request handler.
+  - IRequest
+    - This interface will be implemented by any Request (class) that will be executed by the IOrchestrator and does not return a response.
+  - IRequestHandler
+    - This Handler is used for any class that will handle an IRequest and not return any response type.
+  - IRequestResponse
+    - This interface will be implemented by any Request (class) that returns a response which will be fetched by the IOrchestrator.
+  - IRequestResponseHandler
+    - This Handler is used for any class that will handle an IRequest that returns a Response.
+  - ITypeActivator
+    - This interface defines the contract for the implementation to instantiate an object at run time.
+- BaseObjects
+  - BaseHandlers
+    - Reuseable base classes for Handlers that will have common dependencies for example using the IDataAccess interface.
+  - BaseRequests
+    - Reuseable base classes for Requests that will have common requestBody and/or validation rules, for example RequiredEventGuidRequest.
+- Implementation
+    - This namespace contains the implementation for the interfaces defined in Abstraction (First Bullet Point).
+- Requests
+  - This namespace contains folders/subFolders where the folders are Feature/Table specific and the subFolders are Request specific.
+    - Example Folders are EventRequests and EventDateRequests
+    - Example SubFolders are EventRequests/Delete or EventRequests/GetByGuid
 
 ### StarWarsTracker.Api
-Info about Api Layer
+The Api Application is the outermost layer of the application. This is what exposes the functionality of the application to the user, Dependencies are injected, and Middlewares are implemented.
+
+Below are some things you will find in the API project:
+- Controllers
+  - BaseController - Defines common dependencies used by all Controllers and implements logging on requests being handled.
+  - Contains various other controllers that expose endpoints such as EventController and EventDateController.
+- Middleware
+  - ExceptionHandlingMiddleware
+    - This class is responsible for acting as a global exception handler in the middleware.
+      - This ensures that custom exceptions are returned with consistent response bodies and expected status codes.
+      - Other unhandled exceptions are treated as 500 Internal Server Error.
+      - Logging is enabled based on Logging Configurations from appsettings.
+  - LoggingMiddleware
+    - This class is responsible for acting as a global Logger in the middleware.
+      - LogConfigReaders have their EndpointOverrides set as the request comes in the pipeline.
+      - Additional Try/Catch is enabled in case of any exceptions making it past Global Exception Handler.
+      - LogMessage is saved using ILogWriter when the request is leaving the pipeline.     
+  - AppSettings
+    - Although it is added to the gitIgnore, the AppSettings is housed in the API project.
+    - AppSettings has configurations such as the Database ConnectionString and the Logging Configurations.
 
 ### StarWarsTracker.SqlServiceDatabase
 Info about Sql Server Database
