@@ -25,13 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Tests.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Api.Tests", "StarWarsTracker.Api.Tests\StarWarsTracker.Api.Tests.csproj", "{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.BlazorServer", "StarWarsTracker.BlazorServer\StarWarsTracker.BlazorServer.csproj", "{AC62499D-3867-408B-AE3E-5D94D21D2FC0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Logging", "StarWarsTracker.Logging\StarWarsTracker.Logging.csproj", "{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Logging.Tests", "StarWarsTracker.Logging.Tests\StarWarsTracker.Logging.Tests.csproj", "{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.ApiCaller", "StarWarsTracker.ApiCaller\StarWarsTracker.ApiCaller.csproj", "{E543C4CF-7481-4421-99AD-F57F412713A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,14 +121,6 @@ Global
 		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Trace|Any CPU.ActiveCfg = Trace|Any CPU
 		{C0B115CB-AFFF-45B3-B151-FBCBC2486EF7}.Trace|Any CPU.Build.0 = Trace|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Info|Any CPU.ActiveCfg = Info|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Info|Any CPU.Build.0 = Info|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Trace|Any CPU.ActiveCfg = Trace|Any CPU
-		{AC62499D-3867-408B-AE3E-5D94D21D2FC0}.Trace|Any CPU.Build.0 = Trace|Any CPU
 		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA5B8B7-6B60-4E38-9FA1-B44D77BE7616}.Info|Any CPU.ActiveCfg = Debug|Any CPU
@@ -149,14 +137,6 @@ Global
 		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Trace|Any CPU.ActiveCfg = Debug|Any CPU
 		{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}.Trace|Any CPU.Build.0 = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Info|Any CPU.ActiveCfg = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Info|Any CPU.Build.0 = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Trace|Any CPU.ActiveCfg = Debug|Any CPU
-		{E543C4CF-7481-4421-99AD-F57F412713A1}.Trace|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
