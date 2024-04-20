@@ -3,6 +3,10 @@ using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Implementation
 {
+    /// <summary>
+    /// This class implements the ITypeActivator in order to instantiate objects at runtime. 
+    /// Uses IServiceProvider and ActivatorUtilities to instantiate objects.
+    /// </summary>
     internal class TypeActivator : ITypeActivator
     {
         private readonly IServiceProvider _serviceProvider;

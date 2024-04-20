@@ -2,6 +2,9 @@
 
 namespace StarWarsTracker.Logging.Implementation
 {
+    /// <summary>
+    /// This class represents the information that is captured when content is added to the LogMessage.
+    /// </summary>
     public class LogContent
     {
         public LogContent(LogLevel logLevel, string className, string nameSpace, string methodCalling, string description, object? extra, double elapsedMilliseconds)

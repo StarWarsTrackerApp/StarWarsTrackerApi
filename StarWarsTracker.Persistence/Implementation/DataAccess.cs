@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace StarWarsTracker.Persistence.Implementation
 {
+    /// <summary>
+    /// This class implements IDataAccess in order to encapsulate the integration with Dapper to send SQL Transactions to the database.
+    /// </summary>
     internal class DataAccess : IDataAccess
     {
         #region Private Members

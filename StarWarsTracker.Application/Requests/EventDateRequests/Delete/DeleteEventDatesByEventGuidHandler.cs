@@ -12,8 +12,6 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
         {
             _logger.AddInfo("Executing Request", request.GetType().Name);
 
-            _logger.AddDebug("Request Body", request);
-
             var eventToDeleteDatesFor = await _dataAccess.FetchAsync(new GetEventByGuid(request.EventGuid));
 
             _logger.AddDebug("Event To Delete Dates For", eventToDeleteDatesFor);

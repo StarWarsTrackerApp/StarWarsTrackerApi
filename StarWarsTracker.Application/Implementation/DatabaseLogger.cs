@@ -1,9 +1,13 @@
 ﻿using StarWarsTracker.Domain.Constants.LogConfigs;
 using StarWarsTracker.Logging.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.Logging;
+using System.Text.Json;
 
 namespace StarWarsTracker.Application.Implementation
 {
+    /// <summary>
+    /// This class implements the ILogWriter to save LogMessages to the database.
+    /// </summary>
     public class DatabaseLogger: ILogWriter
     {
         #region Private Members
@@ -39,11 +43,23 @@ namespace StarWarsTracker.Application.Implementation
 
             var logLevel = logMessage.GetLevel();
 
-            var content = logMessage.GetMessageJson(contentLevel ?? LogLevel.None);
+            var logContents = logMessage.GetContent(contentLevel ?? LogLevel.None);
+
+            var currentTime = DateTime.UtcNow;
+
+            var message = new
+            {
+                ElapsedMilliseconds = logMessage.GetElapsedMilliseconds(),                                        
+                LogLevel = logLevel,
+                NameOfLogLevel = logLevel.ToString(),
+                LogContents = logContents
+            };
+
+            var messageJson = JsonSerializer.Serialize(message);
 
             if (minimumLoggingLevel <= logLevel)
             {
-                Task.Run(() => _dataAccess.ExecuteAsync(new InsertLog((int)logLevel, content, requestPath, httpMethod, null)));
+                Task.Run(() => _dataAccess.ExecuteAsync(new InsertLog((int)logLevel, messageJson, requestPath, httpMethod, null)));
             }
         }
 

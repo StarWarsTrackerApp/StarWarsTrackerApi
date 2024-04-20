@@ -5,6 +5,10 @@
     /// </summary>
     internal interface IRequestHandler<TRequest> : IBaseHandler where TRequest : IRequest
     {
+        /// <summary>
+        /// Execute/Handle the IRequest received.
+        /// </summary>
+        /// <param name="request">The IRequest to be Executed</param>
         public Task ExecuteRequestAsync(TRequest request);
     }
 }

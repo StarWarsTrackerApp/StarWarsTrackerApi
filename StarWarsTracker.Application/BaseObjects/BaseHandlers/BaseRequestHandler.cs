@@ -2,6 +2,10 @@
 
 namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
+    /// <summary>
+    /// This base class is used for Handlers that will Execute an IRequest.    
+    /// </summary>
+    /// <typeparam name="TRequest">The Type of IRequest to be executed.</typeparam>
     internal abstract class BaseRequestHandler<TRequest> : IRequestHandler<TRequest> where TRequest : IRequest
     {
         protected readonly IClassLogger _logger;
