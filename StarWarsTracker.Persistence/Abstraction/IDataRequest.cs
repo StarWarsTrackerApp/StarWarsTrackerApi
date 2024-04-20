@@ -6,8 +6,16 @@
     /// </summary>
     public interface IDataRequest
     {
+        /// <summary>
+        /// Get the SQL Query/Command for the DataRequest.
+        /// </summary>
+        /// <returns>string value of the SQL Query/Command</returns>
         public string GetSql();
 
+        /// <summary>
+        /// Returns Nullable object representing the Parameters used in the DataRequest's SQL Query/Command.
+        /// </summary>
+        /// <returns>object representing the SQL Parameters. Null if no parameters.</returns>
         public object? GetParameters();
     }
 }
