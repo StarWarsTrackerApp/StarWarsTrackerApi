@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Logging", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.Logging.Tests", "StarWarsTracker.Logging.Tests\StarWarsTracker.Logging.Tests.csproj", "{69B16F8A-C20E-4B20-B1AD-01C73E0E5C5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsTracker.ApiCaller", "StarWarsTracker.ApiCaller\StarWarsTracker.ApiCaller.csproj", "{E543C4CF-7481-4421-99AD-F57F412713A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarsTracker.ApiCaller", "StarWarsTracker.ApiCaller\StarWarsTracker.ApiCaller.csproj", "{E543C4CF-7481-4421-99AD-F57F412713A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

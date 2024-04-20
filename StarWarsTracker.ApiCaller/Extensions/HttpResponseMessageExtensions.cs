@@ -1,5 +1,6 @@
 ﻿using StarWarsTracker.ApiCaller.BaseResponses;
 using StarWarsTracker.ApiCaller.Implementation;
+using System.Net;
 using System.Text.Json;
 
 namespace StarWarsTracker.ApiCaller.Extensions
@@ -8,7 +9,6 @@ namespace StarWarsTracker.ApiCaller.Extensions
     {
         public static bool TryParseContent<T>(this HttpResponseMessage message, out T content)
         {
-            
             try
             {
                 var json = message.Content.ReadAsStringAsync().Result;
@@ -45,7 +45,7 @@ namespace StarWarsTracker.ApiCaller.Extensions
 
             var json = await message.Content.ReadAsStringAsync();
 
-            if (message.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            if (message.StatusCode == HttpStatusCode.BadRequest)
             {
                 var validationFailureReasons = JsonSerializer.Deserialize<IEnumerable<string>>(json);
 
@@ -53,6 +53,11 @@ namespace StarWarsTracker.ApiCaller.Extensions
                 {
                     return new ValidationFailureResponse(validationFailureReasons);                    
                 }
+            }
+
+            if (message.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new NotFoundResponse(json);
             }
 
             return new UnexpectedResponse((int)message.StatusCode, json);

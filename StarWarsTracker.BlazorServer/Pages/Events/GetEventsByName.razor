@@ -1,68 +1,94 @@
 ﻿@page "/Events/GetEventsByName"
 
 @using StarWarsTracker.ApiCaller.StarWarsTrackerApi.Events.GetByNameLike
+@using StarWarsTracker.BlazorServer.Components;
+@using StarWarsTracker.BlazorServer.Components.Popups;
+@using StarWarsTracker.Domain.Extensions;
 @using StarWarsTracker.Domain.Models
 
 @inject IApiCaller ApiCaller;
 
-<h3>GetEventsByName</h3>
+<h3>Search Events By Name</h3>
 
-<input @bind="name"/>
-
+<input @bind="_name"/>
 <button class="btn btn-primary" @onclick="SearchAsync">Search</button>
 
-@if(noFormsFound == null)
+<ValidationFailureResponsePopup @ref="_validationPopup" IsOpenChanged="StateHasChanged" />
+
+@if(_eventsFound == null)
 {
     <p>Enter the name of an Event to search for.</p>
 }
-else if (noFormsFound == true)
+else if (_eventsFound == false)
 {
-    <p>
-        No Forms Found With EventName Containing: @name
-    </p>
+    <p>No Events Found With EventName Containing: @_name</p>
 }
-else if(noFormsFound == false)
+else if(_eventsFound == true)
 {
-    <p>Forms Found:</p>
-    <ul>
-        @foreach(var e in @events)
-        {
-            <li> @e.Name </li>
-        }
-    </ul>
+    <SearchResultTablets SearchResults="GetSearchResults()" />    
 }
 
 @code {
-    private string name = string.Empty;
 
-    private bool? noFormsFound = null;
+    #region Private Members
 
-    private bool isBadRequest = false;
+    private string _name = string.Empty;
 
-    private IEnumerable<Event> events = Enumerable.Empty<Event>();
+    private bool? _eventsFound = null;
+
+    private IEnumerable<Event> _events = Enumerable.Empty<Event>();
+
+    private ValidationFailureResponsePopup _validationPopup = new();
+
+    #endregion
+
+    #region Search Functionality
 
     private async Task SearchAsync()
     {
-        var response = await ApiCaller.GetResponseAsync(new GetEventsByNameLikeRequest(name));
+        var response = await ApiCaller.GetResponseAsync(new GetEventsByNameLikeRequest(_name));
 
         if(response is GetResponse<GetEventsByNameLikeResponse> r)
         {
-            if(!r.Value.Events.Any())
+            if(r.Value.Events.Any())
             {
-                noFormsFound = true;
+                _eventsFound = true;
+                _events = r.Value.Events;
             }
             else
             {
-                noFormsFound = false;
-                events = r.Value.Events;
+                _eventsFound = false;
             }
         }
         else if(response is ValidationFailureResponse v)
         {
-            // validationFailure - Add popup here
-            isBadRequest = false;
-            noFormsFound = true;
+            await _validationPopup.OpenModalAsync(v);
+            _eventsFound = null;
         }
-        //TODO: More Failure Handling
+        else if(response is NotFoundResponse)
+        {
+            _eventsFound = false;
+        }
+        else
+        {
+            if(response is UnexpectedResponse u)
+            {
+                //TODO: Unexpected Response Handling
+            }
+
+            _eventsFound = false;
+        }
     }
+
+    private IEnumerable<SearchResultTablets.SearchResult> GetSearchResults()
+    {
+        if(_events.Any())
+        {
+            return _events.Select(_ => new SearchResultTablets.SearchResult($"{_.Name} | {_.CanonType.GetEnumDescription()}", _.Description, ""));
+        }
+
+        return Enumerable.Empty<SearchResultTablets.SearchResult>();
+    }
+
+#endregion
 }
