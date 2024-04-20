@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Domain.Enums
 {
+    /// <summary>
+    /// This enum defines the type of time frame that an Event has.
+    /// </summary>
     public enum EventTimeFrameType
     {
         Invalid = 0,
