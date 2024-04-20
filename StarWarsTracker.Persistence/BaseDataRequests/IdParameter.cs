@@ -5,12 +5,24 @@
     /// </summary>
     public abstract class IdParameter : IDataRequest
     {
-        public int Id { get; set; }
+        #region Constructor
 
         public IdParameter(int id) => Id = id;
+
+        #endregion
+
+        #region Public Properties / SQL Parameters
+
+        public int Id { get; set; }
+
+        #endregion
+
+        #region Public IDataRequest Methods
 
         public object? GetParameters() => new { Id };
 
         public abstract string GetSql();
+        
+        #endregion
     }
 }

@@ -3,6 +3,9 @@ using StarWarsTracker.Domain.Models;
 
 namespace StarWarsTracker.Persistence.DataTransferObjects
 {
+    /// <summary>
+    /// DTO representing the EventDate table exactly.
+    /// </summary>
     public class EventDate_DTO
     {
         public int Id { get; set; }

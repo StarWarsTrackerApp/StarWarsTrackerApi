@@ -2,6 +2,8 @@
 {
     public class InsertEventDate : IDataExecute
     {
+        #region Constructor
+
         public InsertEventDate(Guid eventGuid, int eventDateTypeId, int yearsSinceBattleOfYavin, int sequence)
         {
             EventGuid = eventGuid;
@@ -10,6 +12,10 @@
             Sequence = sequence;
         }
 
+        #endregion
+
+        #region Public Properties / SQL Parameters
+
         public Guid EventGuid { get; set; }
 
         public int EventDateTypeId { get; set; }
@@ -17,6 +23,10 @@
         public int YearsSinceBattleOfYavin { get; set; }
 
         public int Sequence { get; set; }
+
+        #endregion
+
+        #region Public IDataExecute Methods
 
         public object? GetParameters() => this;
 
@@ -27,5 +37,7 @@
             INSERT INTO {TableName.EventDate} (  EventId,  EventDateTypeId,  YearsSinceBattleOfYavin,  Sequence )
                                        VALUES ( @EventId, @EventDateTypeId, @YearsSinceBattleOfYavin, @Sequence )
         ";
+
+        #endregion
     }
 }

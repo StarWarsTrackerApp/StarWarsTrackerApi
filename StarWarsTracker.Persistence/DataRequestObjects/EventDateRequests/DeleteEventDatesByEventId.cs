@@ -1,6 +1,4 @@
-﻿using StarWarsTracker.Persistence.BaseDataRequests;
-
-namespace StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests
+﻿namespace StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests
 {
     public class DeleteEventDatesByEventId : IdParameter, IDataExecute
     {

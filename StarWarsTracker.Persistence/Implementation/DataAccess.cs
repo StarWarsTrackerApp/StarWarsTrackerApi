@@ -33,11 +33,6 @@ namespace StarWarsTracker.Persistence.Implementation
 
         #region Public Methods
 
-        /// <summary>
-        /// Send IDataExecute Requests through Dapper to use connection.ExecuteAsync for any Insert, Update, or Delete SQL Command.
-        /// </summary>
-        /// <param name="request">The IDataExecute Request to send to Dapper which contains the SQL and the Parameters that will be used.</param>
-        /// <returns>Returns the number of rows that are affected by the SQL Command that is executed.</returns>
         public async Task<int> ExecuteAsync(IDataExecute request)
         {
             LogRequest(Section.SqlExecute, request);
@@ -57,12 +52,6 @@ namespace StarWarsTracker.Persistence.Implementation
             return response;
         }
 
-        /// <summary>
-        /// Sends IDataFetch Requests through Dapper to use connection.QueryFirstOrDefaultAsync for any SQL Query.
-        /// </summary>
-        /// <typeparam name="TResponse">The DTO that will be fetched from the Database using the IDataFetch Request</typeparam>
-        /// <param name="request">The IDataFetch Request to send to Dapper which contains the SQL and the Parameters that will be used.</param>
-        /// <returns>Returns the first record found or default if none found.</returns>
         public async Task<TResponse?> FetchAsync<TResponse>(IDataFetch<TResponse> request)
         {
             LogRequest(Section.SqlFetch, request);
@@ -82,12 +71,6 @@ namespace StarWarsTracker.Persistence.Implementation
             return response;
         }
 
-        /// <summary>
-        /// Sends IDataFetch Requests through Dapper to use connection.QueryAsync for any SQL Query.
-        /// </summary>
-        /// <typeparam name="TResponse">The DTO that will be fetched from the Database using the IDataFetch Request</typeparam>
-        /// <param name="request">The IDataFetch Request to send to Dapper which contains the SQL and the Parameters that will be used.</param>
-        /// <returns>Returns the records found or an empty collection if none found.</returns>
         public async Task<IEnumerable<TResponse>> FetchListAsync<TResponse>(IDataFetch<TResponse> request)
         {
             LogRequest(Section.SqlFetchList, request);
@@ -111,6 +94,9 @@ namespace StarWarsTracker.Persistence.Implementation
 
         #region Private Methods For Logging
 
+        /// <summary>
+        /// Helper method for Logging the DataRequest
+        /// </summary>
         private void LogRequest<T>(string logConfigSection, T request, [CallerMemberName] string methodCalling = "") where T : IDataRequest
         {
             var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlRequestLogDetails);
@@ -132,6 +118,9 @@ namespace StarWarsTracker.Persistence.Implementation
             _logger.AddConfiguredLogLevel(logConfigSection, Key.SqlRequestLogLevel, "Sql Request Received", extra, methodCalling);
         }
 
+        /// <summary>
+        /// Helper method for Logging the DataRequest's Response
+        /// </summary>
         private void LogResponse<T>(string logConfigSection, T? response, [CallerMemberName] string methodCalling = "")
         {
             var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlResponseLogDetails);

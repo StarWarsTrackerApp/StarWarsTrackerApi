@@ -2,6 +2,8 @@
 {
     public class InsertEvent : IDataExecute
     {
+        #region Constructor
+
         public InsertEvent(Guid guid, string name, string description, int canonTypeId)
         {
             Guid = guid;
@@ -10,6 +12,10 @@
             CanonTypeId = canonTypeId;
         }
 
+        #endregion
+
+        #region Public Properties / SQL Parameters
+
         public Guid Guid { get; set; }
 
         public string Name { get; set; }
@@ -17,6 +23,10 @@
         public string Description { get; set; } 
 
         public int CanonTypeId { get; set; }
+
+        #endregion
+
+        #region Public IDataExecute Methods
 
         public object? GetParameters() => this;
 
@@ -28,5 +38,7 @@
                                        VALUES ( @Guid, @Name, @Description, @CanonTypeId )
             END
         ";
+        
+        #endregion
     }
 }

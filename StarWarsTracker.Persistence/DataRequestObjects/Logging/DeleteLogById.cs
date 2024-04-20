@@ -1,6 +1,4 @@
-﻿using StarWarsTracker.Persistence.BaseDataRequests;
-
-namespace StarWarsTracker.Persistence.DataRequestObjects.Logging
+﻿namespace StarWarsTracker.Persistence.DataRequestObjects.Logging
 {
     public class DeleteLogById : IdParameter, IDataExecute
     {

@@ -6,7 +6,7 @@ namespace StarWarsTracker.Persistence.Implementation
     [ExcludeFromCodeCoverage]
     public static class DependencyInjection
     {
-        [ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]        
         public static IServiceCollection InjectPersistenceDependencies(this IServiceCollection services, string connectionString)
         {
             if (services == null)
