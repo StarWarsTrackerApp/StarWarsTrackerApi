@@ -17,28 +17,14 @@
         #region Constructors 
 
         /// <summary>
-        /// Constructor for Validator which applies a single IValidationRule.
-        /// </summary>
-        /// <param name="rule">The rule to apply.</param>
-        public Validator(IValidationRule rule)
-        {
-            ApplyRule(rule);
-        }
-
-        /// <summary>
-        /// Constructor for Validator which applies multiple IValidationRules.
+        /// Constructor for Validator which applies IValidationRules that are passed in.
         /// </summary>
         /// <param name="rules">The IValidationRules to apply.</param>
         public Validator(params IValidationRule[] rules)
         {
             ApplyRules(rules);
         }
-
-        /// <summary>
-        /// Constructor for initializing a Validator without applying any rules.
-        /// </summary>
-        public Validator() { }
-
+        
         #endregion
 
         #region Public Members
