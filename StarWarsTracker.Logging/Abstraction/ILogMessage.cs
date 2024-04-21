@@ -28,18 +28,17 @@ namespace StarWarsTracker.Logging.Abstraction
         public LogLevel GetLevel();
 
         /// <summary>
-        /// Return the LogMessage as a JSON string with only LogContent that is above or equal to the LogLevel provided.
-        /// </summary>
-        /// <param name="logLevel">The lowest LogLevel of LogContent to be included in the response.</param>
-        /// <returns>JSON string of the LogMessage with ElapsedMilliseconds, LogStartTime, LogEndTime, LogLevel, NameOfLogLevel, and LogContents.</returns>
-        public string GetMessageJson(LogLevel logLevel);
-
-        /// <summary>
         /// Returns all the LogContent that has been added to the LogMessage that is equal to or greater than the logLevel provided.
         /// </summary>
         /// <param name="logLevel">The lowest LogLevel of LogContent to be included in the response.</param>
         /// <returns>Collection of LogContent belonging to the ILogMessage that is equal to or greater than the logLevel provided.</returns>
         public IEnumerable<LogContent> GetContent(LogLevel logLevel);
+
+        /// <summary>
+        /// Returns all the LogContent that has been added to the LogMessage
+        /// </summary>
+        /// <returns>Collection of LogContent belonging to the ILogMessage.</returns>
+        public IEnumerable<LogContent> GetAllContent();
 
         /// <summary>
         /// Returns the Elapsed Milliseconds since the LogMessage was initialized.
