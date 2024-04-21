@@ -63,7 +63,7 @@ namespace StarWarsTracker.Logging.Implementation
             AddContent(_critical, description, extra, methodCalling);
 
         public void AddConfiguredLogLevel(string logConfigSection, string logConfigKey, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>            
-            AddContent(_logConfigReader.GetCustomLogLevel(logConfigSection, logConfigKey) ?? LogLevel.None, description, extra, methodCalling);
+            AddContent(_logConfigReader.GetLogLevel(logConfigSection, logConfigKey) ?? LogLevel.None, description, extra, methodCalling);
 
         public void IncreaseLevel(LogLevel logLevel, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
             _logMessage.IncreaseLevel(new(logLevel, _className, _namespaceName, methodCalling, description, extra, _logMessage.GetElapsedMilliseconds()));
