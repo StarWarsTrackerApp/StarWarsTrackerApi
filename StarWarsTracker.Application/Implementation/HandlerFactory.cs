@@ -58,7 +58,7 @@ namespace StarWarsTracker.Application.Implementation
                 throw new DoesNotExistException("RequestHandler", (request, nameof(request)));
             }
 
-            _logger.AddTrace("Located Handler", handlerType);
+            _logger.AddTrace("Located Handler Type", handlerType.Name);
 
             var handler = _typeActivator.Instantiate<IBaseHandler>(handlerType);
 
