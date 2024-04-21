@@ -48,7 +48,6 @@ namespace StarWarsTracker.Logging.Implementation
 
         public void AddDebug(string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
             AddContent(_debug, description, extra, methodCalling);
-
         
         public void AddInfo(string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
             AddContent(_info, description, extra, methodCalling);
@@ -62,8 +61,8 @@ namespace StarWarsTracker.Logging.Implementation
         public void AddCritical(string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
             AddContent(_critical, description, extra, methodCalling);
 
-        public void AddConfiguredLogLevel(string logConfigSection, string logConfigKey, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>            
-            AddContent(_logConfigReader.GetLogLevel(logConfigSection, logConfigKey) ?? LogLevel.None, description, extra, methodCalling);
+        public void AddConfiguredLogLevel(string logConfigSection, string logConfigKey, string description, object? extra = null, string configCategory = Category.CustomLogLevels, [CallerMemberName] string methodCalling = "") =>            
+            AddContent(_logConfigReader.GetLogLevel(logConfigSection, logConfigKey, configCategory) ?? LogLevel.None, description, extra, methodCalling);
 
         public void IncreaseLevel(LogLevel logLevel, string description, object? extra = null, [CallerMemberName] string methodCalling = "") =>
             _logMessage.IncreaseLevel(new(logLevel, _className, _namespaceName, methodCalling, description, extra, _logMessage.GetElapsedMilliseconds()));
@@ -98,14 +97,7 @@ namespace StarWarsTracker.Logging.Implementation
         {
             var allNameSpaceOverrides = _logConfigReader.GetConfigCategory(Category.OverrideLogLevelByNameSpace);
 
-            Dictionary<string, LogLevel> nameSpaceOverrides = null!;
-
-            var qualifyingNameSpaceOverrides = allNameSpaceOverrides?.Where(_ => _namespaceName.Equals(_.Key, StringComparison.OrdinalIgnoreCase));
-
-            if (qualifyingNameSpaceOverrides?.Any() ?? false)
-            {
-                nameSpaceOverrides = qualifyingNameSpaceOverrides.OrderBy(_ => _.Key.Length).First().Value;
-            }
+            var nameSpaceOverrides = allNameSpaceOverrides?.FirstOrDefault(_ => _.Key.Equals(_namespaceName, StringComparison.OrdinalIgnoreCase)).Value;
 
             return nameSpaceOverrides;
         }
