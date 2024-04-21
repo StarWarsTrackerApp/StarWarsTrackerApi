@@ -2,6 +2,10 @@
 
 namespace StarWarsTracker.Logging.AppSettingsConfig
 {
+    /// <summary>
+    /// LogConfigSection represents the Dictionary (of String, LogLevel) that contains LogLevel Configurations.
+    /// Each Key would map to a LogLevel
+    /// </summary>
     public class LogConfigSection : Dictionary<string, string>
     {
         public Dictionary<string, LogLevel> ToLogLevelDictionary()

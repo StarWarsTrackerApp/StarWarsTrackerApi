@@ -21,10 +21,6 @@ namespace StarWarsTracker.Logging.Implementation
 
         #region Public ILogMessage Methods
 
-        /// <summary>
-        /// Add the LogContent to the Contents of the LogMessage. LogContent is not added if the LogLevel is None.
-        /// </summary>
-        /// <param name="logContent">The content to be added to the LogMessage</param>
         public void AddContent(LogContent logContent)
         {
             if (logContent.LogLevel != LogLevel.None)
@@ -33,11 +29,6 @@ namespace StarWarsTracker.Logging.Implementation
             }
         }
 
-        /// <summary>
-        /// Return the LogMessage as a JSON string with only LogContent that is above or equal to the LogLevel provided 
-        /// </summary>
-        /// <param name="logLevel">The lowest LogLevel of LogContent to be included in the response.</param>
-        /// <returns>JSON string of the LogMessage with ElapsedMilliseconds, LogStartTime, LogEndTime, LogLevel, NameOfLogLevel, and LogContents.</returns>
         public string GetMessageJson(LogLevel logLevel)
         {
             if (logLevel == LogLevel.None)
@@ -64,19 +55,10 @@ namespace StarWarsTracker.Logging.Implementation
             return jsonContent;
         }
 
-        /// <summary>
-        /// Returns the Elapsed Milliseconds since the LogMessage was initialized.
-        /// </summary>
-        /// <returns>Total Milliseconds since the LogMessage was initialized. </returns>
         public double GetElapsedMilliseconds() => _stopwatch.Elapsed.TotalMilliseconds;
 
         public LogLevel GetLevel() => _logLevel;
-
-        /// <summary>
-        /// Increase the Level of the LogMessage to the Level of the LogContent provided.
-        /// If the Level is lower than the LogMessage is currently set, then the LogMessage will maintain the higher level.
-        /// </summary>
-        /// <param name="logContent">The LogContent to add to the LogMessage</param>
+       
         public void IncreaseLevel(LogContent logContent)
         {
             if (logContent.LogLevel == LogLevel.None)

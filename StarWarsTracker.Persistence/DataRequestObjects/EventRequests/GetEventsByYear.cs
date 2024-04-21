@@ -2,9 +2,19 @@
 {
     public class GetEventsByYear : IDataFetch<Event_DTO>
     {
+        #region Constructor
+
         public GetEventsByYear(int yearsSinceBattleOfYavin) => YearsSinceBattleOfYavin = yearsSinceBattleOfYavin;
 
+        #endregion
+
+        #region Public Properties / SQL Parameters
+
         public int YearsSinceBattleOfYavin { get; set; }
+
+        #endregion
+
+        #region Public IDataFetch Methods
 
         public object? GetParameters() => new { YearsSinceBattleOfYavin };
 
@@ -15,5 +25,7 @@
             WHERE YearsSinceBattleOfYavin = @YearsSinceBattleOfYavin
             ORDER BY Sequence
         ";
+        
+        #endregion
     }
 }

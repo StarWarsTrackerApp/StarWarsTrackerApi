@@ -3,8 +3,9 @@
 namespace StarWarsTracker.Application.BaseObjects.BaseHandlers
 {
     /// <summary>
-    /// This abstract base class can be inherited from by any Handler for an IRequest that will use IDataAccess and does not return a response.
+    /// This base class is used for Handlers that will Execute an IRequest and integrate with the DataAccess layer.
     /// </summary>
+    /// <typeparam name="TRequest">The type of IRequest to Execute</typeparam>
     internal abstract class DataRequestHandler<TRequest> : BaseRequestHandler<TRequest> where TRequest : IRequest
     {
         protected readonly IDataAccess _dataAccess;

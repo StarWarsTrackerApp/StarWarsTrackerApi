@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Application.Abstraction
 {
+    /// <summary>
+    /// This interface defines the contract for the factory that will instantiate a Handler at runtime using the Type of Request that is being received.
+    /// </summary>
     internal interface IHandlerFactory
     {
         /// <summary>

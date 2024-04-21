@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Persistence.DataTransferObjects
 {
+    /// <summary>
+    /// DTO representing the Log table exactly.
+    /// </summary>
     public class Log_DTO
     {
         public int Id { get; set; }

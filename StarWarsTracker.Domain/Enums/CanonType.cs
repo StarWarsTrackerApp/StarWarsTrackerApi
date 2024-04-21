@@ -2,6 +2,9 @@
 
 namespace StarWarsTracker.Domain.Enums
 {
+    /// <summary>
+    /// This Enum defines the different Continuities for Star Wars.
+    /// </summary>
     public enum CanonType
     {
         [Description("Canon")]

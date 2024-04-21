@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Domain.Enums
 {
+    /// <summary>
+    /// This enum defines the type that an EventDate is.
+    /// </summary>
     public enum EventDateType
     {
         Definitive = 1,

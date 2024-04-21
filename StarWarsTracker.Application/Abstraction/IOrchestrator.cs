@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Application.Abstraction
 {
+    /// <summary>
+    /// This interface defines the contract for the Orchestrator that will act as a mediator between the request caller and the request handler.
+    /// </summary>
     public interface IOrchestrator
     {
         /// <summary>

@@ -2,6 +2,11 @@
 
 namespace StarWarsTracker.Application.Implementation
 {
+    /// <summary>
+    /// This class implements the IHandleFactory in order to instantiate a new Handler at runtime.
+    /// The Type of Handler to instantiate is determined by sending the TRequest to the IHandlerDictionary.
+    /// The Handler is instantiated by using the ITypeActivator.
+    /// </summary>
     internal class HandlerFactory : IHandlerFactory
     {
         #region Private Members
@@ -53,7 +58,7 @@ namespace StarWarsTracker.Application.Implementation
                 throw new DoesNotExistException("RequestHandler", (request, nameof(request)));
             }
 
-            _logger.AddTrace("Located Handler", handlerType.Name);
+            _logger.AddTrace("Located Handler", handlerType);
 
             var handler = _typeActivator.Instantiate<IBaseHandler>(handlerType);
 

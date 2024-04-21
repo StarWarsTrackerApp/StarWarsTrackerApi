@@ -2,6 +2,9 @@
 
 namespace StarWarsTracker.Persistence.DataTransferObjects
 {
+    /// <summary>
+    /// DTO for SQL Query to determine if an Event.Name exists in Canon, Legends, or CanonAndLegends
+    /// </summary>
     public class IsEventNameExisting_DTO
     {
         public IsEventNameExisting_DTO() { }

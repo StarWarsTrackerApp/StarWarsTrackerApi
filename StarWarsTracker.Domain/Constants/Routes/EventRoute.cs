@@ -1,5 +1,8 @@
 ﻿namespace StarWarsTracker.Domain.Constants.Routes
 {
+    /// <summary>
+    /// The constants in this class are related to specific Endpoint Routes included in the EventController.
+    /// </summary>
     public static class EventRoute
     {
         public const string Insert = "Event/InsertEvent";

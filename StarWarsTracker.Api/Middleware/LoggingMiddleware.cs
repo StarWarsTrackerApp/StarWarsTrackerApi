@@ -2,8 +2,16 @@
 
 namespace StarWarsTracker.Api.Middleware
 {
+    /// <summary>
+    /// This class is responsible for acting as a global Logger in the middleware.
+    /// LogConfigReaders have their EndpointOverrides set as the request comes in the pipeline.
+    /// Additional Try/Catch is enabled in case of any exceptions making it past Global Exception Handler.
+    /// LogMessage is saved using ILogWriter when the request is leaving the pipeline.
+    /// </summary>
     public class LoggingMiddleware : IMiddleware
     {
+        #region Private Members
+
         private readonly ILogWriter _logWriter;
 
         private readonly IClassLogger _logger;
@@ -12,6 +20,10 @@ namespace StarWarsTracker.Api.Middleware
 
         private readonly ILogConfigReader _logConfigReader;
 
+        #endregion
+
+        #region Constructor
+
         public LoggingMiddleware(ILogWriter logWriter, ILogMessage logMessage, IClassLoggerFactory loggerFactory, ILogConfigReader logConfigReader)
         {
             _logWriter = logWriter;
@@ -19,6 +31,10 @@ namespace StarWarsTracker.Api.Middleware
             _logConfigReader = logConfigReader;
             _logMessage = logMessage;
         }
+
+        #endregion
+
+        #region Public IMiddleware Method
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
@@ -53,5 +69,7 @@ namespace StarWarsTracker.Api.Middleware
                 _logWriter.Write(_logMessage, requestPath, method);
             }
         }
+        
+        #endregion
     }
 }
