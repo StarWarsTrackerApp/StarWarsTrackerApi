@@ -30,7 +30,7 @@ namespace StarWarsTracker.Api.Controllers
         public async Task<GetEventByNameAndCanonTypeResponse> GetEventByNameAndCanonType(GetEventByNameAndCanonTypeRequest request) => await GetResponseAsync(request);
 
         [HttpGet(EventRoute.GetByNameLike)]
-        public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike([FromBody]GetEventsByNameLikeRequest request) => await GetResponseAsync(request);
+        public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await GetResponseAsync(request);
 
         [HttpGet(EventRoute.GetByYear)]
         public async Task<GetEventsByYearResponse> GetEventsByYear(GetEventsByYearRequest request) => await GetResponseAsync(request);
