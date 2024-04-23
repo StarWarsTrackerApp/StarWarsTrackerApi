@@ -8,7 +8,19 @@ This is an Application built using Clean Architecture and the Mediator Pattern. 
 
 ## Table Of Contents
 
-Coming soon - Table of Contents
+- [Overview](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#overview)
+- [Project Goals](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#project-goals)
+- [What does this Application allow a user to do?](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#what-does-this-application-allow-a-user-to-do)
+- [What Technologies/Dependencies Were Used To Build This Application?](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#what-technologiesdependencies-were-used-to-build-this-application)
+- [How Is This Application Structured](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#how-is-this-application-structured)
+- [Projects](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#projects)
+  - [StarWarsTracker.Domain](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackerdomain)
+  - [StarWarsTracker.Logging](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackerlogging)
+  - [StarWarsTracker.Persistence](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackerpersistence)
+  - [StarWarsTracker.Application](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackerapplication)
+  - [StarWarsTracker.Api](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackerapi)
+  - [StarWarsTracker.SqlServiceDatabase](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#starwarstrackersqlservicedatabase)
+- [Testing Projects](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#testing-projects)
 
 ---
 
@@ -21,6 +33,8 @@ Events would be:
 - Referenced in Source Material
 - Tied to People/Organizations and/or Planets/Locations
 - Happen at a definitive or speculative time/timeframe based on 'Years Since Battle Of Yavin'
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ---
 
@@ -47,6 +61,8 @@ Timelines of events will be fetchable by People, Locations, Planets, Organizatio
 - Fetching Timelines
 - UserEvents For Tracking Consumed Source Material
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ---
 
 ## What Does This Application Allow A User To Do?
@@ -66,6 +82,8 @@ CRUD and basic search functionality is available via the Event endpoints:
 Insert/Delete Functionality For EventDates that define when a specific Event happened.
 - EventDate/InsertEventDates
 - EventDate/DeleteEventDatesByEventGuid
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ---
 
@@ -96,6 +114,8 @@ This Application was built using the following frameworks/nuget packages:
   - This package is helpful for Generating Fake Data to use in Unit Tests.
   - Dependency in StarWarsTracker.Application.Tests
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ---
 
 ## How Is This Application Structured
@@ -122,14 +142,18 @@ Below is how each project depends on each other:
   - This .Net 6 ASP.Net Core Web API project/port exposes functionalty to consumers of this api.
   - Depends on StarWarsTracker.Application
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ---
 
 ## Projects
 With this application following Clean Architecture (or sometimes referred to as Ports And Adapters), each project would represent a different Port for this Application. 
 The Domain is the core of the Application, so it has no dependencies on any other projects. 
+
 Each of the other Projects/Ports would encapsulate functionality to a different section of the Application. 
 For example, all interactions with the Database are encapsulated in the StarWarsTracker.Persistence project. 
-In the below sections we will discuss each projects responsibility and any notes to highlight from that project.
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Domain
 The Domain is the core of the application. This project does not depend on any other projects.
@@ -147,6 +171,8 @@ Below are some things you will find in the Domain project:
   - Contains Domain Models that are used throughout the application.
 - Validation
   - Contains ValidationRules for how objects are validated, reuseable ValidationFailureMessages, and a Validator to apply Validation Rules.
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Logging
 The Logging project is responsible for defining how the Custom Logging is handled/exposed.
@@ -174,6 +200,8 @@ Below are some things you will find in the Logging project:
     - LogConfigSettings represents the Dictionary (of String, LogConfigCategory) that contains the Default or Endpoint Override Configurations.
 - Implementation
   - This namespace contains the implementation for the interfaces defined in Abstraction (First Bullet Point).
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Persistence
 The Persistence layer encapsulates the SQL transactions sent to the Database. This is where the application has a dependency on the Dapper (ORM).
@@ -209,6 +237,8 @@ Below are some things you will find in the Persistence project:
     - Implements IDataAccess to encapsulate Dapper dependency.
   - DependencyInjection
     - Utilize Microsoft.Extensions.DependencyInjection to inject Dependencies into IServiceCollection.
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Application
 The Application Project encapsulates the logic on how requests are handled. This is where the Mediator Pattern is implemented. 
@@ -247,6 +277,8 @@ Below are some things you will find in the Application project:
     - Example Folders are EventRequests and EventDateRequests
     - Example SubFolders are EventRequests/Delete or EventRequests/GetByGuid
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.Api
 The Api Application is the outermost layer of the application. This is what exposes the functionality of the application to the user, Dependencies are injected, and Middlewares are implemented.
 
@@ -269,8 +301,12 @@ Below are some things you will find in the API project:
     - Although it is added to the gitIgnore, the AppSettings is housed in the API project.
     - AppSettings has configurations such as the Database ConnectionString and the Logging Configurations.
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.SqlServiceDatabase
 Info about Sql Server Database
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ---
 
@@ -278,22 +314,36 @@ Info about Sql Server Database
 Testing is an important aspect of every application. This application ensures stability using both Integration and Unit tests with the popular framework xUnit. 
 Each test project is responsible for testing a separate Port (Class Library) for the application. In this section we will review the test coverage for this project.
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.Api.Tests
 Api Tests
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Application.Tests
 Application Tests
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.Domain.Tests
 Domain Tests
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ### StarWarsTracker.Logging.Tests
 Logging Tests
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.Persistence.Tests
 DataAccess Tests
 
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
+
 ### StarWarsTracker.Tests.Shared
 Shared functionality for tests
+
+[Return To Table Of Contents](https://github.com/StarWarsTrackerApp/StarWarsTrackerApi?tab=readme-ov-file#table-of-contents)
 
 ---
