@@ -1,4 +1,5 @@
 ﻿using StarWarsTracker.Logging.Abstraction;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Api.Middleware
 {
@@ -8,6 +9,7 @@ namespace StarWarsTracker.Api.Middleware
     /// Additional Try/Catch is enabled in case of any exceptions making it past Global Exception Handler.
     /// LogMessage is saved using ILogWriter when the request is leaving the pipeline.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class LoggingMiddleware : IMiddleware
     {
         #region Private Members

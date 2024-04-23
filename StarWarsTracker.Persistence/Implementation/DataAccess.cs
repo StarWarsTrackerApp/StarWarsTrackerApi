@@ -102,7 +102,7 @@ namespace StarWarsTracker.Persistence.Implementation
         /// </summary>
         private void LogRequest<T>(string logConfigSection, T request, [CallerMemberName] string methodCalling = "") where T : IDataRequest
         {
-            var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlRequestLogDetails);
+            var logDetailLevel = _logConfigReader.GetLogLevel(logConfigSection, Key.SqlRequestLogDetails);
 
             object? extra = logDetailLevel switch
             {
@@ -126,7 +126,7 @@ namespace StarWarsTracker.Persistence.Implementation
         /// </summary>
         private void LogResponse<T>(string logConfigSection, T? response, [CallerMemberName] string methodCalling = "")
         {
-            var logDetailLevel = _logConfigReader.GetCustomLogLevel(logConfigSection, Key.SqlResponseLogDetails);
+            var logDetailLevel = _logConfigReader.GetLogLevel(logConfigSection, Key.SqlResponseLogDetails);
 
             object? extra = logDetailLevel switch
             {

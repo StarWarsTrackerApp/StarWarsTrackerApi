@@ -33,8 +33,8 @@ namespace StarWarsTracker.Application.Implementation
 
         public void Write(ILogMessage logMessage, string requestPath, string httpMethod)
         {
-            var minimumLoggingLevel = _logConfigReader.GetCustomLogLevel(Section.DatabaseLogSettings, Key.LogMessageLevelToWrite);
-            var contentLevel = _logConfigReader.GetCustomLogLevel(Section.DatabaseLogSettings, Key.LogContentLevelToWrite);
+            var minimumLoggingLevel = _logConfigReader.GetLogLevel(Section.DatabaseLogSettings, Key.LogMessageLevelToWrite);
+            var contentLevel = _logConfigReader.GetLogLevel(Section.DatabaseLogSettings, Key.LogContentLevelToWrite);
 
             if (minimumLoggingLevel == LogLevel.None)
             {

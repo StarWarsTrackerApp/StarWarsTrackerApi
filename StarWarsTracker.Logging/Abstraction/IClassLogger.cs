@@ -1,4 +1,5 @@
-﻿using StarWarsTracker.Domain.Enums;
+﻿using StarWarsTracker.Domain.Constants.LogConfigs;
+using StarWarsTracker.Domain.Enums;
 using System.Runtime.CompilerServices;
 
 namespace StarWarsTracker.Logging.Abstraction
@@ -83,7 +84,8 @@ namespace StarWarsTracker.Logging.Abstraction
 
         /// <summary>
         /// Add the description and optional extra object as LogContent to the LogMessage.
-        /// The LogContent will be a loglevel that is configured under CustomLogLevels with the logConfigSection and logConfigKey provided.
+        /// The LogContent will be a loglevel that is configured under the logConfigSection and logConfigKey provided.
+        /// The ConfigCategory defaults to CustomLogLevel ConfigCategory but can be passed in.
         /// Class and namespace overrides do not impact the LogLevel used for LogContent added with this method.
         /// </summary>
         /// <param name="logConfigSection">The ConfigSection from the CustomLogLevel ConfigCategory that the ConfigKey belongs to.</param>      
@@ -91,6 +93,7 @@ namespace StarWarsTracker.Logging.Abstraction
         /// <param name="description">The description to add to the LogContent. </param>
         /// <param name="extra">Optional object to be added to the LogContent. </param>
         /// <param name="methodCalling">Defaults to the name of the method that calls AddCritical().</param>
-        public void AddConfiguredLogLevel(string logConfigSection, string logConfigKey, string description, object? extra = null, [CallerMemberName] string methodCalling = "");
+        /// <param name="configCategory">Defaults to CustomLogLevels Category</param>
+        public void AddConfiguredLogLevel(string logConfigSection, string logConfigKey, string description, object? extra = null, string configCategory = Category.CustomLogLevels, [CallerMemberName] string methodCalling = "");
     }
 }

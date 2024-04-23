@@ -13,6 +13,40 @@ namespace StarWarsTracker.Logging.Tests.ImplementationTests
 
         #endregion
 
+        #region AddContent Tests
+
+        [Fact]
+        public void AddContent_Given_LogContentLogLevelIsNone_Should_NotAddContent()
+        {
+            _content.LogLevel = LogLevel.None;
+
+            _logMessage.AddContent(_content);
+
+            var contents = _logMessage.GetAllContent();
+
+            Assert.Empty(contents);
+        }
+
+        [Theory]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Critical)]
+        public void AddContent_Given_LogContentLogLevelNotNone_Should_AddLogContent(LogLevel logLevel)
+        {
+            _content.LogLevel = logLevel;
+
+            _logMessage.AddContent(_content);
+
+            var contents = _logMessage.GetAllContent();
+
+            Assert.Equal(_content, contents.Single());
+        }
+
+        #endregion
+
         #region GetMessageLogLevel Tests
 
         [Fact]
@@ -104,5 +138,39 @@ namespace StarWarsTracker.Logging.Tests.ImplementationTests
 
         #endregion
 
+        #region GetContent Tests
+
+        [Fact]
+        public void GetContent_Given_LogLevelNone_ShouldReturn_EmptyCollection()
+        {
+            _logMessage.AddContent(_content);
+
+            var results = _logMessage.GetContent(LogLevel.None);
+
+            Assert.Empty(results);
+        }
+
+        [Theory]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Critical)]
+        public void GetContent_Given_LogLevel_ShouldReturn_LogContentAboveOrEqualToLogLevel(LogLevel logLevel)
+        {
+            _logMessage.AddContent(new(LogLevel.Trace, "TraceClass", "TraceNamespace", "TraceMethod", "TraceDescription", "TraceExtra", 1.23));
+            _logMessage.AddContent(new(LogLevel.Debug, "DebugClass", "DebugNamespace", "DebugMethod", "DebugDescription", "DebugExtra", 2.34));
+            _logMessage.AddContent(new(LogLevel.Information, "InformationClass", "InformationNamespace", "InformationMethod", "InformationDescription", "InformationExtra", 3.45));
+            _logMessage.AddContent(new(LogLevel.Warning, "WarningClass", "WarningNamespace", "WarningMethod", "WarningDescription", "WarningExtra", 4.56));
+            _logMessage.AddContent(new(LogLevel.Error, "ErrorClass", "ErrorNamespace", "ErrorMethod", "ErrorDescription", "ErrorExtra", 5.67));
+            _logMessage.AddContent(new(LogLevel.Critical, "CriticalClass", "CriticalNamespace", "CriticalMethod", "CriticalDescription", "CriticalExtra", 6.78));
+
+            var results = _logMessage.GetContent(logLevel);
+
+            Assert.True(results.All(_ => _.LogLevel >= logLevel));
+        }
+
+        #endregion
     }
 }
