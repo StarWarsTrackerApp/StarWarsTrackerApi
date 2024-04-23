@@ -34,8 +34,8 @@ namespace StarWarsTracker.Logging.Implementation
         public Dictionary<string, LogLevel>? GetConfigSection(string configCategory, string configSection) =>
             GetConfigCategory(configCategory)?.TryGetValue(configSection, out var section) ?? false ? section : null;
 
-        public LogLevel? GetCustomLogLevel(string configSection, string configKeyName) =>
-            GetConfigSection(Category.CustomLogLevels, configSection)?.TryGetValue(configKeyName, out var level) ?? false ? level : null;
+        public LogLevel? GetLogLevel(string configSection, string configKeyName, string configCategory = Category.CustomLogLevels) =>
+            GetConfigSection(configCategory, configSection)?.TryGetValue(configKeyName, out var level) ?? false ? level : null;
 
         public bool TrySetEndpointConfigs(string endpoint)
         {

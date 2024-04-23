@@ -1,4 +1,5 @@
-﻿using StarWarsTracker.Domain.Enums;
+﻿using StarWarsTracker.Domain.Constants.LogConfigs;
+using StarWarsTracker.Domain.Enums;
 
 namespace StarWarsTracker.Logging.Abstraction
 {
@@ -35,7 +36,7 @@ namespace StarWarsTracker.Logging.Abstraction
         /// <param name="configSection">The ConfigSection under CustomLogLevels Category to retrieve a LogLevel from.</param>
         /// <param name="configKeyName">The ConfigKey under the ConfigSection that the LogLevel being retrieved belongs to.</param>
         /// <returns>CustomLogLevel found using the configSection and configKeyName provided.</returns>
-        public LogLevel? GetCustomLogLevel(string configSection, string configKeyName);
+        public LogLevel? GetLogLevel(string configSection, string configKeyName, string configCategory = Category.CustomLogLevels);
 
         /// <summary>
         /// Return the current LoggingConfigs that are being used.
