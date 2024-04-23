@@ -2,7 +2,7 @@
 using StarWarsTracker.Tests.Shared;
 using System.Data;
 
-namespace StarWarsTracker.Persistence.Tests
+namespace StarWarsTracker.Persistence.Tests.ImplementationTests
 {
     public class SqlConnectionFactoryTests
     {
@@ -44,7 +44,7 @@ namespace StarWarsTracker.Persistence.Tests
             var connectionFactory = new SqlConnectionFactory(dbServer, dbName, useIntegratedSecurity: false, username, password);
 
             using var connection = connectionFactory.NewConnection();
-            
+
             Assert.Equal(expectedConnectionString, connection.ConnectionString);
         }
     }

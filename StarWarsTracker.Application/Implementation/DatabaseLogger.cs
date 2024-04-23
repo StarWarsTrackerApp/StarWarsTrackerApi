@@ -40,16 +40,14 @@ namespace StarWarsTracker.Application.Implementation
             {
                 return;
             }
-
+            
             var logLevel = logMessage.GetLevel();
 
             var logContents = logMessage.GetContent(contentLevel ?? LogLevel.None);
-
-            var currentTime = DateTime.UtcNow;
-
+                
             var message = new
             {
-                ElapsedMilliseconds = logMessage.GetElapsedMilliseconds(),                                        
+                ElapsedMilliseconds = logMessage.GetElapsedMilliseconds(),
                 LogLevel = logLevel,
                 NameOfLogLevel = logLevel.ToString(),
                 LogContents = logContents

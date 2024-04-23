@@ -38,7 +38,7 @@ namespace StarWarsTracker.Application.Implementation
 
             var handler = _handlerFactory.NewHandler(request);
 
-            _logger.AddTrace("Handler Instantiated", handler);
+            _logger.AddTrace("Handler Instantiated", handler.GetType().Name);
 
             await handler.HandleAsync(request);
 
@@ -53,7 +53,7 @@ namespace StarWarsTracker.Application.Implementation
 
             var handler = _handlerFactory.NewHandler(request);
 
-            _logger.AddTrace("Handler Instantiated", handler);
+            _logger.AddTrace("Handler Instantiated", handler.GetType().Name);
 
             var result = await handler.HandleAsync(request);
 
