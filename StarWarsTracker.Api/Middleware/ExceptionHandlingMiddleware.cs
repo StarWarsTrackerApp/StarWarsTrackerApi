@@ -43,37 +43,23 @@ namespace StarWarsTracker.Api.Middleware
             {
                 await next(context);
             }
-            catch (ValidationFailureException e)
+            catch (CustomException e)
             {
-                _logger.IncreaseLevel(_logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.ValidationFailureExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
-                    "ValidationFailureException Caught", new { e.GetType().Name, e.ValidationFailureMessages, e.StackTrace });
+                var response = e.GetResponseBody();
 
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                var logLevel = _logConfigReader.GetLogLevel(Section.ExceptionLogging, e.GetLogLevelConfigKey()) ?? Domain.Enums.LogLevel.None;
 
-                await context.Response.WriteAsync(JsonSerializer.Serialize(e.ValidationFailureMessages));
-            }
-            catch (DoesNotExistException e)
-            {
-                _logger.IncreaseLevel(_logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.DoesNotExistExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
-                    "DoesNotExistException Caught", new { e.GetType().Name, e.NameOfObjectNotExisting, e.ValuesSearchedBy, e.StackTrace });
+                _logger.IncreaseLevel(logLevel, e.GetType().Name, response);
 
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                context.Response.StatusCode = e.GetStatusCode();
 
-                await context.Response.WriteAsync(JsonSerializer.Serialize(new { e.NameOfObjectNotExisting, e.ValuesSearchedBy }));
-            }
-            catch (AlreadyExistsException e)
-            {
-                _logger.IncreaseLevel(_logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.AlreadyExistsExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
-                    "AlreadyExistsException Caught", new { e.GetType().Name, e.NameOfObjectAlreadyExisting, e.Conflicts, e.StackTrace });
-
-                context.Response.StatusCode = StatusCodes.Status409Conflict;
-
-                await context.Response.WriteAsync(JsonSerializer.Serialize(new { e.Conflicts }));
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
             catch (Exception e)
             {
-                _logger.IncreaseLevel(_logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.DefaultExceptionLogLevel) ?? Domain.Enums.LogLevel.None, 
-                    "Exception Caught", new { e.GetType().Name, e.Message, e.StackTrace });
+                var logLevel = _logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.DefaultExceptionLogLevel) ?? Domain.Enums.LogLevel.None;
+
+                _logger.IncreaseLevel(logLevel, "Exception Caught", new { e.GetType().Name, e.Message, e.StackTrace });
                 
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

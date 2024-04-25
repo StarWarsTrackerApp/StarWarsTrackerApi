@@ -20,7 +20,11 @@ namespace StarWarsTracker.Application.BaseObjects.BaseRequests
 
         #region Public Properties
 
-        public Guid EventGuid { get; set; }
+        /// <summary>
+        /// EventGuid Required For Request
+        /// </summary>        
+        /// <example>53F5A23C-968E-4C0E-A195-79B55CD8068E</example>
+        public Guid EventGuid { get; set; } = Guid.Empty;
 
         #endregion
 

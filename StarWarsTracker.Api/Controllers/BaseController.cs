@@ -1,4 +1,5 @@
 ﻿using StarWarsTracker.Domain.Constants.LogConfigs;
+using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Logging.Abstraction;
 using System.Runtime.CompilerServices;
 
@@ -29,6 +30,12 @@ namespace StarWarsTracker.Api.Controllers
 
         public async Task ExecuteRequestAsync(IRequest request, [CallerMemberName] string methodCalling = "")
         {
+            if (request == null)
+            {
+                _logger.AddDebug("Null Request Received", typeof(IRequest).Name);
+                throw new ValidationFailureException("Null Request Received");
+            }
+
             LogRequest(request, methodCalling);
 
             await _orchestrator.ExecuteRequestAsync(request);
@@ -38,6 +45,12 @@ namespace StarWarsTracker.Api.Controllers
 
         public async Task<TResponse> GetResponseAsync<TResponse>(IRequestResponse<TResponse> request, [CallerMemberName] string methodCalling = "")
         {
+            if (request == null)
+            {
+                _logger.AddDebug("Null Request Received", typeof(IRequest).Name);
+                throw new ValidationFailureException("Null Request Received");
+            }
+
             LogRequest(request, methodCalling);
 
             var response = await _orchestrator.GetRequestResponseAsync(request);
