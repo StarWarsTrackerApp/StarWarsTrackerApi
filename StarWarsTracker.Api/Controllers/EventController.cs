@@ -62,7 +62,7 @@ namespace StarWarsTracker.Api.Controllers
 
         #endregion
 
-        #region Get Event By Name And Canon Type
+        #region Get Event By Name And Canon Type Endpoint
 
         [HttpGet(EventRoute.GetByNameAndCanonType),
             SwaggerOperation("Search for a specific Event by specifying the Event's Name and the CanonType"),
@@ -73,7 +73,7 @@ namespace StarWarsTracker.Api.Controllers
 
         #endregion
 
-        #region Get Events By Name Like
+        #region Get Events By Name Like Endpoint
 
         [HttpGet(EventRoute.GetByNameLike),
             SwaggerOperation("Get a list of Events where the name contains the Name provided."),
@@ -84,7 +84,7 @@ namespace StarWarsTracker.Api.Controllers
 
         #endregion
 
-        #region Get Events By Year
+        #region Get Events By Year Endpoint
 
         [HttpGet(EventRoute.GetByYear),
             SwaggerOperation("Get a list of Events that happen during a specific year."),
