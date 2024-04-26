@@ -27,7 +27,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
         }
 
         [Theory]

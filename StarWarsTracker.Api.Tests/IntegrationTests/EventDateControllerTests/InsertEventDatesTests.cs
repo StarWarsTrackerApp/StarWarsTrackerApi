@@ -20,7 +20,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectAlreadyExisting, exception.NameOfObjectAlreadyExisting);
+            Assert.Equal(expectedNameOfObjectAlreadyExisting, exception.GetResponseBody().NameOfObjectAlreadyExisting);
         }
 
         //TODO: Bad Request and Happy Path testing

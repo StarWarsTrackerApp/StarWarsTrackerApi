@@ -4,24 +4,36 @@ using System.Net;
 
 namespace StarWarsTracker.Domain.Exceptions
 {
+    /// <summary>
+    /// This Exception is used when an object does not exist.
+    /// StatusCode will use HttpStatusCode.NotFound (404)
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class DoesNotExistException : CustomException
     {
+        #region Private Members
+
+        private readonly DoesNotExistResponse _response;
+
+        #endregion
+
+        #region Constructor
+
         public DoesNotExistException(string nameOfObjectNotExisting, params(object? Value, string NameOfValue)[] valuesSearchedBy)
         {
-            NameOfObjectNotExisting = nameOfObjectNotExisting;
-
-            ValuesSearchedBy = valuesSearchedBy;
+            _response = new(nameOfObjectNotExisting, valuesSearchedBy);
         }
 
-        public readonly string NameOfObjectNotExisting;
+        #endregion
 
-        public readonly (object?, string)[] ValuesSearchedBy;
+        #region Public CustomException Methods
 
         public override int GetStatusCode() => (int)HttpStatusCode.NotFound;
 
-        public override CustomExceptionResponse GetResponseBody() => new DoesNotExistResponse(NameOfObjectNotExisting, ValuesSearchedBy);
+        public override DoesNotExistResponse GetResponseBody() => _response;
 
         public override string GetLogLevelConfigKey() => Key.DoesNotExistExceptionLogLevel;
+
+        #endregion
     }
 }

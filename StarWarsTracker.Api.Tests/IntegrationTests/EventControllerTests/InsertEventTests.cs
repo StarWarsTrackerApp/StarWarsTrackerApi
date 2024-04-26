@@ -26,7 +26,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedMessage, exception.ValidationFailureMessages.Single());
+            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
         }
 
         [Theory]
@@ -43,7 +43,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedMessage, exception.ValidationFailureMessages.Single());
+            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
         }
 
         [Theory]
@@ -60,7 +60,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedMessage, exception.ValidationFailureMessages.Single());
+            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedMessage, exception.ValidationFailureMessages.Single());
+            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
         }
 
         #endregion

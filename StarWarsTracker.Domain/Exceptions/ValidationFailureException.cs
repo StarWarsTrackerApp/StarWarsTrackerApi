@@ -5,25 +5,35 @@ using System.Net;
 
 namespace StarWarsTracker.Domain.Exceptions
 {
+    /// <summary>
+    /// This Exception is used when a request fails validation.
+    /// StatusCode will use HttpStatusCode.BadRequest (400)
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class ValidationFailureException : CustomException
     {
-        public ValidationFailureException(params string[] validationFailureMessages) 
-        { 
-            ValidationFailureMessages = validationFailureMessages;
-        }
+        #region Private Members
 
-        public ValidationFailureException(IEnumerable<string> validationFailureMessages)
-        {
-            ValidationFailureMessages = validationFailureMessages;
-        }
+        private readonly ValidationFailureResponse _response;
 
-        public IEnumerable<string> ValidationFailureMessages { get; set; } = Enumerable.Empty<string>();
+        #endregion
+
+        #region Constructors
+
+        public ValidationFailureException(params string[]  validationFailureMessages) => _response = new(validationFailureMessages);
+
+        public ValidationFailureException(IEnumerable<string> validationFailureMessages) => _response = new(validationFailureMessages);
+
+        #endregion
+
+        #region Public CustomException Methods
 
         public override string GetLogLevelConfigKey() => Key.ValidationFailureExceptionLogLevel;
 
-        public override CustomExceptionResponse GetResponseBody() => new ValidationFailureResponse(ValidationFailureMessages);
+        public override ValidationFailureResponse GetResponseBody() => _response;
 
         public override int GetStatusCode() => (int)HttpStatusCode.BadRequest;
+        
+        #endregion
     }
 }

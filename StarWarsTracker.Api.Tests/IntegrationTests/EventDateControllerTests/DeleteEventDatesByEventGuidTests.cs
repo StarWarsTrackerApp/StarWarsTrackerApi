@@ -20,7 +20,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedMessage, exception.ValidationFailureMessages.Single());
+            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
 
             Assert.NotNull(exception);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
         }
     }
 }

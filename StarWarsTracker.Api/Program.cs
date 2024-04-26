@@ -1,6 +1,6 @@
-using StarWarsTracker.Api.Examples.Events;
 using StarWarsTracker.Api.Middleware;
 using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Domain.Constants;
 using StarWarsTracker.Logging;
 using StarWarsTracker.Logging.AppSettingsConfig;
 using StarWarsTracker.Persistence.Implementation;
@@ -17,6 +17,7 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
 
+        // Setup Swagger
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
@@ -46,12 +47,12 @@ internal class Program
         builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
         // Inject Dependencies
-        builder.Services.InjectPersistenceDependencies(builder.Configuration.GetConnectionString("Default"));
+        builder.Services.InjectPersistenceDependencies(builder.Configuration.GetConnectionString(AppConfigKeys.DefaultConnectionString));
         builder.Services.InjectApplicationDependencies();
 
-        var env = builder.Environment.EnvironmentName;
-
-        var loggingConfigs = builder.Configuration.GetSection($"Logging:Environment:{env}").Get<Dictionary<string, LogConfigSettings>>();
+        var loggingConfigs = builder.Configuration
+                                    .GetSection(AppConfigKeys.LoggingConfigurations + builder.Environment.EnvironmentName)
+                                    .Get<Dictionary<string, LogConfigSettings>>();
 
         builder.Services.InjectLoggingDependencies(loggingConfigs);
 
