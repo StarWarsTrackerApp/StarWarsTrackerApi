@@ -43,5 +43,11 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
             // Assert that attempting to fetch the event after inserting throws a does not exist exception
             Assert.NotNull(doesNotExistExceptionAfterDeleting);
         }
+
+        [Fact]
+        public async Task DeleteEvent_Given_NullRequest_ShouldThrow_ValidationFailureException()
+        {
+            await Assert.ThrowsAsync<ValidationFailureException>(async () => await _controller.DeleteEvent(null!));
+        }
     }
 }

@@ -26,9 +26,9 @@ namespace StarWarsTracker.Api.Controllers
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public async Task ExecuteRequestAsync(IRequest request, [CallerMemberName] string methodCalling = "")
+        protected async Task ExecuteRequestAsync(IRequest request, [CallerMemberName] string methodCalling = "")
         {
             if (request == null)
             {
@@ -43,7 +43,7 @@ namespace StarWarsTracker.Api.Controllers
             LogResponse(null, methodCalling);
         }
 
-        public async Task<TResponse> GetResponseAsync<TResponse>(IRequestResponse<TResponse> request, [CallerMemberName] string methodCalling = "")
+        protected async Task<TResponse> GetResponseAsync<TResponse>(IRequestResponse<TResponse> request, [CallerMemberName] string methodCalling = "")
         {
             if (request == null)
             {
