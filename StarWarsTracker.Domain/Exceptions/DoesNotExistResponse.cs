@@ -1,5 +1,8 @@
-﻿namespace StarWarsTracker.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class DoesNotExistResponse
     {
         #region Constructor

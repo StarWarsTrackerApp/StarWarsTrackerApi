@@ -1,20 +1,23 @@
 ﻿using StarWarsTracker.Api.SwaggerHelpers.ExampleProviders;
 using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
-using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Domain.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Api.Examples.Events
 {
+    [ExcludeFromCodeCoverage]
     public class GetEventsByYearExample
     {
         public class SuccessResponse : IExample<GetEventsByYearResponse>
         {
             public GetEventsByYearResponse GetExamples() =>
-                new(new Event[]
+                new(new[]
                 {
-                    new(Guid.NewGuid(), "The Death Of Count Dooku", "Count Dooku Died at the hands of Anakin Skywalker", CanonType.CanonAndLegends),
-                    new(Guid.NewGuid(), "The Death Of General Grievous", "General Grievous was brought to an end by Obi Wan Kenobi", CanonType.CanonAndLegends)
+                    ExampleModel.Event,
+                    ExampleModel.Event,
+                    ExampleModel.Event,
+                    ExampleModel.Event
                 });
         }
 

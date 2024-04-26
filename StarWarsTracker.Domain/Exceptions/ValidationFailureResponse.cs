@@ -1,5 +1,8 @@
-﻿namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
 {
+    [ExcludeFromCodeCoverage]
     public class ValidationFailureResponse
     {
         #region Constructors

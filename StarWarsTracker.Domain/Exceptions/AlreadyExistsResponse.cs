@@ -1,8 +1,11 @@
-﻿namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
 {
     /// <summary>
     /// This class represents the response the API would return when an Exception occurs due to an object already existing.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class AlreadyExistsResponse
     {
         #region Constructor
