@@ -53,5 +53,11 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
             Assert.Equal(secondEventDuringYear.Description, secondEventResponse.Description);
             Assert.Equal(secondEventDuringYear.CanonTypeId, (int)secondEventResponse.CanonType);
         }
+
+        [Fact]
+        public async Task GetEventsByYear_Given_Null_ShouldThrow_ValidationFailedException()
+        {
+            await Assert.ThrowsAsync<ValidationFailureException>(async () => await _controller.GetEventsByYear(null!));
+        }
     }
 }
