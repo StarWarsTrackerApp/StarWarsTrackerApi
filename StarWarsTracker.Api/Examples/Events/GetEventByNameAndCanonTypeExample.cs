@@ -11,6 +11,12 @@ namespace StarWarsTracker.Api.Examples.Events
 {
     public class GetEventByNameAndCanonTypeExample
     {
+        public class SuccessResponse : IExample<GetEventByNameAndCanonTypeResponse>
+        {
+            public GetEventByNameAndCanonTypeResponse GetExamples() =>
+                new(new Event(Guid.NewGuid(), "Name Of Event Found", "This Event Brought To You By Event Name And Canon Type Match", CanonType.StrictlyCanon));
+        }
+
         public class BadRequest : GetEventByNameAndCanonTypeRequest, IManyValidationFailureExamples
         {
             public IEnumerable<SwaggerExample<ValidationFailureResponse>> GetExamples() =>

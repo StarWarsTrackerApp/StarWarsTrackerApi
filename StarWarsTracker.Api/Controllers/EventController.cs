@@ -46,7 +46,7 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet(EventRoute.GetNotHavingDates),
             SwaggerOperation("Get all Star Wars Events that do not have an EventDate saved."),
-            SuccessResponse(typeof(GetAllEventsNotHavingDatesResponse))]
+            SuccessResponse(typeof(GetAllEventsNotHavingDatesResponse)), SuccessResponseExample(typeof(GetAllEventsNotHavingDatesExample.SuccessResponse))]
         public async Task<GetAllEventsNotHavingDatesResponse> GetAllEventsNotHavingDates() => await GetResponseAsync(new GetAllEventsNotHavingDatesRequest());
 
         #endregion
@@ -55,9 +55,9 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet(EventRoute.GetByGuid),
             SwaggerOperation("Get a specific Event and its Timeline using the EventGuid Identifier."),
-            SuccessResponse(), SuccessResponseExample(typeof(GetEventByGuidExample.SuccessResponse)),
+            SuccessResponse(typeof(GetEventByGuidResponse)), SuccessResponseExample(typeof(GetEventByGuidExample.SuccessResponse)),
             ValidationFailedResponse(), ValidationFailedExample(typeof(GetEventByGuidExample.BadRequest)),
-            DoesNotExistResponse()]
+            DoesNotExistResponse(), DoesNotExistExample(typeof(GetEventByGuidExample.DoesNotExist))]
         public async Task<GetEventByGuidResponse> GetEventByGuid(GetEventByGuidRequest request) => await GetResponseAsync(request);
 
         #endregion
@@ -66,7 +66,7 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet(EventRoute.GetByNameAndCanonType),
             SwaggerOperation("Search for a specific Event by specifying the Event's Name and the CanonType"),
-            SuccessResponse(),
+            SuccessResponse(typeof(GetEventByNameAndCanonTypeResponse)), SuccessResponseExample(typeof(GetEventByNameAndCanonTypeExample.SuccessResponse)),
             ValidationFailedResponse(), ValidationFailedExample(typeof(GetEventByNameAndCanonTypeExample.BadRequest)),
             DoesNotExistResponse(), DoesNotExistExample((typeof(GetEventByNameAndCanonTypeExample.DoesNotExist)))]
         public async Task<GetEventByNameAndCanonTypeResponse> GetEventByNameAndCanonType(GetEventByNameAndCanonTypeRequest request) => await GetResponseAsync(request);
@@ -77,7 +77,7 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet(EventRoute.GetByNameLike),
             SwaggerOperation("Get a list of Events where the name contains the Name provided."),
-            SuccessResponse(), SuccessResponseExample(typeof(GetEventByGuidExample.SuccessResponse)),
+            SuccessResponse(typeof(GetEventsByNameLikeResponse)), SuccessResponseExample(typeof(GetEventsByNameLikeExample.SuccessResponse)),
             ValidationFailedResponse(), ValidationFailedExample(typeof(GetEventsByNameLikeExample.BadRequest)),
             DoesNotExistResponse(), DoesNotExistExample(typeof(GetEventsByNameLikeExample.DoesNotExist))]
         public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await GetResponseAsync(request);
@@ -88,7 +88,7 @@ namespace StarWarsTracker.Api.Controllers
 
         [HttpGet(EventRoute.GetByYear),
             SwaggerOperation("Get a list of Events that happen during a specific year."),
-            SuccessResponse(), SuccessResponseExample(typeof(GetEventsByYearExample.SuccessResponse)),
+            SuccessResponse(typeof(GetEventsByYearResponse)), SuccessResponseExample(typeof(GetEventsByYearExample.SuccessResponse)),
             DoesNotExistResponse(), DoesNotExistExample(typeof(GetEventsByYearExample.DoesNotExist))]
         public async Task<GetEventsByYearResponse> GetEventsByYear(GetEventsByYearRequest request) => await GetResponseAsync(request);
 
