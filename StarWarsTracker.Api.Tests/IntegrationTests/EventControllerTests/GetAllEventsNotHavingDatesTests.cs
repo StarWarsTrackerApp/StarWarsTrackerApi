@@ -9,7 +9,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
         {
             var existingEventWithoutDates = await TestEvent.InsertAndFetchEventAsync();
 
-            var response = await _controller.GetAllEventsNotHavingDates(new());
+            var response = await _controller.GetAllEventsNotHavingDates();
 
             await _controller.DeleteEvent(new(existingEventWithoutDates.Guid));
 
@@ -31,7 +31,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
         {
             var (existingEventWithDates, _) = await TestEventDate.InsertAndFetchEventDateAsync();
 
-            var response = await _controller.GetAllEventsNotHavingDates(new());
+            var response = await _controller.GetAllEventsNotHavingDates();
 
             await _controller.DeleteEvent(new(existingEventWithDates.Guid));
 
