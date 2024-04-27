@@ -57,7 +57,7 @@ namespace StarWarsTracker.Api.Middleware
             }
             catch (Exception e)
             {
-                var logLevel = _logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.DefaultExceptionLogLevel) ?? Domain.Enums.LogLevel.None;
+                var logLevel = _logConfigReader.GetLogLevel(Section.ExceptionLogging, Key.DefaultExceptionLogLevel) ?? Domain.Enums.LogLevel.Critical;
 
                 _logger.IncreaseLevel(logLevel, "Exception Caught", new { e.GetType().Name, e.Message, e.StackTrace });
                 
