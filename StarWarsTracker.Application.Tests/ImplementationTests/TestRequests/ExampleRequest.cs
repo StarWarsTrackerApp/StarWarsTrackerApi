@@ -4,14 +4,12 @@ using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests.TestRequests
 {
-    internal class ExampleRequest : IRequest { }
+    internal class ExampleRequest { }
 
-    internal class ExampleRequestHandler : BaseRequestHandler<ExampleRequest>
+    internal class ExampleRequestHandler : BaseHandler<ExampleRequest>
     {
-        public ExampleRequestHandler(IClassLoggerFactory classLoggerFactory) : base(classLoggerFactory)
-        {
-        }
+        public ExampleRequestHandler(IClassLoggerFactory classLoggerFactory) : base(classLoggerFactory) { }
 
-        public override Task ExecuteRequestAsync(ExampleRequest request) => Task.CompletedTask;
+        internal protected override Task<IResponse> HandleRequestAsync(ExampleRequest request) => Task.FromResult(Response.Success());
     }
 }

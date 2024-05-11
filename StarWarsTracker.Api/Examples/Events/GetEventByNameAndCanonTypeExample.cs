@@ -39,9 +39,9 @@ namespace StarWarsTracker.Api.Examples.Events
                 };
         }
 
-        public class DoesNotExist : GetEventByNameAndCanonTypeRequest, IDoesNotExistExample
+        public class DoesNotExist : GetEventByNameAndCanonTypeRequest, INotFoundExample
         {
-            public DoesNotExistResponse GetExamples() => new(nameof(Event), ("Name Of Event Searched For", nameof(Name)), (CanonType.StrictlyCanon, nameof(CanonType)));
+            public NotFoundResponse GetExamples() => new(nameof(Event), ("Name Of Event Searched For", nameof(Name)), (CanonType.StrictlyCanon, nameof(CanonType)));
         }
     }
 }

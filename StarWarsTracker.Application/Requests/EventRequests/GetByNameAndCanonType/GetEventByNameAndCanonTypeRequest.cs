@@ -3,7 +3,7 @@ using StarWarsTracker.Domain.Validation.StringValidation;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonType
 {
-    public class GetEventByNameAndCanonTypeRequest : IRequestResponse<GetEventByNameAndCanonTypeResponse>, IValidatable
+    public class GetEventByNameAndCanonTypeRequest : IValidatable
     {
         #region Constructors
 
@@ -33,6 +33,9 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonTy
         public CanonType CanonType { get; set; }
 
         #endregion
+
+        #region Public IValidatable Method
+
         public bool IsValid(out Validator validator)
         {
             validator = new(
@@ -42,5 +45,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonTy
             
             return validator.IsPassingAllRules;
         }
+
+        #endregion
     }
 }

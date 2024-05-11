@@ -3,30 +3,17 @@ using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 {
-    internal class GetEventsByNameLikeHandler : DataRequestResponseHandler<GetEventsByNameLikeRequest, GetEventsByNameLikeResponse>
+    internal class GetEventsByNameLikeHandler : DataRequestHandler<GetEventsByNameLikeRequest>
     {
         public GetEventsByNameLikeHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task<GetEventsByNameLikeResponse> GetResponseAsync(GetEventsByNameLikeRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(GetEventsByNameLikeRequest request)
         {
-            _logger.AddDebug("Request Body", request);
+            var eventDtos = await _dataAccess.FetchListAsync(new GetEventsByNameLike(request.Name));
 
-            var events = await _dataAccess.FetchListAsync(new GetEventsByNameLike(request.Name));
+            var events = eventDtos.Any() ? eventDtos.Select(_ => _.AsDomainEvent()) : Enumerable.Empty<Event>();
 
-            _logger.AddDebug("Event DTO's Found", events);
-
-            if (events.Any())
-            {
-                var response = new GetEventsByNameLikeResponse(events.Select(_ => _.AsDomainEvent()));
-
-                _logger.AddInfo("Response Found", response.GetType().Name);
-
-                return response;
-            }
-
-            _logger.AddInfo("No Events Found");
-
-            throw new DoesNotExistException(nameof(Event), (request.Name, nameof(request.Name)));
+            return Response.Success(events);
         }
     }
 }

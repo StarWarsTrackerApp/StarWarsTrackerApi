@@ -3,14 +3,14 @@
     /// <summary>
     /// This interface defines the contract for the factory that will instantiate a Handler at runtime using the Type of Request that is being received.
     /// </summary>
-    internal interface IHandlerFactory
+    public interface IHandlerFactory
     {
         /// <summary>
-        /// Uses the TRequest provided to locate the IBaseHandler that handles the TRequest.
+        /// Instantiates and returns the type of IHandler that handles the TRequest provided.
         /// </summary>
-        /// <typeparam name="TRequest">The IRequest or IRequestResponse that will be used to locate an IBaseHandler.</typeparam>
-        /// <param name="request">The IRequest or IRequestResponse that will be used to locate an IBaseHandler. </param>
-        /// <returns>Returns the IBaseHandler that handles the TRequest or throws a NotFoundException if there is no Handler found.</returns>
-        public IBaseHandler NewHandler<TRequest>(TRequest request);
+        /// <typeparam name="TRequest">The type of request that an IHandler needs to be instantiated for.</typeparam>
+        /// <param name="request">The request object that a handler needs to be instantiated for.</param>
+        /// <returns>IHandler that handles the TRequest provided.</returns>
+        public IHandler<TRequest> GetHandler<TRequest>(TRequest request) where TRequest : class;
     }
 }

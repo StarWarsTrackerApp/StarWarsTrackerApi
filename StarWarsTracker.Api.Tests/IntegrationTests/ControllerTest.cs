@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Application;
 using StarWarsTracker.Logging;
 using StarWarsTracker.Logging.AppSettingsConfig;
 using StarWarsTracker.Persistence.Implementation;

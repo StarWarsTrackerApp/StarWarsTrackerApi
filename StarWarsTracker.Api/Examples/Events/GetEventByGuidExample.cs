@@ -21,9 +21,9 @@ namespace StarWarsTracker.Api.Examples.Events
             public ValidationFailureResponse GetExamples() => new(ValidationFailureMessage.RequiredField(nameof(EventGuid)));
         }
 
-        public class DoesNotExist : GetEventByGuidRequest, IDoesNotExistExample
+        public class DoesNotExist : GetEventByGuidRequest, INotFoundExample
         {
-            public DoesNotExistResponse GetExamples() => new(nameof(Event), (Guid.NewGuid(), nameof(EventGuid)));
+            public NotFoundResponse GetExamples() => new(nameof(Event), (Guid.NewGuid(), nameof(EventGuid)));
         }
     }
 }

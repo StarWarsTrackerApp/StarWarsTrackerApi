@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
 {
     /// <summary>
-    /// This class represents the response the API would return when an Exception occurs due to an object already existing.
+    /// This class represents the response the API would return when an issue occurs due to an object already existing.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class AlreadyExistsResponse
+    public class AlreadyExistsResponse : IResponse
     {
         #region Constructor
 
@@ -14,12 +15,12 @@ namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
         {
             NameOfObjectAlreadyExisting = nameOfObject;
 
-            PossibleConflicts = possibleConflicts.Any() ? possibleConflicts.Select( _ => new { Field = _.NameOfField, _.Value }) : Enumerable.Empty<object>();
+            PossibleConflicts = possibleConflicts.Any() ? possibleConflicts.Select(_ => new { Field = _.NameOfField, _.Value }) : Enumerable.Empty<object>();
         }
 
         #endregion
 
-        #region Public Propertieds
+        #region Public Properties
 
         /// <summary>
         /// The name of the object that is already existing.
@@ -30,6 +31,14 @@ namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
         /// The Fields/Values that may have caused the Conflict.
         /// </summary>
         public IEnumerable<object> PossibleConflicts { get; set; }
+
+        #endregion
+
+        #region Public IResponse Methods
+
+        public object? GetBody() => this;
+
+        public int GetStatusCode() => (int)HttpStatusCode.Conflict;
         
         #endregion
     }

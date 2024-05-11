@@ -1,6 +1,8 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonType;
+﻿using StarWarsTracker.Application.BaseObjects.BaseResponses;
+using StarWarsTracker.Application.Requests.EventRequests.GetByNameAndCanonType;
 using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Domain.Exceptions;
+using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
 using StarWarsTracker.Tests.Shared.Helpers;
@@ -16,15 +18,17 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetBy
         public GetEventByNameAndCanonTypeHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
-        public async Task GetEventByNameAndCanonType_Given_NoEventFound_ShouldThrow_DoesNotExistException()
+        public async Task GetEventByNameAndCanonType_Given_NoEventFound_ShouldReturn_NotFoundResponse()
         {
             SetupMockFetchAsync<GetEventByNameAndCanonType, Event_DTO>(null);
 
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _handler.HandleAsync(_request));
+            var response = await _handler.HandleRequestAsync(_request);
+
+            Assert.IsType<NotFoundResponse>(response);
         }
 
         [Fact]
-        public async Task GetEventByNameAndCanonType_Given_EventFound_ShouldReturn_Event()
+        public async Task GetEventByNameAndCanonType_Given_EventFound_ShouldReturn_GetResponse_WithContent_ExpectedEvent()
         {
             var expected = new Event_DTO()
             {
@@ -36,15 +40,14 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetBy
 
             SetupMockFetchAsync<GetEventByNameAndCanonType, Event_DTO>(expected);
 
-            var result = await _handler.HandleAsync(_request) as GetEventByNameAndCanonTypeResponse;
+            var result = await _handler.HandleRequestAsync(_request) as GetResponse<Event>;
 
             Assert.NotNull(result);
 
-            Assert.Equal(expected.Guid, result.Event.Guid);
-            Assert.Equal(expected.Name, result.Event.Name);
-            Assert.Equal(expected.Description, result.Event.Description);
-            Assert.Equal(expected.CanonTypeId, (int)result.Event.CanonType);
-
+            Assert.Equal(expected.Guid, result.Content.Guid);
+            Assert.Equal(expected.Name, result.Content.Name);
+            Assert.Equal(expected.Description, result.Content.Description);
+            Assert.Equal(expected.CanonTypeId, (int)result.Content.CanonType);
         }
     }
 }

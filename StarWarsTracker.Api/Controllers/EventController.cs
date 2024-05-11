@@ -17,7 +17,7 @@ namespace StarWarsTracker.Api.Controllers
 {
     public class EventController : BaseController
     {
-        public EventController(IOrchestrator orchestrator, IClassLoggerFactory loggerFactory) : base(orchestrator, loggerFactory) { }
+        public EventController(IHandlerFactory handlerFactory, IClassLoggerFactory loggerFactory) : base(handlerFactory, loggerFactory) { }
 
         #region Insert Event Endpoint 
 
@@ -29,7 +29,7 @@ namespace StarWarsTracker.Api.Controllers
             ValidationFailedExample(typeof(InsertEventExample.BadRequest)),
             AlreadyExistsResponse(), 
             AlreadyExistsExample(typeof(InsertEventExample.AlreadyExists))]
-        public async Task InsertEvent([FromBody] InsertEventRequest request) => await ExecuteRequestAsync(request);
+        public async Task<IActionResult> InsertEvent([FromBody] InsertEventRequest request) => await HandleAsync(request);
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace StarWarsTracker.Api.Controllers
             ValidationFailedExample(typeof(DeleteEventExample.BadRequest)),
             DoesNotExistResponse(), 
             DoesNotExistExample(typeof(DeleteEventExample.DoesNotExist))]
-        public async Task DeleteEvent(DeleteEventByGuidRequest request) => await ExecuteRequestAsync(request);
+        public async Task<IActionResult> DeleteEvent(DeleteEventByGuidRequest request) => await HandleAsync(request);
 
         #endregion
 
@@ -52,7 +52,7 @@ namespace StarWarsTracker.Api.Controllers
             SwaggerOperation("Get all Star Wars Events that do not have an EventDate saved."),
             SuccessResponse(typeof(GetAllEventsNotHavingDatesResponse)), 
             SuccessResponseExample(typeof(GetAllEventsNotHavingDatesExample.SuccessResponse))]
-        public async Task<GetAllEventsNotHavingDatesResponse> GetAllEventsNotHavingDates() => await GetResponseAsync(new GetAllEventsNotHavingDatesRequest());
+        public async Task<IActionResult> GetAllEventsNotHavingDates() => await HandleAsync(new GetAllEventsNotHavingDatesRequest());
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace StarWarsTracker.Api.Controllers
             ValidationFailedExample(typeof(GetEventByGuidExample.BadRequest)),
             DoesNotExistResponse(), 
             DoesNotExistExample(typeof(GetEventByGuidExample.DoesNotExist))]
-        public async Task<GetEventByGuidResponse> GetEventByGuid(GetEventByGuidRequest request) => await GetResponseAsync(request);
+        public async Task<IActionResult> GetEventByGuid(GetEventByGuidRequest request) => await HandleAsync(request);
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace StarWarsTracker.Api.Controllers
             ValidationFailedExample(typeof(GetEventByNameAndCanonTypeExample.BadRequest)),
             DoesNotExistResponse(), 
             DoesNotExistExample((typeof(GetEventByNameAndCanonTypeExample.DoesNotExist)))]
-        public async Task<GetEventByNameAndCanonTypeResponse> GetEventByNameAndCanonType(GetEventByNameAndCanonTypeRequest request) => await GetResponseAsync(request);
+        public async Task<IActionResult> GetEventByNameAndCanonType(GetEventByNameAndCanonTypeRequest request) => await HandleAsync(request);
 
         #endregion
 
@@ -94,7 +94,7 @@ namespace StarWarsTracker.Api.Controllers
             ValidationFailedExample(typeof(GetEventsByNameLikeExample.BadRequest)),
             DoesNotExistResponse(), 
             DoesNotExistExample(typeof(GetEventsByNameLikeExample.DoesNotExist))]
-        public async Task<GetEventsByNameLikeResponse> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await GetResponseAsync(request);
+        public async Task<IActionResult> GetEventsByNameLike(GetEventsByNameLikeRequest request) => await HandleAsync(request);
 
         #endregion
 
@@ -106,7 +106,7 @@ namespace StarWarsTracker.Api.Controllers
             SuccessResponseExample(typeof(GetEventsByYearExample.SuccessResponse)),
             DoesNotExistResponse(), 
             DoesNotExistExample(typeof(GetEventsByYearExample.DoesNotExist))]
-        public async Task<GetEventsByYearResponse> GetEventsByYear(GetEventsByYearRequest request) => await GetResponseAsync(request);
+        public async Task<IActionResult> GetEventsByYear(GetEventsByYearRequest request) => await HandleAsync(request);
 
         #endregion
 

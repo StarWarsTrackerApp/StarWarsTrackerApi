@@ -1,10 +1,12 @@
 ﻿using GenFu;
+using StarWarsTracker.Application.BaseObjects.BaseResponses;
 using StarWarsTracker.Application.Requests.EventDateRequests.Delete;
 using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
+using System.Net;
 
 namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.DeleteEventDatesByEventGuidTests
 {
@@ -17,21 +19,21 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
         public DeleteEventDatesByEventGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
-        public async Task DeleteEventDatesByEventGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException_WithEventNotFound()
+        public async Task DeleteEventDatesByEventGuid_Given_NoEventFoundWithGuid_ShouldReturn_NotFoundResponse_WithNameOfObjectNotFound_Event()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(null);
 
             var expectedNameOfObjectNotExisting = nameof(Event);
 
-            var exception = await Record.ExceptionAsync(async () => await _handler.HandleAsync(_request)) as DoesNotExistException;
+            var response = await _handler.HandleRequestAsync(_request) as NotFoundResponse;
 
-            Assert.NotNull(exception);
+            Assert.NotNull(response);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, response.NameOfObjectNotExisting);
         }
 
         [Fact]
-        public async Task DeleteEventDatesByEventGuid_Given_EventFoundWithGuid_ButNoEventDatesFound_ShouldThrow_DoesNotExistException_WithEventDateNotFound()
+        public async Task DeleteEventDatesByEventGuid_Given_EventFoundWithGuid_ButNoEventDatesFound_ShouldReturn_NotFoundResponse_WithNameOfObjectNotFound_EventDate()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(A.New<Event_DTO>());
 
@@ -39,11 +41,11 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
             var expectedNameOfObjectNotExisting = nameof(EventDate);
 
-            var exception = await Record.ExceptionAsync(async () => await _handler.HandleAsync(_request)) as DoesNotExistException;
+            var response = await _handler.HandleRequestAsync(_request) as NotFoundResponse;
 
-            Assert.NotNull(exception);
+            Assert.NotNull(response);
 
-            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
+            Assert.Equal(expectedNameOfObjectNotExisting, response.NameOfObjectNotExisting);
         }
 
         [Theory]
@@ -51,7 +53,7 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
         [InlineData(1, 2)]
         [InlineData(5, 0)]
         [InlineData(5, 10)]
-        public async Task DeleteEventDatesByEventGuid_Given_EventDatesFound_ButNumberOfDatesDeleted_NotSameCountAsEventDatesFound_ShouldThrow_OperationFailedException(int numberOfDates, int numberOfDatesDeleted)
+        public async Task DeleteEventDatesByEventGuid_Given_EventDatesFound_ButNumberOfDatesDeleted_NotSameCountAsEventDatesFound_ShouldReturn_ErrorResponse(int numberOfDates, int numberOfDatesDeleted)
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(A.New<Event_DTO>());
 
@@ -59,7 +61,9 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
             SetupMockExecuteAsync<DeleteEventDatesByEventId>(numberOfDatesDeleted);
 
-            await Assert.ThrowsAsync<OperationFailedException>(async () => await _handler.HandleAsync(_request));
+            var result = await _handler.HandleRequestAsync(_request);
+
+            Assert.IsType<ErrorResponse>(result);
         }
 
         [Theory]
@@ -75,11 +79,11 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventDateRequestTests.D
 
             SetupMockExecuteAsync<DeleteEventDatesByEventId>(numberOfDates);
 
-            var task = _handler.HandleAsync(_request);
+            var response = await _handler.HandleRequestAsync(_request) as ExecuteResponse;
 
-            await task;
+            Assert.NotNull(response);
 
-            Assert.True(task.IsCompletedSuccessfully);
+            Assert.Equal((int)HttpStatusCode.OK, response.GetStatusCode());
         }
     }
 }

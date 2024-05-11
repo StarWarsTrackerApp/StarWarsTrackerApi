@@ -10,7 +10,7 @@ namespace StarWarsTracker.Api.SwaggerHelpers.Attributes
     {
         public const string DefaultDescription = "Not Found Response";
 
-        public DoesNotExistResponseAttribute(string description = DefaultDescription) : base((int)HttpStatusCode.NotFound, description, typeof(DoesNotExistResponse))
+        public DoesNotExistResponseAttribute(string description = DefaultDescription) : base((int)HttpStatusCode.NotFound, description, typeof(NotFoundResponse))
         {
         }
     }

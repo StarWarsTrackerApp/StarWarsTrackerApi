@@ -6,12 +6,12 @@ namespace StarWarsTracker.Api.Controllers
 {
     public class EventDateController : BaseController
     {
-        public EventDateController(IOrchestrator orchestrator, IClassLoggerFactory loggerFactory) : base(orchestrator, loggerFactory) { }
+        public EventDateController(IHandlerFactory handlerFactory, IClassLoggerFactory loggerFactory) : base(handlerFactory, loggerFactory) { }
 
         [HttpPost("EventDate/InsertEventDates")]
-        public async Task InsertEventDates([FromBody] InsertEventDatesRequest request) => await ExecuteRequestAsync(request);
+        public async Task<IActionResult> InsertEventDates([FromBody] InsertEventDatesRequest request) => await HandleAsync(request);
 
         [HttpDelete("EventDate/DeleteEventDatesByEventGuid")]
-        public async Task DeleteEventDatesByEventGuid(DeleteEventDatesByEventGuidRequest request) => await ExecuteRequestAsync(request);
+        public async Task<IActionResult> DeleteEventDatesByEventGuid(DeleteEventDatesByEventGuidRequest request) => await HandleAsync(request);
     }
 }

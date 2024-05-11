@@ -21,9 +21,9 @@ namespace StarWarsTracker.Api.Examples.Events
                 });
         }
 
-        public class DoesNotExist : GetEventsByYearRequest, IDoesNotExistExample
+        public class DoesNotExist : GetEventsByYearRequest, INotFoundExample
         {
-            public DoesNotExistResponse GetExamples() => new(nameof(Event), (-19, nameof(YearsSinceBattleOfYavin)));
+            public NotFoundResponse GetExamples() => new(nameof(Event), (-19, nameof(YearsSinceBattleOfYavin)));
         }
     }
 }

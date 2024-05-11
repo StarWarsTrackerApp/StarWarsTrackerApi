@@ -3,7 +3,6 @@ using StarWarsTracker.Application.Abstraction;
 using StarWarsTracker.Application.Implementation;
 using StarWarsTracker.Application.Tests.ImplementationTests.TestRequests;
 using StarWarsTracker.Domain.Enums;
-using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Logging.Abstraction;
 
 namespace StarWarsTracker.Application.Tests.ImplementationTests
@@ -45,28 +44,13 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
             var request = new ExampleRequest();
             var handlerType = typeof(ExampleRequestHandler);
             
-            _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(handlerType);
+            _mockHandlerDictionary.Setup(_ => _.TryGetHandlerType(request, out handlerType)).Returns(true);
 
-            _mockTypeActivator.Setup(_ => _.Instantiate<IBaseHandler>(handlerType)).Returns(new ExampleRequestHandler(_mockLoggerFactory.Object));
+            _mockTypeActivator.Setup(_ => _.Instantiate<IHandler<ExampleRequest>>(handlerType)).Returns(new ExampleRequestHandler(_mockLoggerFactory.Object));
 
-            var result = _handlerFactory.NewHandler(new ExampleRequest());
+            var result = _handlerFactory.GetHandler(request);
 
             Assert.NotNull(result);
-        }
-
-        [Fact]
-        public void HandlerFactory_Given_HandlerDictionaryReturnsHandler_ShouldLog_Trace_Twice()
-        {
-            var request = new ExampleRequest();
-            var handlerType = typeof(ExampleRequestHandler);
-
-            _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(handlerType);
-
-            _mockTypeActivator.Setup(_ => _.Instantiate<IBaseHandler>(handlerType)).Returns(new ExampleRequestHandler(_mockLoggerFactory.Object));
-
-            _handlerFactory.NewHandler(new ExampleRequest());
-
-            _mockLogger.Verify(_ => _.AddTrace(It.IsAny<string>(), It.IsAny<object?>(), "NewHandler"), Times.Exactly(2));
         }
 
         [Fact]
@@ -75,13 +59,13 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
             var request = new ExampleRequest();
             var handlerType = typeof(ExampleRequestHandler);
 
-            _mockHandlerDictionary.Setup(_ => _.GetHandlerType(request.GetType())).Returns(handlerType);
+            _mockHandlerDictionary.Setup(_ => _.TryGetHandlerType(request, out handlerType)).Returns(true);
 
-            _mockTypeActivator.Setup(_ => _.Instantiate<IBaseHandler>(handlerType)).Returns(new ExampleRequestHandler(_mockLoggerFactory.Object));
+            _mockTypeActivator.Setup(_ => _.Instantiate<IHandler<ExampleRequest>>(handlerType)).Returns(new ExampleRequestHandler(_mockLoggerFactory.Object));
 
-            _handlerFactory.NewHandler(new ExampleRequest());
+            var result = _handlerFactory.GetHandler(request);
 
-            _mockLogger.Verify(_ => _.AddInfo(It.IsAny<string>(), It.IsAny<object?>(), "NewHandler"), Times.Exactly(2));
+            _mockLogger.Verify(_ => _.AddInfo(It.IsAny<string>(), It.IsAny<object?>(), "GetHandler"), Times.Exactly(2));
         }
 
         #endregion
@@ -91,7 +75,7 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         [Fact]
         public void HandlerFactory_Given_HandlerNotExisting_ShouldThrow_DoesNotExistException()
         {
-            Assert.Throws<DoesNotExistException>(() => _handlerFactory.NewHandler(new ExampleRequest()));
+            Assert.Throws<ApplicationException>(() => _handlerFactory.GetHandler(new ExampleRequest()));
         }
 
         [Fact]
@@ -99,9 +83,9 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         {
             var request = new ExampleRequest();
 
-            Record.Exception(() => _handlerFactory.NewHandler(new ExampleRequest()));
+            Record.Exception(() => _handlerFactory.GetHandler(new ExampleRequest()));
 
-            _mockLogger.Verify(_ => _.IncreaseLevel(LogLevel.Critical, It.IsAny<string>(), request.GetType().Name, "NewHandler"), Times.Once);
+            _mockLogger.Verify(_ => _.IncreaseLevel(LogLevel.Critical, It.IsAny<string>(), request.GetType().Name, "GetHandler"), Times.Once);
         }
 
         #endregion
@@ -111,15 +95,15 @@ namespace StarWarsTracker.Application.Tests.ImplementationTests
         [Fact]
         public void HandlerFactory_Given_Null_ShouldThrow_ArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _handlerFactory.NewHandler((object)null!));
+            Assert.Throws<ArgumentNullException>(() => _handlerFactory.GetHandler((object)null!));
         }
 
         [Fact]
         public void HandlerFactory_Given_Null_ShouldLog_Critical()
         {
-            Record.Exception(() => _handlerFactory.NewHandler((object)null!));
+            Record.Exception(() => _handlerFactory.GetHandler((object)null!));
 
-            _mockLogger.Verify(_ => _.IncreaseLevel(LogLevel.Critical, It.IsAny<string>(), null, "NewHandler"), Times.Once);
+            _mockLogger.Verify(_ => _.IncreaseLevel(LogLevel.Critical, It.IsAny<string>(), null, "GetHandler"), Times.Once);
         }
 
         #endregion

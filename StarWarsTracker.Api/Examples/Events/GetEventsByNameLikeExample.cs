@@ -16,9 +16,9 @@ namespace StarWarsTracker.Api.Examples.Events
             public ValidationFailureResponse GetExamples() => new(ValidationFailureMessage.RequiredField(nameof(Name)));
         }
 
-        public class DoesNotExist : GetEventsByNameLikeRequest, IDoesNotExistExample
+        public class DoesNotExist : GetEventsByNameLikeRequest, INotFoundExample
         {
-            public DoesNotExistResponse GetExamples() => new(nameof(Event), ("Name Searched By", nameof(Name)));
+            public NotFoundResponse GetExamples() => new(nameof(Event), ("Name Searched By", nameof(Name)));
         }
 
         public class SuccessResponse : IExample<GetEventsByNameLikeResponse>

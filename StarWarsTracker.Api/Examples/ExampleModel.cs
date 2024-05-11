@@ -12,6 +12,11 @@ namespace StarWarsTracker.Api.Examples
         /// </summary>
         public static Event Event => new(Guid.NewGuid(), "Name Of Event", "Description Of Event", CanonType.StrictlyCanon);
 
+        public static IEnumerable<Event> CollectionOfEvents => new[]
+        {
+            Event, Event, Event
+        };
+
         /// <summary>
         /// Example EventTimeFrame set at a Definitive Date.
         /// </summary>

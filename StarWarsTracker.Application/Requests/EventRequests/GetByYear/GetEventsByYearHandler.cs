@@ -3,34 +3,17 @@ using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByYear
 {
-    internal class GetEventsByYearHandler : DataRequestResponseHandler<GetEventsByYearRequest, GetEventsByYearResponse>
+    internal class GetEventsByYearHandler : DataRequestHandler<GetEventsByYearRequest>
     {
         public GetEventsByYearHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task<GetEventsByYearResponse> GetResponseAsync(GetEventsByYearRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(GetEventsByYearRequest request)
         {
-            _logger.AddInfo("Getting Response For Request", request.GetType().Name);
+            var eventDtos = await _dataAccess.FetchListAsync(new GetEventsByYear(request.YearsSinceBattleOfYavin));
 
-            _logger.AddDebug("Request Body", request);
+            var events = eventDtos.Any() ? eventDtos.Select(_ => _.AsDomainEvent()) : Enumerable.Empty<Event>();
 
-            var events = await _dataAccess.FetchListAsync(new GetEventsByYear(request.YearsSinceBattleOfYavin));
-
-            _logger.AddDebug("Event DTOs Found", events);
-
-            if (events.Any())
-            {
-                var response = new GetEventsByYearResponse(events.Select(_ => _.AsDomainEvent()));
-
-                _logger.AddInfo("Response Found", response.GetType().Name);
-
-                _logger.AddDebug("Response Body", response);
-
-                return response;
-            }
-
-            _logger.AddInfo("No Events Found");
-
-            throw new DoesNotExistException(nameof(Event), (request.YearsSinceBattleOfYavin, nameof(request.YearsSinceBattleOfYavin)));
+            return Response.Success(events);
         }
     }
 }

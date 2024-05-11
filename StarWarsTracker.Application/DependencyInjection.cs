@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using StarWarsTracker.Application.Implementation;
 using StarWarsTracker.Logging.Abstraction;
 using System.Diagnostics.CodeAnalysis;
 
-namespace StarWarsTracker.Application.Implementation
+namespace StarWarsTracker.Application
 {
     [ExcludeFromCodeCoverage]
     public static class DependencyInjection
@@ -16,9 +17,8 @@ namespace StarWarsTracker.Application.Implementation
 
             services.AddScoped<ILogWriter, DatabaseLogger>();
 
-            services.AddSingleton<IHandlerDictionary>(new HandlerDictionary());
+            services.AddSingleton(HandlerDictionary.FromDictionaryAssembly());
 
-            services.AddScoped<IOrchestrator, Orchestrator>();
             services.AddScoped<IHandlerFactory, HandlerFactory>();
 
             services.AddTransient<IServiceProvider>(_ => services.BuildServiceProvider());

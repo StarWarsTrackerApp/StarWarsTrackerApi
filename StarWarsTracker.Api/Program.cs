@@ -1,5 +1,5 @@
 using StarWarsTracker.Api.Middleware;
-using StarWarsTracker.Application.Implementation;
+using StarWarsTracker.Application;
 using StarWarsTracker.Domain.Constants;
 using StarWarsTracker.Logging;
 using StarWarsTracker.Logging.AppSettingsConfig;
@@ -29,8 +29,8 @@ internal class Program
             c.ExampleFilters();
             c.EnableAnnotations();
 
-            // add XML Comments for Application Assembly (Where Requests are)
-            var filePath = Path.Combine(AppContext.BaseDirectory, typeof(IRequest).Assembly.GetName().Name + ".xml");
+            // add XML Comments for Application Assembly (Where Request/Handlers are)
+            var filePath = Path.Combine(AppContext.BaseDirectory, typeof(IHandler<>).Assembly.GetName().Name + ".xml");
             if (File.Exists(filePath))
             {
                 c.IncludeXmlComments(filePath);

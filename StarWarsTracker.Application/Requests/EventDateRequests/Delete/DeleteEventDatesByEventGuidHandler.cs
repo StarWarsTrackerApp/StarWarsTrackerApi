@@ -8,7 +8,7 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
     {
         public DeleteEventDatesByEventGuidHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task ExecuteRequestAsync(DeleteEventDatesByEventGuidRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(DeleteEventDatesByEventGuidRequest request)
         {
             _logger.AddInfo("Executing Request", request.GetType().Name);
 
@@ -16,11 +16,11 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
 
             _logger.AddDebug("Event To Delete Dates For", eventToDeleteDatesFor);
 
-            if(eventToDeleteDatesFor == null)
+            if (eventToDeleteDatesFor == null)
             {
                 _logger.AddInfo("No Event Found With Guid", request.EventGuid);
 
-                throw new DoesNotExistException(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
+                return Response.NotFound(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
             }
 
             _logger.AddTrace("Getting EventDates To Delete");
@@ -33,7 +33,7 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
             {
                 _logger.AddInfo("No EventDates Found For Event");
 
-                throw new DoesNotExistException(nameof(EventDate), (request.EventGuid, nameof(request.EventGuid)));
+                return Response.NotFound(nameof(EventDate), (request.EventGuid, nameof(request.EventGuid)));
             }
 
             _logger.AddTrace("Deleting EventDates");
@@ -44,11 +44,13 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
 
             if (rowsImpacted != eventDates.Count())
             {
-                _logger.IncreaseLevel(LogLevel.Critical, "Count Of Event Dates To Delete Not Matching Count Deleted", 
+                _logger.IncreaseLevel(LogLevel.Critical, "Count Of Event Dates To Delete Not Matching Count Deleted",
                     new { ExpectedRowsImpacted = eventDates.Count(), ActualRowsImpacted = rowsImpacted });
 
-                throw new OperationFailedException();
+                return Response.Error();
             }
+
+            return Response.Success();
         }
     }
 }
