@@ -1,42 +1,54 @@
-﻿//using StarWarsTracker.Tests.Shared.Helpers;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Domain.Models;
+using StarWarsTracker.Tests.Shared.Helpers;
 
-//namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
-//{
-//    public class GetAllEventsNotHavingDatesTests : ControllerTest<EventController>
-//    {
-//        [Fact]
-//        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasNoDates_ShouldReturn_ResponseContainingEventInsertedWithoutDates()
-//        {
-//            var existingEventWithoutDates = await TestEvent.InsertAndFetchEventAsync();
+namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
+{
+    public class GetAllEventsNotHavingDatesTests : ControllerTest<EventController>
+    {
+        [Fact]
+        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasNoDates_ShouldReturn_SuccessResponse_With_EventInsertedWithoutDates()
+        {
+            var existingEventWithoutDates = await TestEvent.InsertAndFetchEventAsync();
 
-//            var response = await _controller.GetAllEventsNotHavingDates();
+            var result = await _controller.GetAllEventsNotHavingDates();
 
-//            await _controller.DeleteEvent(new(existingEventWithoutDates.Guid));
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
 
-//            // try to get the event that was inserted from response using the Guid
-//            var eventReturned = response.Events.Single(_ => _.Guid == existingEventWithoutDates.Guid);
+            await _controller.DeleteEvent(new(existingEventWithoutDates.Guid));
 
-//            //Assert that the eventReturned is not null
-//            Assert.NotNull(eventReturned);
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
 
-//            // Assert that the properties on the event match
-//            Assert.Equal(existingEventWithoutDates.Guid, eventReturned.Guid);
-//            Assert.Equal(existingEventWithoutDates.Name, eventReturned.Name);
-//            Assert.Equal(existingEventWithoutDates.Description, eventReturned.Description);
-//            Assert.Equal(existingEventWithoutDates.CanonTypeId, (int)eventReturned.CanonType);
-//        }
+            Assert.NotNull(eventsFound);
 
-//        [Fact]
-//        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasDates_ShouldReturn_ResponseNotContainingEventInsertedWithDates()
-//        {
-//            var (existingEventWithDates, _) = await TestEventDate.InsertAndFetchEventDateAsync();
+            var eventReturned = eventsFound.Single(_ => _.Guid == existingEventWithoutDates.Guid);
 
-//            var response = await _controller.GetAllEventsNotHavingDates();
+            //Assert that the eventReturned is not null
+            Assert.NotNull(eventReturned);
 
-//            await _controller.DeleteEvent(new(existingEventWithDates.Guid));
+            // Assert that the properties on the event match
+            Assert.Equal(existingEventWithoutDates.Guid, eventReturned.Guid);
+            Assert.Equal(existingEventWithoutDates.Name, eventReturned.Name);
+            Assert.Equal(existingEventWithoutDates.Description, eventReturned.Description);
+            Assert.Equal(existingEventWithoutDates.CanonTypeId, (int)eventReturned.CanonType);
+        }
 
-//            // Assert that the response does not contain the existing event guid that has dates
-//            Assert.DoesNotContain(existingEventWithDates.Guid, response.Events.Select(_ => _.Guid));
-//        }
-//    }
-//}
+        [Fact]
+        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasDates_ShouldReturn_SuccessResponse_Without_EventInsertedWithDates()
+        {
+            var (existingEventWithDates, _) = await TestEventDate.InsertAndFetchEventDateAsync();
+
+            var response = await _controller.GetAllEventsNotHavingDates();
+
+            await _controller.DeleteEvent(new(existingEventWithDates.Guid));
+
+            Assert.Equal(StatusCodes.Status200OK, response.GetStatusCode());
+
+            var eventsFound = response.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.NotNull(eventsFound);
+
+            Assert.DoesNotContain(existingEventWithDates.Guid, eventsFound.Select(_ => _.Guid));
+        }
+    }
+}

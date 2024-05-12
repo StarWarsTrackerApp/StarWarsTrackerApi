@@ -1,58 +1,69 @@
-﻿//using StarWarsTracker.Application.Requests.EventDateRequests.Delete;
-//using StarWarsTracker.Domain.Exceptions;
-//using StarWarsTracker.Domain.Models;
-//using StarWarsTracker.Domain.Validation;
-//using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
-//using StarWarsTracker.Tests.Shared.Helpers;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Application.BaseObjects.ExceptionResponses;
+using StarWarsTracker.Application.Requests.EventDateRequests.Delete;
+using StarWarsTracker.Domain.Exceptions;
+using StarWarsTracker.Domain.Models;
+using StarWarsTracker.Domain.Validation;
+using StarWarsTracker.Tests.Shared.Helpers;
 
-//namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
-//{
-//    public class DeleteEventDatesByEventGuidTests : ControllerTest<EventDateController>
-//    {
-//        [Fact]
-//        public async Task DeleteEventDatesByEventGuid_Given_EventGuidNotProvided_ShouldThrow_ValidationFailureException_WithMessage_EventGuidRequired()
-//        {
-//            var request = new DeleteEventDatesByEventGuidRequest();
+namespace StarWarsTracker.Api.Tests.IntegrationTests.EventDateControllerTests
+{
+    public class DeleteEventDatesByEventGuidTests : ControllerTest<EventDateController>
+    {
+        [Fact]
+        public async Task DeleteEventDatesByEventGuid_Given_EventGuidNotProvided_ShouldReturn_BadRequestResponse_WithMessage_EventGuidRequired()
+        {
+            var request = new DeleteEventDatesByEventGuidRequest();
 
-//            var expectedMessage = ValidationFailureMessage.RequiredField(nameof(request.EventGuid));
+            var expectedMessage = ValidationFailureMessage.RequiredField(nameof(request.EventGuid));
 
-//            var exception = await Record.ExceptionAsync(async () => await _controller.DeleteEventDatesByEventGuid(request)) as ValidationFailureException;
+            var result = await _controller.DeleteEventDatesByEventGuid(request);
 
-//            Assert.NotNull(exception);
+            var responseBody = result.GetResponseBody<ValidationFailureResponse>();
 
-//            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
-//        }
+            Assert.Equal(StatusCodes.Status400BadRequest, result.GetStatusCode());
 
-//        [Fact]
-//        public async Task DeleteEventDatesByEventGuid_Given_EventNotExistingWithGuid_ShouldThrow_DoesNotExistException_WithEventBeingNameOfObjectNotExisting()
-//        {
-//            var expectedNameOfObjectNotExisting = nameof(Event);
+            Assert.NotNull(responseBody);
 
-//            var request = new DeleteEventDatesByEventGuidRequest(Guid.NewGuid());
+            Assert.Equal(expectedMessage, responseBody.ValidationFailureReasons.Single());
+        }
 
-//            var exception = await Record.ExceptionAsync(async () => await _controller.DeleteEventDatesByEventGuid(request)) as DoesNotExistException;
+        [Fact]
+        public async Task DeleteEventDatesByEventGuid_Given_EventNotExistingWithGuid_ShouldReturn_NotFoundResponse_With_NameOfObjectNotExisting_Event()
+        {
+            var expectedNameOfObjectNotExisting = nameof(Event);
 
-//            Assert.NotNull(exception);
+            var request = new DeleteEventDatesByEventGuidRequest(Guid.NewGuid());
 
-//            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
-//        }
+            var result = await _controller.DeleteEventDatesByEventGuid(request);
 
-//        [Fact]
-//        public async Task DeleteEventDatesByEventGuid_Given_EventExistsButHasNoDates_ShouldThrow_DoesNotExistException_WithEventDateBeingNameOfObjectNotExisting()
-//        {
-//            var expectedNameOfObjectNotExisting = nameof(EventDate);
+            var responseBody = result.GetResponseBody<NotFoundResponse>();
 
-//            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
+            Assert.Equal(StatusCodes.Status404NotFound, result.GetStatusCode());
 
-//            var request = new DeleteEventDatesByEventGuidRequest(existingEvent.Guid);
+            Assert.NotNull(responseBody);
 
-//            var exception = await Record.ExceptionAsync(async () => await _controller.DeleteEventDatesByEventGuid(request)) as DoesNotExistException;
+            Assert.Equal(expectedNameOfObjectNotExisting, responseBody.NameOfObjectNotExisting);
+        }
 
-//            await TestDataAccess.SharedInstance.ExecuteAsync(new DeleteEventById(existingEvent.Id));
+        [Fact]
+        public async Task DeleteEventDatesByEventGuid_Given_EventExistsButHasNoDates_ShouldReturn_NotFoundResponse_With_NameOfObjectNotExisting_EventDate()
+        {
+            var expectedNameOfObjectNotExisting = nameof(EventDate);
 
-//            Assert.NotNull(exception);
+            var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
-//            Assert.Equal(expectedNameOfObjectNotExisting, exception.GetResponseBody().NameOfObjectNotExisting);
-//        }
-//    }
-//}
+            var request = new DeleteEventDatesByEventGuidRequest(existingEvent.Guid);
+
+            var result = await _controller.DeleteEventDatesByEventGuid(request);
+
+            var responseBody = result.GetResponseBody<NotFoundResponse>();
+
+            Assert.Equal(StatusCodes.Status404NotFound, result.GetStatusCode());
+
+            Assert.NotNull(responseBody);
+
+            Assert.Equal(expectedNameOfObjectNotExisting, responseBody.NameOfObjectNotExisting);
+        }
+    }
+}
