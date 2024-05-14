@@ -1,4 +1,5 @@
 ﻿using GenFu;
+using StarWarsTracker.Application.BaseObjects.BaseResponses;
 using StarWarsTracker.Application.Requests.EventRequests.GetByGuid;
 using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Domain.Models;
@@ -17,15 +18,17 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
         public GetEventByGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
-        public async Task GetEventByGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException()
+        public async Task GetEventByGuid_Given_NoEventFoundWithGuid_ShouldReturn_NotFoundResponse()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(null);
 
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _handler.HandleAsync(_request));
+            var response = await _handler.HandleRequestAsync(_request);
+
+            Assert.IsType<NotFoundResponse>(response);
         }
 
         [Fact]
-        public async Task GetEventByGuid_Given_EventFoundWithoutEventDates_ShouldReturn_ResponseWithEvent_AndNullTimeFrame()
+        public async Task GetEventByGuid_Given_EventFoundWithoutEventDates_ShouldReturn_GetResponse_WithContent_EventWithNullTimeFrame()
         {
             var eventDTO = A.New<Event_DTO>();
             var expectedEvent = eventDTO.AsDomainEvent();
@@ -34,15 +37,15 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
 
             SetupMockFetchListAsync<GetEventDatesByEventId, EventDate_DTO>(Enumerable.Empty<EventDate_DTO>());
 
-            var response = await _handler.HandleAsync(_request) as GetEventByGuidResponse;
+            var response = await _handler.HandleRequestAsync(_request) as GetResponse<GetEventByGuidResponse>;
 
             Assert.NotNull(response);
-            Assert.Equivalent(expectedEvent, response.Event);
-            Assert.Null(response.EventTimeFrame);
+            Assert.Equivalent(expectedEvent, response.Content.Event);
+            Assert.Null(response.Content.EventTimeFrame);
         }
 
         [Fact]
-        public async Task GetEventByGuid_Given_EventFoundWithEventDates_ShouldReturn_ResponseWithEvent_AndTimeFrame()
+        public async Task GetEventByGuid_Given_EventFoundWithEventDates_ShouldReturn_GetResponse_WithContent_EventWithTimeFrame()
         {
             var eventDTO = A.New<Event_DTO>();
             var expectedEvent = eventDTO.AsDomainEvent();
@@ -54,11 +57,11 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.GetEv
 
             SetupMockFetchListAsync<GetEventDatesByEventId, EventDate_DTO>(eventDates);
 
-            var response = await _handler.HandleAsync(_request) as GetEventByGuidResponse;
+            var response = await _handler.HandleRequestAsync(_request) as GetResponse<GetEventByGuidResponse>;
 
             Assert.NotNull(response);
-            Assert.Equivalent(expectedEvent, response.Event);
-            Assert.Equivalent(expectedTimeFrame, response.EventTimeFrame);
+            Assert.Equivalent(expectedEvent, response.Content.Event);
+            Assert.Equivalent(expectedTimeFrame, response.Content.EventTimeFrame);
         }
     }
 }

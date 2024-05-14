@@ -8,7 +8,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.Delete
     {
         public DeleteEventByGuidHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task ExecuteRequestAsync(DeleteEventByGuidRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(DeleteEventByGuidRequest request)
         {
             var eventToDelete = await _dataAccess.FetchAsync(new GetEventByGuid(request.EventGuid));
 
@@ -16,7 +16,7 @@ namespace StarWarsTracker.Application.Requests.EventRequests.Delete
             {
                 _logger.AddInfo("No Event Found With Guid", request.EventGuid);
 
-                throw new DoesNotExistException(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
+                return Response.NotFound(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
             }
 
             _logger.AddDebug("Deleting EventDates", eventToDelete);
@@ -35,8 +35,10 @@ namespace StarWarsTracker.Application.Requests.EventRequests.Delete
             {
                 _logger.IncreaseLevel(LogLevel.Critical, "Failed to delete Event", eventToDelete);
 
-                throw new OperationFailedException();
-            }            
+                return Response.Error();
+            }
+
+            return Response.Success();
         }
     }
 }

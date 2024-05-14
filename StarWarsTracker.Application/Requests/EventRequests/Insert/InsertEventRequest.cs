@@ -3,7 +3,7 @@ using StarWarsTracker.Domain.Validation.StringValidation;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.Insert
 {
-    public class InsertEventRequest : IRequest, IValidatable
+    public class InsertEventRequest :  IValidatable
     {
         public InsertEventRequest() { }
 

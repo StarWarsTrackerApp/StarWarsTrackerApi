@@ -1,6 +1,6 @@
 ﻿namespace StarWarsTracker.Application.Requests.EventDateRequests.Delete
 {
-    public class DeleteEventDatesByEventGuidRequest : RequiredEventGuidRequest, IRequest
+    public class DeleteEventDatesByEventGuidRequest : RequiredEventGuidRequest
     {
         public DeleteEventDatesByEventGuidRequest() { }
 

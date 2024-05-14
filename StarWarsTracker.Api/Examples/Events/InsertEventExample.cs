@@ -5,25 +5,25 @@ using StarWarsTracker.Domain.Enums;
 using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Domain.Validation;
 using Swashbuckle.AspNetCore.Filters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Api.Examples.Events
 {
+    [ExcludeFromCodeCoverage]
     public class InsertEventExample
     {
         public class ValidRequest : IExample<InsertEventRequest>
         {
             public InsertEventRequest GetExamples() =>
                new("Name Of New Event", "Description For New Event", CanonType.StrictlyCanon);
-
         }
 
         public class AlreadyExists : InsertEventRequest, IAlreadyExistExample
         {
-            public AlreadyExistsResponse GetExamples() =>
-                new(nameof(Event),
-                    (CanonType.StrictlyCanon, nameof(CanonType)),
-                    ("Name Of Event", nameof(Name)));
-
+            public AlreadyExistsResponse GetExamples() => new(
+                nameof(Event),
+                (CanonType.StrictlyCanon, nameof(CanonType)),
+                ("Name Of Event", nameof(Name)));
         }
 
         public class BadRequest : InsertEventRequest, IManyValidationFailureExamples

@@ -1,5 +1,6 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.Delete;
-using StarWarsTracker.Domain.Exceptions;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Application.BaseObjects.ExceptionResponses;
+using StarWarsTracker.Application.Requests.EventRequests.Delete;
 using StarWarsTracker.Domain.Validation;
 using StarWarsTracker.Tests.Shared.Helpers;
 
@@ -8,46 +9,55 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
     public class DeleteEventTests : ControllerTest<EventController>
     {
         [Fact]
-        public async Task DeleteEvent_Given_EmptyGuid_ShouldThrow_ValidationFailureException_WithMessage_EventGuidIsRequired()
+        public async Task DeleteEvent_Given_EmptyGuid_ShouldReturn_BadRequestResponse_WithMessage_EventGuidRequired()
         {
             var request = new DeleteEventByGuidRequest(Guid.Empty);
 
             var expectedMessage = ValidationFailureMessage.RequiredField(nameof(request.EventGuid));
 
-            var exception = await Record.ExceptionAsync(async () => await _controller.DeleteEvent(request)) as ValidationFailureException;
+            var result = await _controller.DeleteEvent(request);
 
-            Assert.NotNull(exception);
+            var body = result.GetResponseBody<ValidationFailureResponse>();
 
-            Assert.Equal(expectedMessage, exception.GetResponseBody().ValidationFailureReasons.Single());
+            Assert.NotNull(body);
+
+            Assert.Equal(expectedMessage, body.ValidationFailureReasons.Single());
+
+            Assert.Equal(StatusCodes.Status400BadRequest, result.GetStatusCode());
         }
 
         [Fact]
-        public async Task DeleteEvent_Given_EventNotExistingWithEventGuid_ShouldThrow_DoesNotExistException()
+        public async Task DeleteEvent_Given_EventNotExistingWithGuid_ShouldReturn_NotFoundResponse()
         {
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _controller.DeleteEvent(new(Guid.NewGuid())));
+            var result = await _controller.DeleteEvent(new(Guid.NewGuid()));
+
+            Assert.Equal(StatusCodes.Status404NotFound, result.GetStatusCode());
         }
 
         [Fact]
-        public async Task DeleteDevent_Given_TaskCompletedSuccesfully_Should_DeleteEvent()
+        public async Task DeleteDevent_Given_EventDeleted_ShouldReturn_SuccessResponse()
         {
             var existingEvent = await TestEvent.InsertAndFetchEventAsync();
 
-            var deleteTask = _controller.DeleteEvent(new DeleteEventByGuidRequest(existingEvent.Guid));
+            var fetchBeforeDeleting = await _controller.GetEventByGuid(new(existingEvent.Guid));
 
-            await deleteTask;
+            var result = await _controller.DeleteEvent(new DeleteEventByGuidRequest(existingEvent.Guid));
 
-            var doesNotExistExceptionAfterDeleting = await Record.ExceptionAsync(async () => await _controller.GetEventByGuid(new(existingEvent.Guid))) as DoesNotExistException;
+            var fetchAfterDeleting = await _controller.GetEventByGuid(new(existingEvent.Guid));
 
-            Assert.True(deleteTask.IsCompletedSuccessfully);
+            Assert.Equal(StatusCodes.Status200OK, fetchBeforeDeleting.GetStatusCode());
 
-            // Assert that attempting to fetch the event after inserting throws a does not exist exception
-            Assert.NotNull(doesNotExistExceptionAfterDeleting);
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+         
+            Assert.Equal(StatusCodes.Status404NotFound, fetchAfterDeleting.GetStatusCode());
         }
 
         [Fact]
-        public async Task DeleteEvent_Given_NullRequest_ShouldThrow_ValidationFailureException()
+        public async Task DeleteEvent_Given_NullRequest_ShouldReturn_BadRequestException()
         {
-            await Assert.ThrowsAsync<ValidationFailureException>(async () => await _controller.DeleteEvent(null!));
+            var result = await _controller.DeleteEvent(null!);
+
+            Assert.Equal(StatusCodes.Status400BadRequest, result.GetStatusCode());
         }
     }
 }

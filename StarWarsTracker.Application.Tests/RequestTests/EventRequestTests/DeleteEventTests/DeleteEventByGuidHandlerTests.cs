@@ -1,7 +1,9 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.Delete;
+﻿using StarWarsTracker.Application.BaseObjects.BaseResponses;
+using StarWarsTracker.Application.Requests.EventRequests.Delete;
 using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 using StarWarsTracker.Persistence.DataTransferObjects;
+using System.Net;
 
 namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.DeleteEventTests
 {
@@ -14,35 +16,39 @@ namespace StarWarsTracker.Application.Tests.RequestTests.EventRequestTests.Delet
         public DeleteEventByGuidHandlerTests() => _handler = new(_mockDataAccess.Object, _mockLoggerFactory.Object);
 
         [Fact]
-        public async Task DeleteEventByGuid_Given_NoEventFoundWithGuid_ShouldThrow_DoesNotExistException()
+        public async Task DeleteEventByGuid_Given_NoEventFoundWithGuid_ShouldReturn_NotFoundResponse()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(null);
 
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _handler.HandleAsync(_request));
+            var response = await _handler.HandleRequestAsync(_request);
+
+            Assert.IsType<NotFoundResponse>(response);
         }
 
         [Fact]
-        public async Task DeleteEventByGuid_Given_EventFoundWithGuid_ButNoRowsImpactedWhenDeleting_ShouldThrow_OperationFailedException()
+        public async Task DeleteEventByGuid_Given_EventFoundWithGuid_ButNoRowsImpactedWhenDeleting_ShouldReturn_ErrorResponse()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(new Event_DTO());
 
             SetupMockExecuteAsync<DeleteEventById>(0);
 
-            await Assert.ThrowsAsync<OperationFailedException>(async () => await _handler.HandleAsync(_request));
+            var response = await _handler.HandleRequestAsync(_request);
+
+            Assert.IsType<ErrorResponse>(response);
         }
 
         [Fact]
-        public async Task DeleteEventByGuid_Given_EventFoundWithGuid_AndRowIsImpactedWhenDeleting_ShouldReturn_TaskCompletedSuccessfully()
+        public async Task DeleteEventByGuid_Given_EventFoundWithGuid_AndRowIsImpactedWhenDeleting_ShouldReturn_ExecuteResponse()
         {
             SetupMockFetchAsync<GetEventByGuid, Event_DTO>(new Event_DTO());
 
             SetupMockExecuteAsync<DeleteEventById>(1);
 
-            var task = _handler.HandleAsync(_request);
+            var response = await _handler.HandleRequestAsync(_request);
 
-            await task;
+            Assert.IsType<ExecuteResponse>(response);
 
-            Assert.True(task.IsCompletedSuccessfully);
+            Assert.Equal((int)HttpStatusCode.OK, response.GetStatusCode());
         }
     }
 }

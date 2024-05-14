@@ -1,5 +1,6 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
-using StarWarsTracker.Domain.Exceptions;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Application.Requests.EventRequests.GetByYear;
+using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
@@ -7,15 +8,23 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
     public class GetEventsByYearTests : ControllerTest<EventController>
     {
         [Fact]
-        public async Task GetEventsByYear_Given_NoEventsExistWithYear_ShouldThrow_DoesNotExistException()
+        public async Task GetEventsByYear_Given_NoEventsExistWithYear_ShouldReturn_SuccessResponse_With_EmptyCollection()
         {
             var request = new GetEventsByYearRequest() { YearsSinceBattleOfYavin = int.MinValue };
 
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _controller.GetEventsByYear(request));
+            var result = await _controller.GetEventsByYear(request);
+
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+
+            Assert.NotNull(eventsFound);
+
+            Assert.Empty(eventsFound);
         }
 
         [Fact]
-        public async Task GetEventsByYear_Given_EventsExistWithDatesDuringYear_ShouldReturn_EventsOccuringDuringThatYear()
+        public async Task GetEventsByYear_Given_EventsExistWithDatesDuringYear_ShouldReturn_SuccessResponse_With_EventsOccuringDuringThatYear()
         {
             var year = 24;
 
@@ -27,17 +36,24 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             var request = new GetEventsByYearRequest() { YearsSinceBattleOfYavin = year };
 
-            var response = await _controller.GetEventsByYear(request);
+            var result = await _controller.GetEventsByYear(request);
 
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+
+            Assert.NotNull(eventsFound);
+
+            // Delete inserted objects
             await _controller.DeleteEvent(new(firstEventDuringYear.Guid));
             await _controller.DeleteEvent(new(secondEventDuringYear.Guid));
             await _controller.DeleteEvent(new(thirdEventDuringDifferentYear.Guid));
 
             // Assert that third event during a different year was not returned
-            Assert.DoesNotContain(thirdEventDuringDifferentYear.Guid, response.Events.Select(_ => _.Guid));
+            Assert.DoesNotContain(thirdEventDuringDifferentYear.Guid, eventsFound.Select(_ => _.Guid));
 
-            var firstEventResponse = response.Events.Single(_ => _.Guid == firstEventDuringYear.Guid);
-            var secondEventResponse = response.Events.Single(_ => _.Guid == secondEventDuringYear.Guid);
+            var firstEventResponse = eventsFound.Single(_ => _.Guid == firstEventDuringYear.Guid);
+            var secondEventResponse = eventsFound.Single(_ => _.Guid == secondEventDuringYear.Guid);
 
             // Assert that first event was returned with correct values
             Assert.NotNull(firstEventResponse);
@@ -55,9 +71,11 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
         }
 
         [Fact]
-        public async Task GetEventsByYear_Given_Null_ShouldThrow_ValidationFailedException()
+        public async Task GetEventsByYear_Given_Null_ShouldReturn_BadRequestResponse()
         {
-            await Assert.ThrowsAsync<ValidationFailureException>(async () => await _controller.GetEventsByYear(null!));
+            var result = await _controller.GetEventsByYear(null!);
+
+            Assert.Equal(StatusCodes.Status400BadRequest, result.GetStatusCode());
         }
     }
 }

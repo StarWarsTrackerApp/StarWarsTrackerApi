@@ -1,31 +1,28 @@
-﻿using StarWarsTracker.Application.Requests.EventRequests.GetByGuid;
-using StarWarsTracker.Logging.Abstraction;
+﻿using StarWarsTracker.Logging.Abstraction;
 using StarWarsTracker.Persistence.DataRequestObjects.EventDateRequests;
+using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 {
-    internal class InsertEventDatesHandler : DataOrchestratorRequestHandler<InsertEventDatesRequest>
+    internal class InsertEventDatesHandler : DataRequestHandler<InsertEventDatesRequest>
     {
-        public InsertEventDatesHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory, IOrchestrator orchestrator) : base(dataAccess, loggerFactory, orchestrator) { }
+        public InsertEventDatesHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task ExecuteRequestAsync(InsertEventDatesRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(InsertEventDatesRequest request)
         {
-            _logger.AddInfo("Executing Request", request.GetType().Name);
+            var eventByGuid = await _dataAccess.FetchAsync(new GetEventByGuid(request.EventGuid));
 
-            _logger.AddDebug("Request Body", request);
-
-            var eventByGuid = await _orchestrator.GetRequestResponseAsync(new GetEventByGuidRequest(request.EventGuid));
-
-            _logger.AddDebug("Event To Add Dates To", eventByGuid);
-
-            if(eventByGuid.EventTimeFrame != null)
+            if (eventByGuid == null)
             {
-                _logger.AddInfo("Event Already Contains Event Dates", request.EventGuid);
-
-                throw new AlreadyExistsException(nameof(EventTimeFrame), (request.EventGuid, nameof(request.EventGuid)));
+                return Response.NotFound(nameof(Event), (request.EventGuid, nameof(request.EventGuid)));
             }
 
-            _logger.AddTrace("Inserting Event Dates From Request");
+            var eventDates = await _dataAccess.FetchListAsync(new GetEventDatesByEventId(eventByGuid.Id));
+
+            if (eventDates.Any())
+            {
+                return Response.AlreadyExists(nameof(EventTimeFrame), (request.EventGuid, nameof(request.EventGuid)));
+            }
 
             int rowsUpdated = 0;
 
@@ -37,14 +34,16 @@ namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 
                 _logger.AddDebug("Dates Inserted", rowsUpdated);
             }
-            
+
             if (rowsUpdated != request.EventDates.Length)
             {
                 _logger.IncreaseLevel(LogLevel.Critical, "Expected Number Of Dates Not Inserted",
                     new { ExpectedCountOfRowsUpdated = request.EventDates.Length, ActualCountOfRowsUpdated = rowsUpdated });
 
-                throw new OperationFailedException();
+                return Response.Error();
             }
+
+            return Response.Success();
         }
     }
 }

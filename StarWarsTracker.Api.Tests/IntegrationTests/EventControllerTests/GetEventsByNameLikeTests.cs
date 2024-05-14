@@ -1,4 +1,5 @@
-﻿using StarWarsTracker.Domain.Exceptions;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
@@ -6,13 +7,21 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
     public class GetEventsByNameLikeTests : ControllerTest<EventController>
     {
         [Fact]
-        public async Task GetEventsByNameLike_Given_NoEventsFoundWithName_ShouldThrow_DoesNotExistException()
+        public async Task GetEventsByNameLike_Given_NoEventsFoundWithName_ShouldReturn_SuccessResponse_With_EmptyCollection()
         {
-            await Assert.ThrowsAsync<DoesNotExistException>(async () => await _controller.GetEventsByNameLike(new(TestString.Random())));
+            var result = await _controller.GetEventsByNameLike(new(TestString.Random()));
+
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+
+            Assert.NotNull(eventsFound);
+
+            Assert.Empty(eventsFound);
         }
 
         [Fact]
-        public async Task GetEventsByNameLike_Given_EventsFoundWithName_ShouldReturn_MatchingEvents()
+        public async Task GetEventsByNameLike_Given_EventsFoundWithName_ShouldReturn_SuccessResponse_With_MatchingEvents()
         {
             var partOfNameToSearchBy = TestString.Random();
 
@@ -22,7 +31,13 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             var thirdEventWithoutName = await TestEvent.InsertAndFetchEventAsync();
 
-            var response = await _controller.GetEventsByNameLike(new (partOfNameToSearchBy));
+            var result = await _controller.GetEventsByNameLike(new(partOfNameToSearchBy));
+
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+
+            Assert.NotNull(eventsFound);
 
             // Delete the inserted events
             await _controller.DeleteEvent(new(firstEventWithName.Guid));
@@ -30,10 +45,10 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
             await _controller.DeleteEvent(new(thirdEventWithoutName.Guid));
 
             // Assert that the third event without the name to search by was not returned
-            Assert.DoesNotContain(thirdEventWithoutName.Guid, response.Events.Select(_ => _.Guid));
+            Assert.DoesNotContain(thirdEventWithoutName.Guid, eventsFound.Select(_ => _.Guid));
 
-            var firstEventFromResponse = response.Events.Single(_ => _.Guid == firstEventWithName.Guid);
-            var secondEventFromResponse = response.Events.Single(_ => _.Guid == secondEventWithName.Guid);
+            var firstEventFromResponse = eventsFound.Single(_ => _.Guid == firstEventWithName.Guid);
+            var secondEventFromResponse = eventsFound.Single(_ => _.Guid == secondEventWithName.Guid);
 
             // Assert that first event has correct values
             Assert.Equal(firstEventWithName.Guid, firstEventFromResponse.Guid);

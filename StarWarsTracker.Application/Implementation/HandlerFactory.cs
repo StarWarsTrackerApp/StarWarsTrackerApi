@@ -34,7 +34,7 @@ namespace StarWarsTracker.Application.Implementation
 
         #region Public Method
 
-        public IBaseHandler NewHandler<TRequest>(TRequest request)
+        public IHandler<TRequest> GetHandler<TRequest>(TRequest request) where TRequest : class
         {
             _logger.AddInfo("Handler Factory Receiving Request", request?.GetType().Name);
 
@@ -47,26 +47,22 @@ namespace StarWarsTracker.Application.Implementation
                 throw exception;
             }
 
-            _logger.AddTrace("Looking for Handler", request.GetType().Name);
-            
-            var handlerType = _handlerDictionary.GetHandlerType(request.GetType());            
-
-            if (handlerType == null)
+            if (!_handlerDictionary.TryGetHandlerType(request, out var handlerType))
             {
-                _logger.IncreaseLevel(LogLevel.Critical, "No Handler Found", request.GetType().Name);
+                _logger.IncreaseLevel(LogLevel.Critical, "No Handler Found For Request", request.GetType().Name);
 
-                throw new DoesNotExistException("RequestHandler", (request, nameof(request)));
+                throw new ApplicationException("No handler Found for request: " + request.GetType().Name);
             }
 
             _logger.AddTrace("Located Handler Type", handlerType.Name);
 
-            var handler = _typeActivator.Instantiate<IBaseHandler>(handlerType);
+            var handler = _typeActivator.Instantiate<IHandler<TRequest>>(handlerType);
 
             _logger.AddInfo("Instantiated Handler", handlerType.Name);
 
             return handler;
         }
-        
+
         #endregion
     }
 }

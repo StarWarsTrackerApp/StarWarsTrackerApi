@@ -2,7 +2,7 @@
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetByNameLike
 {
-    public class GetEventsByNameLikeRequest : IRequestResponse<GetEventsByNameLikeResponse>, IValidatable
+    public class GetEventsByNameLikeRequest : IValidatable
     {
         #region Constructors
 

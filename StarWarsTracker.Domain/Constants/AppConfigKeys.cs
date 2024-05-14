@@ -1,8 +1,11 @@
-﻿namespace StarWarsTracker.Domain.Constants
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StarWarsTracker.Domain.Constants
 {
     /// <summary>
     /// The constants in this class are used to map to sections/values in the appsettings.json
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class AppConfigKeys
     {
         /// <summary>

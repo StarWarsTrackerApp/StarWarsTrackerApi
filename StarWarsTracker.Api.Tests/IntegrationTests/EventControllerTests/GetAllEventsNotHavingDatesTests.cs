@@ -1,20 +1,27 @@
-﻿using StarWarsTracker.Tests.Shared.Helpers;
+﻿using StarWarsTracker.Api.Tests.TestHelpers;
+using StarWarsTracker.Domain.Models;
+using StarWarsTracker.Tests.Shared.Helpers;
 
 namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 {
     public class GetAllEventsNotHavingDatesTests : ControllerTest<EventController>
     {
         [Fact]
-        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasNoDates_ShouldReturn_ResponseContainingEventInsertedWithoutDates()
+        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasNoDates_ShouldReturn_SuccessResponse_With_EventInsertedWithoutDates()
         {
             var existingEventWithoutDates = await TestEvent.InsertAndFetchEventAsync();
 
-            var response = await _controller.GetAllEventsNotHavingDates();
+            var result = await _controller.GetAllEventsNotHavingDates();
+
+            var eventsFound = result.GetResponseBody<IEnumerable<Event>>();
 
             await _controller.DeleteEvent(new(existingEventWithoutDates.Guid));
 
-            // try to get the event that was inserted from response using the Guid
-            var eventReturned = response.Events.Single(_ => _.Guid == existingEventWithoutDates.Guid);
+            Assert.Equal(StatusCodes.Status200OK, result.GetStatusCode());
+
+            Assert.NotNull(eventsFound);
+
+            var eventReturned = eventsFound.Single(_ => _.Guid == existingEventWithoutDates.Guid);
 
             //Assert that the eventReturned is not null
             Assert.NotNull(eventReturned);
@@ -27,7 +34,7 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
         }
 
         [Fact]
-        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasDates_ShouldReturn_ResponseNotContainingEventInsertedWithDates()
+        public async Task GetAllEventsNotHavingDates_Given_EventInsertedHasDates_ShouldReturn_SuccessResponse_Without_EventInsertedWithDates()
         {
             var (existingEventWithDates, _) = await TestEventDate.InsertAndFetchEventDateAsync();
 
@@ -35,8 +42,13 @@ namespace StarWarsTracker.Api.Tests.IntegrationTests.EventControllerTests
 
             await _controller.DeleteEvent(new(existingEventWithDates.Guid));
 
-            // Assert that the response does not contain the existing event guid that has dates
-            Assert.DoesNotContain(existingEventWithDates.Guid, response.Events.Select(_ => _.Guid));
+            Assert.Equal(StatusCodes.Status200OK, response.GetStatusCode());
+
+            var eventsFound = response.GetResponseBody<IEnumerable<Event>>();
+
+            Assert.NotNull(eventsFound);
+
+            Assert.DoesNotContain(existingEventWithDates.Guid, eventsFound.Select(_ => _.Guid));
         }
     }
 }

@@ -3,26 +3,17 @@ using StarWarsTracker.Persistence.DataRequestObjects.EventRequests;
 
 namespace StarWarsTracker.Application.Requests.EventRequests.GetAllNotHavingDates
 {
-    internal class GetAllEventsNotHavingDatesHandler : DataRequestResponseHandler<GetAllEventsNotHavingDatesRequest, GetAllEventsNotHavingDatesResponse>
+    internal class GetAllEventsNotHavingDatesHandler : DataRequestHandler<GetAllEventsNotHavingDatesRequest>
     {
         public GetAllEventsNotHavingDatesHandler(IDataAccess dataAccess, IClassLoggerFactory loggerFactory) : base(dataAccess, loggerFactory) { }
 
-        public override async Task<GetAllEventsNotHavingDatesResponse> GetResponseAsync(GetAllEventsNotHavingDatesRequest request)
+        internal protected override async Task<IResponse> HandleRequestAsync(GetAllEventsNotHavingDatesRequest request)
         {
-            var events = await _dataAccess.FetchListAsync(new GetAllEventsNotHavingDates());
+            var eventDtos = await _dataAccess.FetchListAsync(new GetAllEventsNotHavingDates());
 
-            if (events.Any())
-            {
-                _logger.AddDebug("Events Found", events);
+            var events = eventDtos.Any() ? eventDtos.Select(_ => _.AsDomainEvent()) : Enumerable.Empty<Event>();
 
-                var response = new GetAllEventsNotHavingDatesResponse(events.Select(_ => _.AsDomainEvent()));
-
-                return response;
-            }
-
-            _logger.AddInfo("No Events Found Without Dates");
-
-            return new GetAllEventsNotHavingDatesResponse();
+            return Response.Success(events);
         }
     }
 }

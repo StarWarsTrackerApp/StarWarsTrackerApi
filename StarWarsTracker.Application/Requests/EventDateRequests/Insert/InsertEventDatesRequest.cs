@@ -3,7 +3,7 @@ using StarWarsTracker.Domain.Validation.GuidValidation;
 
 namespace StarWarsTracker.Application.Requests.EventDateRequests.Insert
 {
-    public class InsertEventDatesRequest : IRequest, IValidatable
+    public class InsertEventDatesRequest : IValidatable
     {
         public InsertEventDatesRequest() { }
 

@@ -1,10 +1,14 @@
-﻿namespace StarWarsTracker.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
+
+namespace StarWarsTracker.Domain.Exceptions
 {
-    public class DoesNotExistResponse
+    [ExcludeFromCodeCoverage]
+    public class NotFoundResponse : IResponse
     {
         #region Constructor
 
-        public DoesNotExistResponse(string nameOfObject, params (object? Value, string NameOfField)[] valuesSearchedBy)
+        public NotFoundResponse(string nameOfObject, params (object? Value, string NameOfField)[] valuesSearchedBy)
         {
             NameOfObjectNotExisting = nameOfObject;
             ValuesSearchedBy = valuesSearchedBy.Any() 
@@ -25,6 +29,14 @@
         /// The Values that were searched by (NameOfField, Value)
         /// </summary>
         public IEnumerable<KeyValuePair<string, object?>> ValuesSearchedBy { get; set; }
+
+        #endregion
+
+        #region Public IResponse Methods
+
+        public object? GetBody() => this;
+
+        public int GetStatusCode() => (int)HttpStatusCode.NotFound;
 
         #endregion
     }

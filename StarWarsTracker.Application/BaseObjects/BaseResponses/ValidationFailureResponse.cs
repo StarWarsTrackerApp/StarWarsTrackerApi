@@ -1,6 +1,10 @@
-﻿namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
+
+namespace StarWarsTracker.Application.BaseObjects.ExceptionResponses
 {
-    public class ValidationFailureResponse
+    [ExcludeFromCodeCoverage]
+    public class ValidationFailureResponse : IResponse
     {
         #region Constructors
 
@@ -22,6 +26,14 @@
         /// The reasons that the request failed validation.
         /// </summary>
         public IEnumerable<string> ValidationFailureReasons { get; set; }
+
+        #endregion
+
+        #region Public IResponse Methods
+
+        public object? GetBody() => this;
+
+        public int GetStatusCode() => (int)HttpStatusCode.BadRequest;
 
         #endregion
     }

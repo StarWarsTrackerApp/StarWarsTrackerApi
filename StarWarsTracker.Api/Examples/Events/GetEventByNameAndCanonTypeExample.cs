@@ -6,15 +6,16 @@ using StarWarsTracker.Domain.Exceptions;
 using StarWarsTracker.Domain.Models;
 using StarWarsTracker.Domain.Validation;
 using Swashbuckle.AspNetCore.Filters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsTracker.Api.Examples.Events
 {
+    [ExcludeFromCodeCoverage]
     public class GetEventByNameAndCanonTypeExample
     {
         public class SuccessResponse : IExample<GetEventByNameAndCanonTypeResponse>
         {
-            public GetEventByNameAndCanonTypeResponse GetExamples() =>
-                new(new Event(Guid.NewGuid(), "Name Of Event Found", "This Event Brought To You By Event Name And Canon Type Match", CanonType.StrictlyCanon));
+            public GetEventByNameAndCanonTypeResponse GetExamples() => new(ExampleModel.Event);
         }
 
         public class BadRequest : GetEventByNameAndCanonTypeRequest, IManyValidationFailureExamples
@@ -38,9 +39,9 @@ namespace StarWarsTracker.Api.Examples.Events
                 };
         }
 
-        public class DoesNotExist : GetEventByNameAndCanonTypeRequest, IDoesNotExistExample
+        public class DoesNotExist : GetEventByNameAndCanonTypeRequest, INotFoundExample
         {
-            public DoesNotExistResponse GetExamples() => new(nameof(Event), ("Name Of Event Searched For", nameof(Name)), (CanonType.StrictlyCanon, nameof(CanonType)));
+            public NotFoundResponse GetExamples() => new(nameof(Event), ("Name Of Event Searched For", nameof(Name)), (CanonType.StrictlyCanon, nameof(CanonType)));
         }
     }
 }

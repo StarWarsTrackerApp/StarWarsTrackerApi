@@ -28,17 +28,14 @@ namespace StarWarsTracker.Application.Implementation
             {
                 var obj = ActivatorUtilities.CreateInstance(_serviceProvider, typeToInstantiate);
 
-                if (obj is TResponse response)
+                if (obj is TResponse response && obj != null)
                 {
-                    _logger.AddTrace("Instantiated Object", response);
+                    _logger.AddTrace("Instantiated Object", response.GetType().Name);
 
                     return response;
                 }
 
-                _logger.IncreaseLevel(LogLevel.Critical, $"Instantiated Object Not Type of TResponse {typeof(TResponse).Name}", obj.GetType().Name);
-
-                throw new OperationFailedException();
-
+                throw new ApplicationException($"Instantiated Object Not Type of TResponse {typeof(TResponse).Name}");
             }
             catch (Exception e)
             {

@@ -1,7 +1,6 @@
 ﻿using StarWarsTracker.Domain.Constants.LogConfigs;
-using StarWarsTracker.Domain.Exceptions;
+using StarWarsTracker.Domain.Validation;
 using StarWarsTracker.Logging.Abstraction;
-using System.Runtime.CompilerServices;
 
 namespace StarWarsTracker.Api.Controllers
 {
@@ -9,7 +8,7 @@ namespace StarWarsTracker.Api.Controllers
     {
         #region Private Members
 
-        private readonly IOrchestrator _orchestrator;
+        private readonly IHandlerFactory _handlerFactory;
 
         private readonly IClassLogger _logger;
 
@@ -17,9 +16,9 @@ namespace StarWarsTracker.Api.Controllers
 
         #region Constructor
 
-        public BaseController(IOrchestrator orchestrator, IClassLoggerFactory loggerFactory)
+        public BaseController(IHandlerFactory handlerFactory, IClassLoggerFactory loggerFactory)
         {
-            _orchestrator = orchestrator;
+            _handlerFactory = handlerFactory;
 
             _logger = loggerFactory.GetLoggerFor(this);
         }
@@ -28,48 +27,40 @@ namespace StarWarsTracker.Api.Controllers
 
         #region Protected Methods
 
-        protected async Task ExecuteRequestAsync(IRequest request, [CallerMemberName] string methodCalling = "")
+        protected async Task<IActionResult> HandleAsync<TRequest>(TRequest request) where TRequest : class
         {
-            if (request == null)
-            {
-                _logger.AddDebug("Null Request Received", typeof(IRequest).Name);
-                throw new ValidationFailureException("Null Request Received");
-            }
+            var response = await GetResponseAsync(request);
 
-            LogRequest(request, methodCalling);
+            var statusCode = response.GetStatusCode();
 
-            await _orchestrator.ExecuteRequestAsync(request);
+            var responseBody = response.GetBody();
 
-            LogResponse(null, methodCalling);
+            return responseBody == null ? new StatusCodeResult(statusCode) : new ObjectResult(responseBody) { StatusCode = statusCode };
         }
 
-        protected async Task<TResponse> GetResponseAsync<TResponse>(IRequestResponse<TResponse> request, [CallerMemberName] string methodCalling = "")
+        internal protected async Task<IResponse> GetResponseAsync<TRequest>(TRequest request) where TRequest : class
         {
             if (request == null)
             {
-                _logger.AddDebug("Null Request Received", typeof(IRequest).Name);
-                throw new ValidationFailureException("Null Request Received");
+                return Response.ValidationFailure("Request Is NULL");
             }
 
-            LogRequest(request, methodCalling);
+            _logger.AddConfiguredLogLevel(Section.ControllerLogging, Key.ControllerRequestBodyLogLevel, $"Request Received: {request.GetType().Name}", request);
 
-            var response = await _orchestrator.GetRequestResponseAsync(request);
+            if (request is IValidatable validatable && !validatable.IsValid(out var validator))
+            {
+                return Response.ValidationFailure(validator.ReasonsForFailure);
+            }
 
-            LogResponse(response, methodCalling);
+            var handler = _handlerFactory.GetHandler(request);
+
+            var response = await handler.GetResponseAsync(request);
+
+            _logger.AddConfiguredLogLevel(Section.ControllerLogging, Key.ControllerResponseBodyLogLevel, $"Response Received: ", response);
 
             return response;
         }
 
-        #endregion
-
-        #region Private Helpers For Logging
-
-        private void LogRequest(object request, string methodCalling) => 
-            _logger.AddConfiguredLogLevel(Section.ControllerLogging, Key.ControllerRequestBodyLogLevel, "Request Received", request, methodCalling);
-
-        private void LogResponse(object? response, string methodCalling) =>
-            _logger.AddConfiguredLogLevel(Section.ControllerLogging, Key.ControllerResponseBodyLogLevel, "Response Received", response, methodCalling);
-        
         #endregion
     }
 }
